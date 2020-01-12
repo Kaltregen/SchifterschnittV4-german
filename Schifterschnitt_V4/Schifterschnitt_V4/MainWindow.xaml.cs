@@ -1,18 +1,20 @@
-﻿// Schifterschnitt_V4 - A program for joiners to calculate compound miters.
-// Copyright (C) 2020 Michael Pütz
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿/* 
+ * Schifterschnitt V4 - A program for joiners to calculate compound miters.
+ * Copyright (C) 2020 Michael Pütz
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Windows;
@@ -1288,18 +1290,22 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Schifterschnitt_V4 - A program for joiners to calculate compound miters.\n" +
-                "Copyright (C) 2020 Michael Pütz\n\n" +
-                "This program is free software: you can redistribute it and/or modify\n" +
-                "it under the terms of the GNU General Public License as published by\n" +
-                "the Free Software Foundation, either version 3 of the License, or\n" +
-                "(at your option) any later version.\n\n" +
-                "This program is distributed in the hope that it will be useful,\n" +
-                "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-                "GNU General Public License for more details.\n\n" +
-                "You should have received a copy of the GNU General Public License\n" +
-                "along with this program.  If not, see <https://www.gnu.org/licenses/>.");
+            MessageBox.Show(@"Schifterschnitt V4
+A program for joiners to calculate compound miters.
+Copyright (C) 2020 Michael Pütz
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz");
         }
 
         /// <summary>
