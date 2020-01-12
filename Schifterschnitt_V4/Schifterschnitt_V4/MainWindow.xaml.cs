@@ -1282,6 +1282,27 @@ namespace Schifterschnitt
         #region Gemeinsame Methoden
 
         /// <summary>
+        /// Zeigt die Lizenz an.
+        /// </summary>
+        /// <param name="sender">Der About-Button.</param>
+        /// <param name="e"></param>
+        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Schifterschnitt_V4 - A program for joiners to calculate compound miters.\n" +
+                "Copyright (C) 2020 Michael Pütz\n\n" +
+                "This program is free software: you can redistribute it and/or modify\n" +
+                "it under the terms of the GNU General Public License as published by\n" +
+                "the Free Software Foundation, either version 3 of the License, or\n" +
+                "(at your option) any later version.\n\n" +
+                "This program is distributed in the hope that it will be useful,\n" +
+                "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                "GNU General Public License for more details.\n\n" +
+                "You should have received a copy of the GNU General Public License\n" +
+                "along with this program.  If not, see <https://www.gnu.org/licenses/>.");
+        }
+
+        /// <summary>
         /// Prüft ob die Eingabe in einer TextBox gültig ist und in eine Zahl konvertiert werden kann.
         /// </summary>
         /// <param name="textBox">Die TextBox deren Text geprüft werden soll.</param>

@@ -424,10 +424,21 @@
                         </Button>
                         <!--Beschreibung-->
                         <Border Background="LightSkyBlue" Padding="10">
-                            <StackPanel>
-                                <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
-                                <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
-                            </StackPanel>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
+                                    <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
+                                </StackPanel>
+                                <Button Click="ButtonAbout_Click" HorizontalAlignment="Right" Height="24">
+                                    <Button.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="DarkGray" Offset="0"/>
+                                            <GradientStop Color="WhiteSmoke" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Button.Background>
+                                    <TextBlock Text="About"/>
+                                </Button>
+                            </Grid>
                         </Border>
                     </StackPanel>
                 </Grid>
@@ -706,10 +717,21 @@
                         </Button>
                         <!--Beschreibung-->
                         <Border Background="LightSkyBlue" Padding="10">
-                            <StackPanel>
-                                <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
-                                <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
-                            </StackPanel>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
+                                    <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
+                                </StackPanel>
+                                <Button Click="ButtonAbout_Click" HorizontalAlignment="Right" Height="24">
+                                    <Button.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="DarkGray" Offset="0"/>
+                                            <GradientStop Color="WhiteSmoke" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Button.Background>
+                                    <TextBlock Text="About"/>
+                                </Button>
+                            </Grid>
                         </Border>
                     </StackPanel>
                 </Grid>
@@ -1015,10 +1037,21 @@
                         </Button>
                         <!-- Beschreibung -->
                         <Border Background="LightSkyBlue" Padding="10">
-                            <StackPanel>
-                                <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
-                                <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
-                            </StackPanel>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Alle Eingaben in mm und Grad" Margin="0 0 0 3" FontSize="12" FontFamily="Calibri"/>
+                                    <TextBlock Text="Auf der Kreissäge ist die Außenseite nach oben zu legen" Margin="0 3 0 3" FontSize="12" FontFamily="Calibri"/>
+                                </StackPanel>
+                                <Button Click="ButtonAbout_Click" HorizontalAlignment="Right" Height="24">
+                                    <Button.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="DarkGray" Offset="0"/>
+                                            <GradientStop Color="WhiteSmoke" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Button.Background>
+                                    <TextBlock Text="About"/>
+                                </Button>
+                            </Grid>
                         </Border>
                     </StackPanel>
                 </Grid>

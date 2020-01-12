@@ -54,7 +54,7 @@
     <ApplicationIcon>Schifterschnitt_Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>2F812B83C1A78B237BC04C5CB99BC467BCCAD3DD</ManifestCertificateThumbprint>
