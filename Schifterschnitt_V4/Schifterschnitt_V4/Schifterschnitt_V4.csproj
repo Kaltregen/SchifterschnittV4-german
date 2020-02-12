@@ -132,9 +132,7 @@
     <Resource Include="Images\Schifterschnitt_Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\Holz.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Images\Holz.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Ecke.png" />

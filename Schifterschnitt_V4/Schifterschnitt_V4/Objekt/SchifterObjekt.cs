@@ -135,7 +135,7 @@ namespace Schifterschnitt.Objekt
         public SchifterObjekt()
         {
             // Dem ImageBrush ein Bild zuweisen und diesen dem Holzmaterial zuweisen.
-            holz.ImageSource = new BitmapImage(new Uri("Images/Holz.bmp", UriKind.Relative));
+            holz.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Holz.bmp"));
             holzmaterial = new DiffuseMaterial(holz);
         }
 
