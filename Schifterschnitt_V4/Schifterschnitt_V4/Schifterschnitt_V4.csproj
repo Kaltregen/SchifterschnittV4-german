@@ -84,7 +84,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Objekt\Ecke.cs" />
-    <Compile Include="Rechne.cs" />
+    <Compile Include="Calculate.cs" />
     <Compile Include="Objekt\SchifterObjekt.cs" />
     <Compile Include="Objekt\Pyramide.cs" />
     <Page Include="MainWindow.xaml">

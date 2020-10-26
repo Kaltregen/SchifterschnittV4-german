@@ -148,14 +148,14 @@ namespace Schifterschnitt.Objekt
         /// </summary>
         public void Berechnung()
         {
-            double winkelAlphaEinsRadian = Rechne.DegreeToRadian(WinkelAlphaEins);
-            double winkelAlphaZweiRadian = Rechne.DegreeToRadian(WinkelAlphaZwei);
-            double winkelBetaRadian = Rechne.DegreeToRadian(WinkelBeta);
+            double winkelAlphaEinsRadian = Calculate.DegreeToRadian(WinkelAlphaEins);
+            double winkelAlphaZweiRadian = Calculate.DegreeToRadian(WinkelAlphaZwei);
+            double winkelBetaRadian = Calculate.DegreeToRadian(WinkelBeta);
 
             Vector3D vektorEins = new Vector3D()
             {
-                X = Math.Sin(winkelBetaRadian - Rechne.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian),
-                Y = Math.Cos(winkelBetaRadian - Rechne.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian)
+                X = Math.Sin(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian),
+                Y = Math.Cos(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian)
             };
 
             Vector3D vektorZwei = new Vector3D()
@@ -166,9 +166,9 @@ namespace Schifterschnitt.Objekt
             Vector3D vektorDrei = new Vector3D()
             {
                 X = Math.Tan(winkelAlphaZweiRadian),
-                Y = Math.Cos(winkelBetaRadian - Rechne.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian) -
-                (Math.Tan(winkelBetaRadian - Rechne.DegreeToRadian(90)) * (Math.Tan(winkelAlphaZweiRadian) - Math.Sin(winkelBetaRadian -
-                Rechne.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian)))
+                Y = Math.Cos(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian) -
+                (Math.Tan(winkelBetaRadian - Calculate.DegreeToRadian(90)) * (Math.Tan(winkelAlphaZweiRadian) - Math.Sin(winkelBetaRadian -
+                Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian)))
             };
             
             // Berechnung der Queranschlagswinkel.
@@ -223,8 +223,8 @@ namespace Schifterschnitt.Objekt
                 winkelQueranschlagZweiRadian = 0;
 
             // Zuweisung der Queranschlagswinkel zu den Eigenschaften.
-            WinkelQueranschlagEins = Rechne.RadianToDegree(winkelQueranschlagEinsRadian);
-            WinkelQueranschlagZwei = Rechne.RadianToDegree(winkelQueranschlagZweiRadian);
+            WinkelQueranschlagEins = Calculate.RadianToDegree(winkelQueranschlagEinsRadian);
+            WinkelQueranschlagZwei = Calculate.RadianToDegree(winkelQueranschlagZweiRadian);
 
             // Berechnung der Werte der Vektoren für den Flächenwinkel.
             Vector3D vektorVier = new Vector3D();
@@ -235,8 +235,8 @@ namespace Schifterschnitt.Objekt
             var winkelBodenlinieRadian = Math.Atan(Math.Sin(winkelAlphaEinsRadian) * Math.Sin(winkelQueranschlagEinsRadian) / Math.Cos(winkelQueranschlagEinsRadian));
             var bodenlinie = Math.Cos(winkelQueranschlagEinsRadian) / Math.Cos(winkelBodenlinieRadian);
 
-            vektorVier.X = -1 * Math.Cos(Rechne.DegreeToRadian(WinkelBeta - 90 + Rechne.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
-            vektorVier.Y = Math.Sin(Rechne.DegreeToRadian(WinkelBeta - 90 + Rechne.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
+            vektorVier.X = -1 * Math.Cos(Calculate.DegreeToRadian(WinkelBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
+            vektorVier.Y = Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
 
             vektorFuenf.Z = Math.Cos(winkelAlphaZweiRadian) * Math.Sin(winkelQueranschlagZweiRadian);
             vektorFuenf.X = Math.Sin(winkelAlphaZweiRadian) * Math.Sin(winkelQueranschlagZweiRadian);
@@ -251,10 +251,10 @@ namespace Schifterschnitt.Objekt
 
             // Berechnung der Sägeblattwinkel.
             double linie = Math.Sqrt(Math.Pow(MaterialstaerkeEins, 2) + Math.Pow(MaterialstaerkeZwei, 2) - 2 * MaterialstaerkeEins * MaterialstaerkeZwei *
-                Math.Cos(Rechne.DegreeToRadian(360 - Flächenwinkel - 180)));
-            double winkelgruenEins = Rechne.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeEins, 2) - Math.Pow(MaterialstaerkeZwei, 2)) /
+                Math.Cos(Calculate.DegreeToRadian(360 - Flächenwinkel - 180)));
+            double winkelgruenEins = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeEins, 2) - Math.Pow(MaterialstaerkeZwei, 2)) /
                 (2 * linie * MaterialstaerkeEins)));
-            double winkelgruenZwei = Rechne.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeZwei, 2) - Math.Pow(MaterialstaerkeEins, 2)) /
+            double winkelgruenZwei = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeZwei, 2) - Math.Pow(MaterialstaerkeEins, 2)) /
                 (2 * linie * MaterialstaerkeZwei)));
             double winkelgelbEins = 0;
             double winkelgelbZwei = 0;
@@ -272,10 +272,10 @@ namespace Schifterschnitt.Objekt
             winkelgelbEins = Math.Abs(winkelgelbEins);
             winkelgelbZwei = Math.Abs(winkelgelbZwei);
 
-            WinkelSägeblattEins = Rechne.RadianToDegree(Math.Atan(linie / Math.Sin(Rechne.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
-                Math.Sin(Rechne.DegreeToRadian(winkelgelbZwei)) / MaterialstaerkeEins));
-            WinkelSägeblattZwei = Rechne.RadianToDegree(Math.Atan(linie / Math.Sin(Rechne.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
-                Math.Sin(Rechne.DegreeToRadian(winkelgelbEins)) / MaterialstaerkeZwei));
+            WinkelSägeblattEins = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
+                Math.Sin(Calculate.DegreeToRadian(winkelgelbZwei)) / MaterialstaerkeEins));
+            WinkelSägeblattZwei = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
+                Math.Sin(Calculate.DegreeToRadian(winkelgelbEins)) / MaterialstaerkeZwei));
 
             // Setzt die Sägeblattwinkel auf Null wenn sie keine Zahl sind.
             if (System.Double.IsNaN(WinkelSägeblattEins))

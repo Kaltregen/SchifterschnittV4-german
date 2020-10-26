@@ -91,9 +91,9 @@ namespace Schifterschnitt
             modelVisual3dPyramideWinkel.Transform = pyramideWinkelTransformation;
             
             // Die Winkel für die Kamera in der Grafik berechnen.
-            eckeKameraWinkel = Rechne.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
-            pyramideLinieKameraWinkel = Rechne.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
-            pyramideWinkelKameraWinkel = Rechne.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
+            eckeKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
+            pyramideLinieKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
+            pyramideWinkelKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
             
             // Die Feedbackleisten initialisieren und den Grids im Fenster zuweisen.
             eckeFeedback = new Feedbackleiste(gridEckeFeedback);
@@ -317,10 +317,10 @@ namespace Schifterschnitt
             }
             else
             {
-                textBlockEckeBreitenversatzEinsErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Rechne.DegreeToRadian(ecke.WinkelAlphaEins)) * ecke.BreiteEins, 2)) + " mm";
-                textBlockEckeBreitenversatzZweiErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Rechne.DegreeToRadian(ecke.WinkelAlphaZwei)) * ecke.BreiteZwei, 2)) + " mm";
-                textBlockEckeSchraegeSEins.Text = Convert.ToString(Math.Round(ecke.MaterialstaerkeEins / Math.Cos(Rechne.DegreeToRadian(ecke.WinkelAlphaEins)), 2)) + " mm";
-                textBlockEckeSchraegeSZwei.Text = Convert.ToString(Math.Round(ecke.MaterialstaerkeZwei / Math.Cos(Rechne.DegreeToRadian(ecke.WinkelAlphaZwei)), 2)) + " mm";
+                textBlockEckeBreitenversatzEinsErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(ecke.WinkelAlphaEins)) * ecke.BreiteEins, 2)) + " mm";
+                textBlockEckeBreitenversatzZweiErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(ecke.WinkelAlphaZwei)) * ecke.BreiteZwei, 2)) + " mm";
+                textBlockEckeSchraegeSEins.Text = Convert.ToString(Math.Round(ecke.MaterialstaerkeEins / Math.Cos(Calculate.DegreeToRadian(ecke.WinkelAlphaEins)), 2)) + " mm";
+                textBlockEckeSchraegeSZwei.Text = Convert.ToString(Math.Round(ecke.MaterialstaerkeZwei / Math.Cos(Calculate.DegreeToRadian(ecke.WinkelAlphaZwei)), 2)) + " mm";
             }
 
             // Ein 3D-Modell der Pyramide erzeugen und der Grafik zuweisen.
@@ -393,8 +393,8 @@ namespace Schifterschnitt
             if (eckeFeedback.Berechnet.Aktiv && !TextBoxIstRot(eckeEingaben, 9, 12))
             {
                 // Die Zusätze berechnen.
-                double zusatzEins = Math.Tan(Rechne.DegreeToRadian(ecke.WinkelQueranschlagEins)) * ecke.BreiteEins;
-                double zusatzZwei = Math.Tan(Rechne.DegreeToRadian(ecke.WinkelQueranschlagZwei)) * ecke.BreiteZwei;
+                double zusatzEins = Math.Tan(Calculate.DegreeToRadian(ecke.WinkelQueranschlagEins)) * ecke.BreiteEins;
+                double zusatzZwei = Math.Tan(Calculate.DegreeToRadian(ecke.WinkelQueranschlagZwei)) * ecke.BreiteZwei;
 
                 // Wenn es bei einer Linie eine Eingabe gibt die andere Linie berechnen und dem anderen Eingabefeld zuweisen.
                 if (textBoxEckeLinieYEins.Text != "" && liniexyTeilEinsBerechnet == false)
@@ -459,14 +459,14 @@ namespace Schifterschnitt
             // Wenn alle Eingaben gültig sind und die Eingabefelder nicht leer sind die Winkel Alpha berechnen und zuweisen.
             if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzEins.Background == Brushes.White && textBoxEckeBreitenversatzEins.Text != "")
             {
-                textBoxEckeWinkelAlphaEins.Text = Convert.ToString(Math.Round(Rechne.RadianToDegree(Math.Atan(breitenversatzEins / höhe)), 4));
+                textBoxEckeWinkelAlphaEins.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatzEins / höhe)), 4));
 
                 x = true;
             }
 
             if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzZwei.Background == Brushes.White && textBoxEckeBreitenversatzZwei.Text != "")
             {
-                textBoxEckeWinkelAlphaZwei.Text = Convert.ToString(Math.Round(Rechne.RadianToDegree(Math.Atan(breitenversatzZwei / höhe)), 4));
+                textBoxEckeWinkelAlphaZwei.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatzZwei / höhe)), 4));
 
                 x = true;
             }
@@ -813,8 +813,8 @@ namespace Schifterschnitt
             // Berechnung und setzen der Eigenschaften für die Hauptberechnung.
             pyramideLinie.WinkelBeta = Math.Round(Convert.ToDouble((pyramideLinie.AnzahlSeiten - 2.0) * 180.0 / pyramideLinie.AnzahlSeiten), 4);
 
-            double alpha = Rechne.RadianToDegree(Math.Atan(((pyramideLinie.Grundlinie / (2 * Math.Tan(Rechne.DegreeToRadian(180.0) / pyramideLinie.AnzahlSeiten))) -
-                (pyramideLinie.Oberlinie / (2 * Math.Tan(Rechne.DegreeToRadian(180.0) / pyramideLinie.AnzahlSeiten)))) / pyramideLinie.Hoehe));
+            double alpha = Calculate.RadianToDegree(Math.Atan(((pyramideLinie.Grundlinie / (2 * Math.Tan(Calculate.DegreeToRadian(180.0) / pyramideLinie.AnzahlSeiten))) -
+                (pyramideLinie.Oberlinie / (2 * Math.Tan(Calculate.DegreeToRadian(180.0) / pyramideLinie.AnzahlSeiten)))) / pyramideLinie.Hoehe));
 
             pyramideLinie.WinkelAlphaEins = alpha;
             pyramideLinie.WinkelAlphaZwei = alpha;
@@ -825,7 +825,7 @@ namespace Schifterschnitt
             pyramideLinie.Berechnung();
 
             // Die Länge der Schräge S berechnen.
-            double schrägeS = pyramideLinie.MaterialstaerkeEins / Math.Cos(Rechne.DegreeToRadian(pyramideLinie.WinkelAlphaEins));
+            double schrägeS = pyramideLinie.MaterialstaerkeEins / Math.Cos(Calculate.DegreeToRadian(pyramideLinie.WinkelAlphaEins));
 
             // Die Ergebnisse den Ergebnisfeldern zuweisen.
             textBlockPyramideLinieWinkelQueranschlag.Text = Math.Round(pyramideLinie.WinkelQueranschlagEins, 2) + "°";
@@ -835,19 +835,19 @@ namespace Schifterschnitt
 
             // Berechnung der weiteren Ergebnisse und Zuweisung zu den Ergebnisfeldern.
             textBlockPyramideLinieFlächenwinkel.Text = Math.Round(pyramideLinie.Flächenwinkel, 2) + "°";
-            textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Math.Sin(Rechne.DegreeToRadian(pyramideLinie.WinkelAlphaEins)) * pyramideLinie.BreiteEins, 2)) + " mm";
+            textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(pyramideLinie.WinkelAlphaEins)) * pyramideLinie.BreiteEins, 2)) + " mm";
             textBlockPyramideLinieSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
             textBlockPyramideLinieNeigungswinkel.Text = Convert.ToString(Math.Round(pyramideLinie.WinkelAlphaEins, 2)) + " °";
-            textBlockPyramideLinieInkreisradiusOA.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusOI.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUA.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUI.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOA.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOI.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten) - schrägeS /
-                Math.Sin(Rechne.DegreeToRadian(pyramideLinie.WinkelBeta / 2.0)), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUA.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten) - schrägeS /
-                Math.Sin(Rechne.DegreeToRadian(pyramideLinie.WinkelBeta / 2.0)), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten) - schrägeS, 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten) - schrägeS, 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideLinie.Oberlinie, pyramideLinie.AnzahlSeiten) - schrägeS /
+                Math.Sin(Calculate.DegreeToRadian(pyramideLinie.WinkelBeta / 2.0)), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideLinie.Grundlinie, pyramideLinie.AnzahlSeiten) - schrägeS /
+                Math.Sin(Calculate.DegreeToRadian(pyramideLinie.WinkelBeta / 2.0)), 2)) + " mm";
 
             // Ein 3D-Modell der Pyramide erzeugen und der Grafik zuweisen.
             pyramideLinie.ModellErzeugen(modelVisual3dPyramideLinie);
@@ -1055,7 +1055,7 @@ namespace Schifterschnitt
             pyramideWinkel.WinkelAlphaZwei = neigungswinkel;
 
             // Die Höhe der Pyramide berechnen.
-            höheErgebend = Math.Tan(Rechne.DegreeToRadian(90.0 - pyramideWinkel.WinkelAlphaEins)) * (pyramideWinkel.Grundlinie / (2 * Math.Tan(Rechne.DegreeToRadian(180.0 /
+            höheErgebend = Math.Tan(Calculate.DegreeToRadian(90.0 - pyramideWinkel.WinkelAlphaEins)) * (pyramideWinkel.Grundlinie / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 /
                 pyramideWinkel.AnzahlSeiten))));
 
             // Wenn der Neigungswinkel positiv ist.
@@ -1133,7 +1133,7 @@ namespace Schifterschnitt
             pyramideWinkel.Berechnung();
 
             // Die Länge der Schräge S berechnen.
-            double schrägeS = pyramideWinkel.MaterialstaerkeEins / Math.Cos(Rechne.DegreeToRadian(pyramideWinkel.WinkelAlphaEins));
+            double schrägeS = pyramideWinkel.MaterialstaerkeEins / Math.Cos(Calculate.DegreeToRadian(pyramideWinkel.WinkelAlphaEins));
 
             // Zuweisen der Ergebnisse zu den Ergebnisfeldern.
             textBlockPyramideWinkelWinkelQueranschlag.Text = Math.Round(pyramideWinkel.WinkelQueranschlagEins, 2) + "°";
@@ -1142,12 +1142,12 @@ namespace Schifterschnitt
             textBlockPyramideWinkelBreiteMitSchraege.Text = pyramideWinkel.WinkelAlphaEins == 90 || pyramideWinkel.WinkelAlphaEins == -90 ? "Error" : Math.Round(pyramideWinkel.BreiteMitSchrägeEins, 2) + " mm";
 
             // Berechnung der weiteren Ergebnisse und Zuweisung zu den Ergebnisfeldern.
-            pyramideWinkel.Oberlinie = ((pyramideWinkel.Grundlinie / (2 * Math.Tan(Rechne.DegreeToRadian(180.0 / pyramideWinkel.AnzahlSeiten)))) -
-                Math.Sin(Rechne.DegreeToRadian(pyramideWinkel.WinkelAlphaEins)) * pyramideWinkel.BreiteEins) * (2 * Math.Tan(Rechne.DegreeToRadian(180.0 / pyramideWinkel.AnzahlSeiten)));
+            pyramideWinkel.Oberlinie = ((pyramideWinkel.Grundlinie / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramideWinkel.AnzahlSeiten)))) -
+                Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.WinkelAlphaEins)) * pyramideWinkel.BreiteEins) * (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramideWinkel.AnzahlSeiten)));
 
             textBlockPyramideWinkelFlächenwinkel.Text = Math.Round(pyramideWinkel.Flächenwinkel, 2) + "°";
-            textBlockPyramideWinkelInkreisradiusUA.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
-            textBlockPyramideWinkelUmkreisradiusUA.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideWinkelInkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
+            textBlockPyramideWinkelUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
 
             if (pyramideWinkel.WinkelAlphaEins == 90 || pyramideWinkel.WinkelAlphaEins == -90)
             {
@@ -1164,14 +1164,14 @@ namespace Schifterschnitt
             else
             {
                 textBlockPyramideWinkelSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelBreitenversatzErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Rechne.DegreeToRadian(pyramideWinkel.WinkelAlphaEins)) * pyramideWinkel.BreiteEins, 2)) + " mm";
+                textBlockPyramideWinkelBreitenversatzErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.WinkelAlphaEins)) * pyramideWinkel.BreiteEins, 2)) + " mm";
                 textBlockPyramideWinkelOberlinie.Text = Convert.ToString(Math.Round(pyramideWinkel.Oberlinie, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOA.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOA.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOI.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusUI.Text = Convert.ToString(Math.Round(Rechne.Inkreis(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOI.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten) - schrägeS / Math.Sin(Rechne.DegreeToRadian(pyramideWinkel.WinkelBeta / 2.0)), 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Rechne.Umkreis(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten) - schrägeS / Math.Sin(Rechne.DegreeToRadian(pyramideWinkel.WinkelBeta / 2.0)), 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten), 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten) - schrägeS, 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten) - schrägeS, 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideWinkel.Oberlinie, pyramideWinkel.AnzahlSeiten) - schrägeS / Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.WinkelBeta / 2.0)), 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideWinkel.Grundlinie, pyramideWinkel.AnzahlSeiten) - schrägeS / Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.WinkelBeta / 2.0)), 2)) + " mm";
             }
 
             // Ein neues 3D-Modell der Pyramide erzeugen und der Grafik zuweisen.
@@ -1219,7 +1219,7 @@ namespace Schifterschnitt
             }
 
             // Den Neigungswinkel berechnen und einsetzen.
-            textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(Math.Round(Rechne.RadianToDegree(Math.Atan(breitenversatz / höhe)), 4));
+            textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatz / höhe)), 4));
 
             // Aktiviert die Meldung [NeigungswinkelBerechnet].
             pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.NeigungswinkelBerechnet);
@@ -1499,17 +1499,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
             // Wenn das Scrollrad nach oben bewegt wurde und die Position weit genug vom Nullpunkt weg ist die Position der Kamera an den Mittelpunkt annähern.
             if (e.Delta > 0 && entfernung > 2.5)
             {
-                actualPosition.X = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Y = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Z = Math.Sin(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7);
+                actualPosition.X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
+                actualPosition.Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
+                actualPosition.Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7);
             }
 
             // Wenn das Scrollrad nach unten bewegt wurde und die Position nah genug am Nullpunkt ist die Position der Kamera vom Mittelpunkt entfernen.
             if (e.Delta < 0 && entfernung < 20)
             {
-                actualPosition.X = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Y = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Z = Math.Sin(Rechne.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7);
+                actualPosition.X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
+                actualPosition.Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
+                actualPosition.Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7);
             }
 
             // Die neue Position der Kamera zuweisen.
@@ -1581,9 +1581,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
             Point3D kameraPositionNeu = new Point3D
             {
                 // Die neuen Werte für die Position berechnen.
-                Z = Math.Sin(Rechne.DegreeToRadian(kameraWinkel)) * entfernung,
-                X = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1,
-                Y = Math.Abs(Math.Cos(Rechne.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1
+                Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * entfernung,
+                X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1,
+                Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1
             };
 
             // Die neue Position der Kamera zuweisen.
