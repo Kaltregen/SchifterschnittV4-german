@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-namespace Schifterschnitt.Objekt
+namespace Schifterschnitt
 {
     /// <summary>
     /// Eine Pyramide mit Schifterschnitt.

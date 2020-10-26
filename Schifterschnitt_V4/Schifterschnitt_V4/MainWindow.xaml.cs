@@ -21,8 +21,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using Schifterschnitt.Objekt;
-using Schifterschnitt.Feedback;
 using System.Windows.Input;
 
 namespace Schifterschnitt
@@ -57,9 +55,9 @@ namespace Schifterschnitt
         double pyramideWinkelKameraWinkel = new double();
 
         // Die Feedbackleisten erstellen.
-        Feedbackleiste eckeFeedback;
-        Feedbackleiste pyramideLinieFeedback;
-        Feedbackleiste pyramideWinkelFeedback;
+        FeedbackArea eckeFeedback;
+        FeedbackArea pyramideLinieFeedback;
+        FeedbackArea pyramideWinkelFeedback;
 
         // Arrays für die Eingabefelder erstellen.
         TextBox[] eckeEingaben;
@@ -96,9 +94,9 @@ namespace Schifterschnitt
             pyramideWinkelKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
             
             // Die Feedbackleisten initialisieren und den Grids im Fenster zuweisen.
-            eckeFeedback = new Feedbackleiste(gridEckeFeedback);
-            pyramideLinieFeedback = new Feedbackleiste(gridPyramideLinieFeedback);
-            pyramideWinkelFeedback = new Feedbackleiste(gridPyramideWinkelFeedback);
+            eckeFeedback = new FeedbackArea(gridEckeFeedback);
+            pyramideLinieFeedback = new FeedbackArea(gridPyramideLinieFeedback);
+            pyramideWinkelFeedback = new FeedbackArea(gridPyramideWinkelFeedback);
 
             // Die Arrays für die Eingabefelder füllen.
             eckeEingaben = new TextBox[] { textBoxEckeHoehe, textBoxEckeMaterialstaerkeEins, textBoxEckeMaterialstaerkeZwei, textBoxEckeWinkelAlphaEins,
@@ -112,9 +110,9 @@ namespace Schifterschnitt
                 textBoxPyramideWinkelGrundlinie, textBoxPyramideWinkelNeigungswinkel, textBoxPyramideWinkelBreitenversatz };
             
             // Für alle Tabs die Meldung Eingabewerte eingeben aktivieren.
-            eckeFeedback.Aktivieren(eckeFeedback.EingabewerteEingeben);
-            pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.EingabewerteEingeben);
-            pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+            eckeFeedback.Activate(eckeFeedback.EnterValues);
+            pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
+            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
         }
 
         #endregion
@@ -195,11 +193,11 @@ namespace Schifterschnitt
             modelVisual3dEcke.Content = new Model3DGroup();
             
             // Deaktiviert die Meldungen [Berechnet, EingabeGeändert, AlphaBerechnet, AlphaGeändert, BetaBerechnet, BetaGeändert, UngültigeWerte, LiniexyUngültigeWerte, LiniexyZuVieleEingaben].
-            eckeFeedback.Deaktivieren(eckeFeedback.Berechnet, eckeFeedback.EingabeGeändert, eckeFeedback.AlphaBerechnet, eckeFeedback.AlphaGeändert, eckeFeedback.BetaBerechnet, 
-                eckeFeedback.BetaGeändert, eckeFeedback.UngültigeWerte, eckeFeedback.LiniexyUngültigeWerte, eckeFeedback.LiniexyZuVieleEingaben);
+            eckeFeedback.Deactivate(eckeFeedback.Calculated, eckeFeedback.InputChanged, eckeFeedback.AlphaCalculated, eckeFeedback.AlphaChanged, eckeFeedback.BetaCalculated, 
+                eckeFeedback.BetaChanged, eckeFeedback.InvalidValues, eckeFeedback.LineXYInvalidValues, eckeFeedback.LineXYToManyValues);
 
             // Aktiviert die Meldungen [EingabewerteEingeben].
-            eckeFeedback.Aktivieren(eckeFeedback.EingabewerteEingeben);
+            eckeFeedback.Activate(eckeFeedback.EnterValues);
         }
 
         /// <summary>
@@ -216,7 +214,7 @@ namespace Schifterschnitt
             }
 
             // Deaktiviert die Meldung [EingabeGeändert].
-            eckeFeedback.Deaktivieren(eckeFeedback.EingabeGeändert);
+            eckeFeedback.Deactivate(eckeFeedback.InputChanged);
 
             // Hilfsvariablen erstellen.
             double höhe = 0;
@@ -236,10 +234,10 @@ namespace Schifterschnitt
                 modelVisual3dEcke.Content = new Model3DGroup();
 
                 // Deaktiviert die Meldung [Berechnet].
-                eckeFeedback.Deaktivieren(eckeFeedback.Berechnet);
+                eckeFeedback.Deactivate(eckeFeedback.Calculated);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                eckeFeedback.Aktivieren(eckeFeedback.EingabewerteEingeben);
+                eckeFeedback.Activate(eckeFeedback.EnterValues);
 
                 return;
             }
@@ -273,13 +271,13 @@ namespace Schifterschnitt
                 modelVisual3dEcke.Content = new Model3DGroup();
                 
                 // Deaktiviert die Meldung [Berechnet].
-                eckeFeedback.Deaktivieren(eckeFeedback.Berechnet);
+                eckeFeedback.Deactivate(eckeFeedback.Calculated);
 
                 // Aktivert die Meldung [UngültigeWerte].
-                eckeFeedback.Aktivieren(eckeFeedback.UngültigeWerte);
+                eckeFeedback.Activate(eckeFeedback.InvalidValues);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                eckeFeedback.Aktivieren(eckeFeedback.EingabewerteEingeben);
+                eckeFeedback.Activate(eckeFeedback.EnterValues);
 
                 return;
             }
@@ -327,10 +325,10 @@ namespace Schifterschnitt
             ecke.ModellErzeugen(modelVisual3dEcke);
 
             // Deaktiviert die Meldung [EingabewerteEingeben].
-            eckeFeedback.Deaktivieren(eckeFeedback.EingabewerteEingeben);
+            eckeFeedback.Deactivate(eckeFeedback.EnterValues);
 
             // Aktiviert die Meldung [Berechnet].
-            eckeFeedback.Aktivieren(eckeFeedback.Berechnet);
+            eckeFeedback.Activate(eckeFeedback.Calculated);
         }
 
         /// <summary>
@@ -367,7 +365,7 @@ namespace Schifterschnitt
             if (TextBoxIstRot(eckeEingaben, 9, 12))
             {
                 // Aktiviert die Meldung [LiniexyUngültigeWerte].
-                eckeFeedback.Aktivieren(eckeFeedback.LiniexyUngültigeWerte);
+                eckeFeedback.Activate(eckeFeedback.LineXYInvalidValues);
             }
 
             // Überprüft ob es bei einem Teil mehrere Eingaben gibt und färbt diese Felder rot.
@@ -377,7 +375,7 @@ namespace Schifterschnitt
                 textBoxEckeLinieXEins.Background = Brushes.Red;
 
                 // Aktiviert die Meldung [LiniexyZuVieleEingaben].
-                eckeFeedback.Aktivieren(eckeFeedback.LiniexyZuVieleEingaben);
+                eckeFeedback.Activate(eckeFeedback.LineXYToManyValues);
             }
 
             if (textBoxEckeLinieYZwei.Text != "" && textBoxEckeLinieXZwei.Text != "" && liniexyTeilZweiBerechnet == false)
@@ -386,11 +384,11 @@ namespace Schifterschnitt
                 textBoxEckeLinieXZwei.Background = Brushes.Red;
 
                 // Aktiviert die Meldung [LiniexyZuVieleEingaben].
-                eckeFeedback.Aktivieren(eckeFeedback.LiniexyZuVieleEingaben);
+                eckeFeedback.Activate(eckeFeedback.LineXYToManyValues);
             }
             
             // Wenn die Ecke erfolgreich berechnet wurde und kein Eingabefeld rot ist.
-            if (eckeFeedback.Berechnet.Aktiv && !TextBoxIstRot(eckeEingaben, 9, 12))
+            if (eckeFeedback.Calculated.Active && !TextBoxIstRot(eckeEingaben, 9, 12))
             {
                 // Die Zusätze berechnen.
                 double zusatzEins = Math.Tan(Calculate.DegreeToRadian(ecke.WinkelQueranschlagEins)) * ecke.BreiteEins;
@@ -429,7 +427,7 @@ namespace Schifterschnitt
         private void ButtonEckeWinkelAlpha_Click(object sender, RoutedEventArgs e)
         {
             // Deaktiviert die Meldung [AlphaGeändert].
-            eckeFeedback.Deaktivieren(eckeFeedback.AlphaGeändert);
+            eckeFeedback.Deactivate(eckeFeedback.AlphaChanged);
 
             // Hilfsvariablen erstellen.
             double höhe = 0;
@@ -450,7 +448,7 @@ namespace Schifterschnitt
             if (textBoxEckeHoehe.Background == Brushes.Red || TextBoxIstRot(eckeEingaben, 6, 7))
             {
                 // Aktiviert die Meldung [UngültigeWerte].
-                eckeFeedback.Aktivieren(eckeFeedback.UngültigeWerte);
+                eckeFeedback.Activate(eckeFeedback.InvalidValues);
             }
 
             // Hilfsvariable erstellen.
@@ -475,7 +473,7 @@ namespace Schifterschnitt
             if (x)
             {
                 // Aktiviert die Meldung [AlphaBerechnet].
-                eckeFeedback.Aktivieren(eckeFeedback.AlphaBerechnet);
+                eckeFeedback.Activate(eckeFeedback.AlphaCalculated);
             }
         }
 
@@ -487,7 +485,7 @@ namespace Schifterschnitt
         private void ButtonEckeWinkelBeta_Click(object sender, RoutedEventArgs e)
         {
             // Deaktiviert die Meldung [BetaGeändert].
-            eckeFeedback.Deaktivieren(eckeFeedback.BetaGeändert);
+            eckeFeedback.Deactivate(eckeFeedback.BetaChanged);
 
             // Hilfsvariable erstellen.
             short anzahlSeiten = 0;
@@ -502,7 +500,7 @@ namespace Schifterschnitt
                 textBoxEckeAnzahlSeiten.Background = Brushes.Red;
 
                 // Aktiviert die Meldung [UngültigeWerte].
-                eckeFeedback.Aktivieren(eckeFeedback.UngültigeWerte);
+                eckeFeedback.Activate(eckeFeedback.InvalidValues);
 
                 return;
             }
@@ -511,7 +509,7 @@ namespace Schifterschnitt
             textBoxEckeWinkelBeta.Text = Convert.ToString(Math.Round(Convert.ToDouble((anzahlSeiten - 2.0) * 180.0 / anzahlSeiten), 4));
 
             // Aktiviert die Meldung [BetaBerechnet].
-            eckeFeedback.Aktivieren(eckeFeedback.BetaBerechnet);
+            eckeFeedback.Activate(eckeFeedback.BetaCalculated);
         }
 
         /// <summary>
@@ -528,44 +526,44 @@ namespace Schifterschnitt
             if (!TextBoxIstRot(eckeEingaben, 0, 8))
             {
                 // Deaktivert die Meldung [UngültigeWerte].
-                eckeFeedback.Deaktivieren(eckeFeedback.UngültigeWerte);
+                eckeFeedback.Deactivate(eckeFeedback.InvalidValues);
             }
 
             // Wenn das Eingabefeld, das die Methode ausgelöst hat, keines der Funktionen ist und die Ecke erfolgreich berechnet wurde.
             for (int i = 0; i <= 5; i++)
             {
-                if (eckeFeedback.Berechnet.Aktiv && (TextBox)sender == eckeEingaben[i])
+                if (eckeFeedback.Calculated.Active && (TextBox)sender == eckeEingaben[i])
                 {
                     // Aktiviert die Meldung [EingabeGeändert].
-                    eckeFeedback.Aktivieren(eckeFeedback.EingabeGeändert);
+                    eckeFeedback.Activate(eckeFeedback.InputChanged);
 
                     // Deaktiviert die Meldung [Berechnet].
-                    eckeFeedback.Deaktivieren(eckeFeedback.Berechnet);
+                    eckeFeedback.Deactivate(eckeFeedback.Calculated);
                 }
             }
 
             // Wenn das Eingabefeld, das die Methode ausgelöst hat, eine der Funktion Winkel Alpha Berechnen ist und diese erfolgreich berechnet wurde.
             for (int i = 6; i <= 7; i++)
             {
-                if (eckeFeedback.AlphaBerechnet.Aktiv && ((TextBox)sender == eckeEingaben[i] || (TextBox)sender == textBoxEckeWinkelAlphaEins || 
+                if (eckeFeedback.AlphaCalculated.Active && ((TextBox)sender == eckeEingaben[i] || (TextBox)sender == textBoxEckeWinkelAlphaEins || 
                     (TextBox)sender == textBoxEckeWinkelAlphaZwei || (TextBox)sender == textBoxEckeHoehe))
                 {
                     // Aktiviert die Meldung [AlphaGeändert].
-                    eckeFeedback.Aktivieren(eckeFeedback.AlphaGeändert);
+                    eckeFeedback.Activate(eckeFeedback.AlphaChanged);
 
                     // Deaktiviert die Meldung [AlphaBerechnet].
-                    eckeFeedback.Deaktivieren(eckeFeedback.AlphaBerechnet);
+                    eckeFeedback.Deactivate(eckeFeedback.AlphaCalculated);
                 }
             }
 
             // Wenn das Eingabefeld, das die Methode ausgelöst hat, das der Funktion Winkel Beta Berechnen ist und diese erfolgreich berechnet wurde.
-            if (eckeFeedback.BetaBerechnet.Aktiv && ((TextBox)sender == textBoxEckeAnzahlSeiten || (TextBox)sender == textBoxEckeWinkelBeta))
+            if (eckeFeedback.BetaCalculated.Active && ((TextBox)sender == textBoxEckeAnzahlSeiten || (TextBox)sender == textBoxEckeWinkelBeta))
             {
                 // Aktiviert die Meldung [BetaGeändert].
-                eckeFeedback.Aktivieren(eckeFeedback.BetaGeändert);
+                eckeFeedback.Activate(eckeFeedback.BetaChanged);
 
                 // Deaktiviert die Meldung [BetaBerechnet].
-                eckeFeedback.Deaktivieren(eckeFeedback.BetaBerechnet);
+                eckeFeedback.Deactivate(eckeFeedback.BetaCalculated);
             }
         }
 
@@ -577,13 +575,13 @@ namespace Schifterschnitt
         private void EckeCheckbox_Click(object sender, RoutedEventArgs e)
         {
             // Wenn die Ecke erfolgreich berechnet wurde.
-            if (eckeFeedback.Berechnet.Aktiv)
+            if (eckeFeedback.Calculated.Active)
             {
                 // Aktiviert die Meldung [EingabeGeändert].
-                eckeFeedback.Aktivieren(eckeFeedback.EingabeGeändert);
+                eckeFeedback.Activate(eckeFeedback.InputChanged);
 
                 // Deaktiviert die Meldung [Berechnet].
-                eckeFeedback.Deaktivieren(eckeFeedback.Berechnet);
+                eckeFeedback.Deactivate(eckeFeedback.Calculated);
             }
         }
 
@@ -626,7 +624,7 @@ namespace Schifterschnitt
                 !(textBoxEckeLinieYZwei.Background == Brushes.Red && textBoxEckeLinieXZwei.Background == Brushes.Red))
             {
                 // Deaktivert die Meldung [LiniexyZuVieleEingaben].
-                eckeFeedback.Deaktivieren(eckeFeedback.LiniexyZuVieleEingaben);
+                eckeFeedback.Deactivate(eckeFeedback.LineXYToManyValues);
             }
 
             // Geht die Eingabefelder der Funktion Linie XY durch.
@@ -643,7 +641,7 @@ namespace Schifterschnitt
             }
 
             // Deaktiviert die Meldung [LiniexyUngültigeWerte].
-            eckeFeedback.Deaktivieren(eckeFeedback.LiniexyUngültigeWerte);
+            eckeFeedback.Deactivate(eckeFeedback.LineXYInvalidValues);
         }
 
         #endregion
@@ -724,10 +722,10 @@ namespace Schifterschnitt
             modelVisual3dPyramideLinie.Content = new Model3DGroup();
             
             // Deaktiviert die Meldungen [UngültigeWerte, EingabeGeändert, Berechnet].
-            pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.UngültigeWerte, pyramideLinieFeedback.EingabeGeändert, pyramideLinieFeedback.Berechnet);
+            pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InvalidValues, pyramideLinieFeedback.InputChanged, pyramideLinieFeedback.Calculated);
 
             // Aktiviert die Meldung [EingabewerteEingeben].
-            pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.EingabewerteEingeben);
+            pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
         }
 
         /// <summary>
@@ -738,7 +736,7 @@ namespace Schifterschnitt
         private void ButtonPyramideLinieBerechnung_Click(object sender, RoutedEventArgs e)
         {
             // Deaktiviert die Meldung [EingabeGeändert].
-            pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.EingabeGeändert);
+            pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InputChanged);
 
             // Hilfsvariablen erstellen.
             double höhe = 0;
@@ -757,10 +755,10 @@ namespace Schifterschnitt
                 modelVisual3dPyramideLinie.Content = new Model3DGroup();
 
                 // Deaktiviert die Meldung [Berechnet].
-                pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.Berechnet);
+                pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.EingabewerteEingeben);
+                pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
 
                 return;
             }
@@ -791,13 +789,13 @@ namespace Schifterschnitt
                 modelVisual3dPyramideLinie.Content = new Model3DGroup();
 
                 // Deaktiviert die Meldung [Berechnet].
-                pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.Berechnet);
+                pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
 
                 // Aktiviert die Meldung [UngültigeWerte].
-                pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.UngültigeWerte);
+                pyramideLinieFeedback.Activate(pyramideLinieFeedback.InvalidValues);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.EingabewerteEingeben);
+                pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
 
                 return;
             }
@@ -853,10 +851,10 @@ namespace Schifterschnitt
             pyramideLinie.ModellErzeugen(modelVisual3dPyramideLinie);
 
             // Deaktiviert die Meldungen [EingabewerteEingeben].
-            pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.EingabewerteEingeben);
+            pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.EnterValues);
 
             // Aktiviert die Meldung [Berechnet].
-            pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.Berechnet);
+            pyramideLinieFeedback.Activate(pyramideLinieFeedback.Calculated);
         }
 
         /// <summary>
@@ -873,17 +871,17 @@ namespace Schifterschnitt
             if (!TextBoxIstRot(pyramideLinieEingaben, 0, 4))
             {
                 // Deaktiviert die Meldung [UngültigeWerte].
-                pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.UngültigeWerte);
+                pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InvalidValues);
             }
 
             // Wenn die Pyramide erfolgreich brechnet wurde.
-            if (pyramideLinieFeedback.Berechnet.Aktiv)
+            if (pyramideLinieFeedback.Calculated.Active)
             {
                 // Aktiviert die Meldung [EingabeGeändert].
-                pyramideLinieFeedback.Aktivieren(pyramideLinieFeedback.EingabeGeändert);
+                pyramideLinieFeedback.Activate(pyramideLinieFeedback.InputChanged);
 
                 // Deaktiviert die Meldung [Berechnet].
-                pyramideLinieFeedback.Deaktivieren(pyramideLinieFeedback.Berechnet);
+                pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
             }
         }
 
@@ -965,12 +963,12 @@ namespace Schifterschnitt
             modelVisual3dPyramideWinkel.Content = new Model3DGroup();
 
             // Deaktiviert die Meldungen [UngültigeWerte, EingabeGeändert, Berechnet, NeigungswinkelBerechnet, NeigungswinkelGeändert, HöheGrößerAlsErgebend, HöheErforderlich].
-            pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.UngültigeWerte, pyramideWinkelFeedback.EingabeGeändert, pyramideWinkelFeedback.Berechnet, 
-                pyramideWinkelFeedback.NeigungswinkelBerechnet, pyramideWinkelFeedback.NeigungswinkelGeändert, pyramideWinkelFeedback.HöheGrößerAlsErgebend, 
-                pyramideWinkelFeedback.HöheErforderlich);
+            pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InvalidValues, pyramideWinkelFeedback.InputChanged, pyramideWinkelFeedback.Calculated, 
+                pyramideWinkelFeedback.TiltAngleCalculated, pyramideWinkelFeedback.TiltAngleChanged, pyramideWinkelFeedback.HeightLargerThanResulting, 
+                pyramideWinkelFeedback.HeightNeeded);
 
             // Aktiviert die Meldung [EingabewerteEingeben].
-            pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
         }
 
         /// <summary>
@@ -981,7 +979,7 @@ namespace Schifterschnitt
         private void ButtonPyramideWinkelBerechnung_Click(object sender, RoutedEventArgs e)
         {
             // Deaktiviert die Meldung [EingabeGeändert].
-            pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.EingabeGeändert);
+            pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InputChanged);
 
             // Hilfsvariablen erstellen.
             short anzahlSeiten = 0;
@@ -1001,10 +999,10 @@ namespace Schifterschnitt
                 modelVisual3dPyramideWinkel.Content = new Model3DGroup();
 
                 // Deaktiviert die Meldung [Berechnet].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.Berechnet);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
 
                 return;
             }
@@ -1035,13 +1033,13 @@ namespace Schifterschnitt
                 modelVisual3dPyramideWinkel.Content = new Model3DGroup();
 
                 // Deaktiviert die Meldung [Berechnet].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.Berechnet);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
 
                 // Aktiviert die Meldung [UngültigeWerte].
-                pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.UngültigeWerte);
+                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InvalidValues);
 
                 // Aktiviert die Meldung [EingabewerteEingeben].
-                pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 
                 return;
             }
@@ -1067,13 +1065,13 @@ namespace Schifterschnitt
                     textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
                     // Deaktiviert die Meldung [Berechnet].
-                    pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.Berechnet);
+                    pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
 
                     // Aktiviert die Meldung [HöheGrößerAlsErgebend].
-                    pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.HöheGrößerAlsErgebend);
+                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.HeightLargerThanResulting);
 
                     // Aktiviert die Meldung [EingabewerteEingeben].
-                    pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 }
                 else
                 {
@@ -1097,13 +1095,13 @@ namespace Schifterschnitt
                     textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
                     // Aktiviert die Meldung [HöheErforderlich].
-                    pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.HöheErforderlich);
+                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.HeightNeeded);
 
                     // Deaktiviert die Meldung [Berechnet].
-                    pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.Berechnet);
+                    pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
 
                     // Aktiviert die Meldung [EingabewerteEingeben].
-                    pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 }
                 else
                 {
@@ -1178,10 +1176,10 @@ namespace Schifterschnitt
             pyramideWinkel.ModellErzeugen(modelVisual3dPyramideWinkel);
 
             // Deaktiviert die Meldungen [EingabewerteEingeben].
-            pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.EingabewerteEingeben);
+            pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.EnterValues);
 
             // Aktiviert die Meldung [Berechnet].
-            pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.Berechnet);
+            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.Calculated);
         }
 
         /// <summary>
@@ -1192,7 +1190,7 @@ namespace Schifterschnitt
         private void ButtonPyramideWinkelNeigungswinkel_Click(object sender, RoutedEventArgs e)
         {
             // Deaktiviert die Meldung [NeigungswinkelGeändert].
-            pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.NeigungswinkelGeändert);
+            pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.TiltAngleChanged);
 
             // Hilfsvariablen erstellen.
             double höhe = 0;
@@ -1213,7 +1211,7 @@ namespace Schifterschnitt
             if (textBoxPyramideWinkelHoehe.Background == Brushes.Red || textBoxPyramideWinkelBreitenversatz.Background == Brushes.Red)
             {
                 // Aktiviert die Meldung [UngültigeWerte].
-                pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.UngültigeWerte);
+                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InvalidValues);
 
                 return;
             }
@@ -1222,7 +1220,7 @@ namespace Schifterschnitt
             textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatz / höhe)), 4));
 
             // Aktiviert die Meldung [NeigungswinkelBerechnet].
-            pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.NeigungswinkelBerechnet);
+            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.TiltAngleCalculated);
         }
 
         /// <summary>
@@ -1239,31 +1237,31 @@ namespace Schifterschnitt
             if (!TextBoxIstRot(pyramideWinkelEingaben, 0, 5))
             {
                 // Deaktiviert die Meldung [UngültigeWerte].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.UngültigeWerte);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InvalidValues);
             }
 
             // Wenn das Eingabefeld, das die Methode ausgelöst hat, keines der Funktionen ist und die Ecke erfolgreich berechnet wurde.
             for (int i = 0; i <= 4; i++)
             {
-                if (pyramideWinkelFeedback.Berechnet.Aktiv && (TextBox)sender == pyramideWinkelEingaben[i])
+                if (pyramideWinkelFeedback.Calculated.Active && (TextBox)sender == pyramideWinkelEingaben[i])
                 {
                     // Aktiviert die Meldung [EingabeGeändert].
-                    pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.EingabeGeändert);
+                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InputChanged);
 
                     // Deaktiviert die Meldung [Berechnet].
-                    pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.Berechnet);
+                    pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
                 }
             }
 
             // Wenn das Eingabefeld, das die Methode ausgelöst hat, eine der Funktion Neigungswinkel Berechnen ist und diese erfolgreich berechnet wurde.
-            if (pyramideWinkelFeedback.NeigungswinkelBerechnet.Aktiv && ((TextBox)sender == textBoxPyramideWinkelHoehe || (TextBox)sender == textBoxPyramideWinkelBreitenversatz || 
+            if (pyramideWinkelFeedback.TiltAngleCalculated.Active && ((TextBox)sender == textBoxPyramideWinkelHoehe || (TextBox)sender == textBoxPyramideWinkelBreitenversatz || 
                 (TextBox)sender == textBoxPyramideWinkelNeigungswinkel))
             {
                 // Aktiviert die Meldung [NeigungswinkelGeändert].
-                pyramideWinkelFeedback.Aktivieren(pyramideWinkelFeedback.NeigungswinkelGeändert);
+                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.TiltAngleChanged);
 
                 // Deaktiviert die Meldung [NeigungswinkelBerechnet].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.NeigungswinkelBerechnet);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.TiltAngleCalculated);
             }
 
             // Wenn der sender das Eingabefeld Höhe oder Neigungswinkel ist den Hintergrund des Eingabefelds Höhe weiß setzen und die Feedbackleiste aktualisieren.
@@ -1272,10 +1270,10 @@ namespace Schifterschnitt
                 textBoxPyramideWinkelHoehe.Background = Brushes.White;
 
                 // Deaktiviert die Meldung [HöheErforderlich].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.HöheErforderlich);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.HeightNeeded);
 
                 // Deaktiviert die Meldung [HöheGrößerAlsErgebend].
-                pyramideWinkelFeedback.Deaktivieren(pyramideWinkelFeedback.HöheGrößerAlsErgebend);
+                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.HeightLargerThanResulting);
             }
         }
 

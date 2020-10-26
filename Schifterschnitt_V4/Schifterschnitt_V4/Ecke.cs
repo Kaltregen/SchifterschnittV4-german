@@ -20,7 +20,7 @@ using System;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-namespace Schifterschnitt.Objekt
+namespace Schifterschnitt
 {
     /// <summary>
     /// Eine Ecke mit Schifterschnitt.

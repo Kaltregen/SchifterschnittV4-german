@@ -22,7 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
-namespace Schifterschnitt.Objekt
+namespace Schifterschnitt
 {
     /// <summary>
     /// Eine Ecke oder Pyramide mit Schifterschnitt mit Methoden zum Berechnen des Schifterschnitts und zum Erzeugen eines 3D-Modells.
