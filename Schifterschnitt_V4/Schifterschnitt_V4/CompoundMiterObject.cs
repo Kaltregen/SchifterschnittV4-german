@@ -25,118 +25,117 @@ using System.Windows.Media.Media3D;
 namespace Schifterschnitt
 {
     /// <summary>
-    /// Eine Ecke oder Pyramide mit Schifterschnitt mit Methoden zum Berechnen des Schifterschnitts und zum Erzeugen eines 3D-Modells.
+    /// An object with a compound miter cut.
     /// </summary>
-    public abstract class SchifterObjekt
+    public abstract class CompoundMiterObject
     {
-        #region Eigenschaften
+        #region Properties
 
         /// <summary>
-        /// Die Höhe der Ecke oder Pyramide.
+        /// The height of the object.
         /// </summary>
-        public double Hoehe { get; set; }
+        public double Height { get; set; }
 
         /// <summary>
-        /// Die Materialstärke des ersten Brettes.
+        /// The thickness of the first board.
         /// </summary>
-        public double MaterialstaerkeEins { get; set; }
+        public double ThicknessFirstBoard { get; set; }
 
         /// <summary>
-        /// Die Materialstärke des zweiten Brettes.
+        /// The thickness of the second board.
         /// </summary>
-        public double MaterialstaerkeZwei { get; set; }
+        public double ThicknessSecondBoard { get; set; }
 
         /// <summary>
-        /// Der Neigungswinkel des ersten Brettes.
+        /// The tilt angle of the first board.
         /// </summary>
-        public double WinkelAlphaEins { get; set; }
+        public double AngleAlphaFirstBoard { get; set; }
 
         /// <summary>
-        /// Der Neigungswinkel des zweiten Brettes.
+        /// The tilt angle of the second board.
         /// </summary>
-        public double WinkelAlphaZwei { get; set; }
+        public double AngleAlphaSecondBoard { get; set; }
 
         /// <summary>
-        /// Der Innenwinkel der Ecke oder Pyramide.
+        /// The angle between the boards.
         /// </summary>
-        public double WinkelBeta { get; set; }
+        public double AngleBeta { get; set; }
         
         /// <summary>
-        /// Gibt an ob eine Gehrung vorhanden ist.
+        /// Sets if there is a miter joint.
         /// </summary>
-        public bool Gehrung { get; set; }
+        public bool MiterJoint { get; set; }
         
         /// <summary>
-        /// Der Winkel des Queranschlags beim ersten Brett.
+        /// The cross cut angle for the first board.
         /// </summary>
-        public double WinkelQueranschlagEins { get; set; }
+        public double AngleCrossCutFirstBoard { get; set; }
 
         /// <summary>
-        /// Der Winkel des Queranschlags beim zweiten Brett.
+        /// The cross cut angle for the second board.
         /// </summary>
-        public double WinkelQueranschlagZwei { get; set; }
+        public double AngleCrossCutSecondBoard { get; set; }
 
         /// <summary>
-        /// Der Winkel des Sägeblatts beim ersten Brett.
+        /// The tilt angle of the saw blade for the first board.
         /// </summary>
-        public double WinkelSägeblattEins { get; set; }
+        public double AngleSawBladeTiltFirstBoard { get; set; }
 
         /// <summary>
-        /// Der Winkel des Sägeblatts beim zweiten Brett.
+        /// The tilt angle of the saw blade for the second board.
         /// </summary>
-        public double WinkelSägeblattZwei { get; set; }
+        public double AngleSawBladeTiltSecondBoard { get; set; }
 
         /// <summary>
-        /// Die Breite des ersten Bretts ohne Schräge.
+        /// The board width without the slant area for the first board.
         /// </summary>
-        public double BreiteEins { get; set; }
+        public double WidthFirstBoard { get; set; }
 
         /// <summary>
-        /// Die Breite des zweiten Bretts ohne Schräge.
+        /// The board width without the slant area for the second board.
         /// </summary>
-        public double BreiteZwei { get; set; }
+        public double WidthSecondBoard { get; set; }
 
         /// <summary>
-        /// Die Breite des ersten Bretts mit Schräge.
+        /// The total board width with the slant area for the first board.
         /// </summary>
-        public double BreiteMitSchrägeEins { get; set; }
+        public double WidthWithSlantFirstBoard { get; set; }
 
         /// <summary>
-        /// Die Breite des zweiten Bretts mit Schräge.
+        /// The total board width with the slant area for the second board.
         /// </summary>
-        public double BreiteMitSchrägeZwei { get; set; }
+        public double WidhtWithSlantSecondBoard { get; set; }
 
         /// <summary>
-        /// Der Flächenwinkel zwischen den Brettern.
+        /// The dihedral angle of the boards.
         /// </summary>
-        public double Flächenwinkel { get; set; }
+        public double AngleDihedral { get; set; }
 
         #endregion
 
-        #region Variablen
+        #region Variables
 
         /// <summary>
-        /// Das Material für die Grafik.
+        /// The material shown in the graphic.
         /// </summary>
-        DiffuseMaterial holzmaterial;
+        DiffuseMaterial woodMaterial;
 
         /// <summary>
-        /// Der ImageBrush für das Material.
+        /// The imagebrush for the material shown in the graphic.
         /// </summary>
-        ImageBrush holz = new ImageBrush();
+        ImageBrush wood = new ImageBrush();
 
         #endregion
 
         #region ctor
 
         /// <summary>
-        /// ctor
+        /// Create a new compound miter object.
         /// </summary>
-        public SchifterObjekt()
+        public CompoundMiterObject()
         {
-            // Dem ImageBrush ein Bild zuweisen und diesen dem Holzmaterial zuweisen.
-            holz.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Holz.bmp"));
-            holzmaterial = new DiffuseMaterial(holz);
+            wood.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Holz.bmp"));
+            woodMaterial = new DiffuseMaterial(wood);
         }
 
         #endregion
@@ -144,26 +143,26 @@ namespace Schifterschnitt
         #region Methoden
 
         /// <summary>
-        /// Berechnet den Schifterschnitt.
+        /// Calculates the compound miter cut.
         /// </summary>
-        public void Berechnung()
+        public void Calculation()
         {
-            double winkelAlphaEinsRadian = Calculate.DegreeToRadian(WinkelAlphaEins);
-            double winkelAlphaZweiRadian = Calculate.DegreeToRadian(WinkelAlphaZwei);
-            double winkelBetaRadian = Calculate.DegreeToRadian(WinkelBeta);
+            double winkelAlphaEinsRadian = Calculate.DegreeToRadian(AngleAlphaFirstBoard);
+            double winkelAlphaZweiRadian = Calculate.DegreeToRadian(AngleAlphaSecondBoard);
+            double winkelBetaRadian = Calculate.DegreeToRadian(AngleBeta);
 
-            Vector3D vektorEins = new Vector3D()
+            var vectorOne = new Vector3D()
             {
                 X = Math.Sin(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian),
                 Y = Math.Cos(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian)
             };
 
-            Vector3D vektorZwei = new Vector3D()
+            var vectorTwo = new Vector3D()
             {
                 X = Math.Tan(winkelAlphaZweiRadian)
             };
 
-            Vector3D vektorDrei = new Vector3D()
+            var vectorThree = new Vector3D()
             {
                 X = Math.Tan(winkelAlphaZweiRadian),
                 Y = Math.Cos(winkelBetaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(winkelAlphaEinsRadian) -
@@ -172,59 +171,59 @@ namespace Schifterschnitt
             };
             
             // Berechnung der Queranschlagswinkel.
-            double winkelQueranschlagEinsRadian = Math.Acos((vektorEins.X * vektorDrei.X + vektorEins.Y * vektorDrei.Y + 1) /
-                (Math.Sqrt(Math.Pow(vektorEins.X, 2) + Math.Pow(vektorEins.Y, 2) + 1) * Math.Sqrt(Math.Pow(vektorDrei.X, 2) + Math.Pow(vektorDrei.Y, 2) + 1)));
-            double winkelQueranschlagZweiRadian = Math.Acos((vektorZwei.X * vektorDrei.X + 1) / (Math.Sqrt(Math.Pow(vektorZwei.X, 2) + 1) *
-                Math.Sqrt(Math.Pow(vektorDrei.X, 2) + Math.Pow(vektorDrei.Y, 2) + 1)));
+            double winkelQueranschlagEinsRadian = Math.Acos((vectorOne.X * vectorThree.X + vectorOne.Y * vectorThree.Y + 1) /
+                (Math.Sqrt(Math.Pow(vectorOne.X, 2) + Math.Pow(vectorOne.Y, 2) + 1) * Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
+            double winkelQueranschlagZweiRadian = Math.Acos((vectorTwo.X * vectorThree.X + 1) / (Math.Sqrt(Math.Pow(vectorTwo.X, 2) + 1) *
+                Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
             
             // Setzt den Queranschlagswinkel des Teil zwei wenn nötig ins negative.
-            if (vektorDrei.Y < 0)
+            if (vectorThree.Y < 0)
                 winkelQueranschlagZweiRadian *= -1;
 
             // Setzt den Queranschlagswinkel des Teil eins wenn nötig ins negative.
-            if (360 - WinkelBeta - 180 <= 90)
+            if (360 - AngleBeta - 180 <= 90)
             {
                 // Vektor 3 Oben Links immer negativ
-                if (vektorDrei.X < 0 && vektorDrei.Y >= 0)
+                if (vectorThree.X < 0 && vectorThree.Y >= 0)
                     winkelQueranschlagEinsRadian *= -1;
 
                 // Vektor 3 Oben Rechts
-                if (vektorDrei.X >= 0 && vektorDrei.Y >= 0 && (vektorDrei.Y / vektorDrei.X) > (vektorEins.Y / vektorEins.X))
+                if (vectorThree.X >= 0 && vectorThree.Y >= 0 && (vectorThree.Y / vectorThree.X) > (vectorOne.Y / vectorOne.X))
                     winkelQueranschlagEinsRadian *= -1;
 
                 // Vektor 3 Unten Rechts immer positiv
 
                 // Vektor 3 Unten Links
-                if (vektorDrei.X < 0 && vektorDrei.Y < 0 && (Math.Abs(vektorDrei.Y) / Math.Abs(vektorDrei.X)) < (vektorEins.Y / vektorEins.X))
+                if (vectorThree.X < 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (vectorOne.Y / vectorOne.X))
                     winkelQueranschlagEinsRadian *= -1;
             }
             else
             {
                 // Vektor 3 Oben Links
-                if (vektorDrei.X < 0 && vektorDrei.Y >= 0 && (Math.Abs(vektorDrei.Y) / Math.Abs(vektorDrei.X)) < (Math.Abs(vektorEins.Y) / Math.Abs(vektorEins.X)))
+                if (vectorThree.X < 0 && vectorThree.Y >= 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
                     winkelQueranschlagEinsRadian *= -1;
 
                 // Vektor 3 Oben Rechts immer positiv
 
                 // Vektor 3 Unten Rechts
-                if (vektorDrei.X >= 0 && vektorDrei.Y < 0 && (Math.Abs(vektorDrei.Y) / Math.Abs(vektorDrei.X)) > (Math.Abs(vektorEins.Y) / Math.Abs(vektorEins.X)))
+                if (vectorThree.X >= 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) > (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
                     winkelQueranschlagEinsRadian *= -1;
 
                 // Vektor 3 Unten Links immer negativ
-                if (vektorDrei.X < 0 && vektorDrei.Y < 0)
+                if (vectorThree.X < 0 && vectorThree.Y < 0)
                     winkelQueranschlagEinsRadian *= -1;
             }
 
             // Setzt die Queranschlagswinkel auf Null wenn sie keine Zahl sind.
-            if (double.IsNaN(WinkelQueranschlagEins))
+            if (double.IsNaN(AngleCrossCutFirstBoard))
                 winkelQueranschlagEinsRadian = 0;
 
-            if (double.IsNaN(WinkelQueranschlagZwei))
+            if (double.IsNaN(AngleCrossCutSecondBoard))
                 winkelQueranschlagZweiRadian = 0;
 
             // Zuweisung der Queranschlagswinkel zu den Eigenschaften.
-            WinkelQueranschlagEins = Calculate.RadianToDegree(winkelQueranschlagEinsRadian);
-            WinkelQueranschlagZwei = Calculate.RadianToDegree(winkelQueranschlagZweiRadian);
+            AngleCrossCutFirstBoard = Calculate.RadianToDegree(winkelQueranschlagEinsRadian);
+            AngleCrossCutSecondBoard = Calculate.RadianToDegree(winkelQueranschlagZweiRadian);
 
             // Berechnung der Werte der Vektoren für den Flächenwinkel.
             Vector3D vektorVier = new Vector3D();
@@ -232,30 +231,30 @@ namespace Schifterschnitt
 
             vektorVier.Z = Math.Cos(winkelAlphaEinsRadian) * Math.Sin(winkelQueranschlagEinsRadian);
 
-            var winkelBodenlinieRadian = Math.Atan(Math.Sin(winkelAlphaEinsRadian) * Math.Sin(winkelQueranschlagEinsRadian) / Math.Cos(winkelQueranschlagEinsRadian));
-            var bodenlinie = Math.Cos(winkelQueranschlagEinsRadian) / Math.Cos(winkelBodenlinieRadian);
+            double winkelBodenlinieRadian = Math.Atan(Math.Sin(winkelAlphaEinsRadian) * Math.Sin(winkelQueranschlagEinsRadian) / Math.Cos(winkelQueranschlagEinsRadian));
+            double bodenlinie = Math.Cos(winkelQueranschlagEinsRadian) / Math.Cos(winkelBodenlinieRadian);
 
-            vektorVier.X = -1 * Math.Cos(Calculate.DegreeToRadian(WinkelBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
-            vektorVier.Y = Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
+            vektorVier.X = -1 * Math.Cos(Calculate.DegreeToRadian(AngleBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
+            vektorVier.Y = Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90 + Calculate.RadianToDegree(winkelBodenlinieRadian))) * bodenlinie;
 
             vektorFuenf.Z = Math.Cos(winkelAlphaZweiRadian) * Math.Sin(winkelQueranschlagZweiRadian);
             vektorFuenf.X = Math.Sin(winkelAlphaZweiRadian) * Math.Sin(winkelQueranschlagZweiRadian);
             vektorFuenf.Y = -1 * Math.Cos(winkelQueranschlagZweiRadian);
 
             // Berechnung des Flächenwinkels.
-            Flächenwinkel = Vector3D.AngleBetween(vektorVier, vektorFuenf);
+            AngleDihedral = Vector3D.AngleBetween(vektorVier, vektorFuenf);
 
             // Setzt den Flächenwinkel auf 90° wenn er keine Zahl ist.
-            if (System.Double.IsNaN(Flächenwinkel))
-                Flächenwinkel = 90;
+            if (System.Double.IsNaN(AngleDihedral))
+                AngleDihedral = 90;
 
             // Berechnung der Sägeblattwinkel.
-            double linie = Math.Sqrt(Math.Pow(MaterialstaerkeEins, 2) + Math.Pow(MaterialstaerkeZwei, 2) - 2 * MaterialstaerkeEins * MaterialstaerkeZwei *
-                Math.Cos(Calculate.DegreeToRadian(360 - Flächenwinkel - 180)));
-            double winkelgruenEins = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeEins, 2) - Math.Pow(MaterialstaerkeZwei, 2)) /
-                (2 * linie * MaterialstaerkeEins)));
-            double winkelgruenZwei = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(MaterialstaerkeZwei, 2) - Math.Pow(MaterialstaerkeEins, 2)) /
-                (2 * linie * MaterialstaerkeZwei)));
+            double linie = Math.Sqrt(Math.Pow(ThicknessFirstBoard, 2) + Math.Pow(ThicknessSecondBoard, 2) - 2 * ThicknessFirstBoard * ThicknessSecondBoard *
+                Math.Cos(Calculate.DegreeToRadian(360 - AngleDihedral - 180)));
+            double winkelgruenEins = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(ThicknessFirstBoard, 2) - Math.Pow(ThicknessSecondBoard, 2)) /
+                (2 * linie * ThicknessFirstBoard)));
+            double winkelgruenZwei = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(ThicknessSecondBoard, 2) - Math.Pow(ThicknessFirstBoard, 2)) /
+                (2 * linie * ThicknessSecondBoard)));
             double winkelgelbEins = 0;
             double winkelgelbZwei = 0;
 
@@ -272,40 +271,40 @@ namespace Schifterschnitt
             winkelgelbEins = Math.Abs(winkelgelbEins);
             winkelgelbZwei = Math.Abs(winkelgelbZwei);
 
-            WinkelSägeblattEins = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
-                Math.Sin(Calculate.DegreeToRadian(winkelgelbZwei)) / MaterialstaerkeEins));
-            WinkelSägeblattZwei = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
-                Math.Sin(Calculate.DegreeToRadian(winkelgelbEins)) / MaterialstaerkeZwei));
+            AngleSawBladeTiltFirstBoard = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
+                Math.Sin(Calculate.DegreeToRadian(winkelgelbZwei)) / ThicknessFirstBoard));
+            AngleSawBladeTiltSecondBoard = Calculate.RadianToDegree(Math.Atan(linie / Math.Sin(Calculate.DegreeToRadian(180 - winkelgelbEins - winkelgelbZwei)) *
+                Math.Sin(Calculate.DegreeToRadian(winkelgelbEins)) / ThicknessSecondBoard));
 
             // Setzt die Sägeblattwinkel auf Null wenn sie keine Zahl sind.
-            if (System.Double.IsNaN(WinkelSägeblattEins))
-                WinkelSägeblattEins = 0;
+            if (System.Double.IsNaN(AngleSawBladeTiltFirstBoard))
+                AngleSawBladeTiltFirstBoard = 0;
 
-            if (System.Double.IsNaN(WinkelSägeblattZwei))
-                WinkelSägeblattZwei = 0;
+            if (System.Double.IsNaN(AngleSawBladeTiltSecondBoard))
+                AngleSawBladeTiltSecondBoard = 0;
 
             // Setzt die Sägeblattwinkel ins negative wenn nötig.
             if (winkelgruenEins > 90)
-                WinkelSägeblattZwei *= -1;
+                AngleSawBladeTiltSecondBoard *= -1;
 
             if (winkelgruenZwei > 90)
-                WinkelSägeblattEins *= -1;
+                AngleSawBladeTiltFirstBoard *= -1;
 
             // Wenn keine Gehrung geschnitten werden soll.
-            if (!Gehrung)
+            if (!MiterJoint)
             {
                 // Die Sägeblattwinkel anpassen.
-                WinkelSägeblattEins = (90 - (360 - Flächenwinkel - 180)) * -1;
-                WinkelSägeblattZwei = (90 - (360 - Flächenwinkel - 180)) * -1;
+                AngleSawBladeTiltFirstBoard = (90 - (360 - AngleDihedral - 180)) * -1;
+                AngleSawBladeTiltSecondBoard = (90 - (360 - AngleDihedral - 180)) * -1;
             }
 
             // Berechnet die Breiten der Teile und weist sie der Eigenschaft zu.
-            BreiteEins = Hoehe / Math.Cos(winkelAlphaEinsRadian);
-            BreiteZwei = Hoehe / Math.Cos(winkelAlphaZweiRadian);
+            WidthFirstBoard = Height / Math.Cos(winkelAlphaEinsRadian);
+            WidthSecondBoard = Height / Math.Cos(winkelAlphaZweiRadian);
 
             // Berechnet die Breiten mit Schräge der Teile und weist sie der Eigenschaft zu.
-            BreiteMitSchrägeEins = BreiteEins + Math.Abs(Math.Tan(winkelAlphaEinsRadian)) * MaterialstaerkeEins;
-            BreiteMitSchrägeZwei = BreiteZwei + Math.Abs(Math.Tan(winkelAlphaZweiRadian)) * MaterialstaerkeZwei;
+            WidthWithSlantFirstBoard = WidthFirstBoard + Math.Abs(Math.Tan(winkelAlphaEinsRadian)) * ThicknessFirstBoard;
+            WidhtWithSlantSecondBoard = WidthSecondBoard + Math.Abs(Math.Tan(winkelAlphaZweiRadian)) * ThicknessSecondBoard;
         }
 
         /// <summary>
@@ -346,7 +345,7 @@ namespace Schifterschnitt
             m.TriangleIndices.Add(3);
             m.TriangleIndices.Add(0);
 
-            return new GeometryModel3D(m, holzmaterial);
+            return new GeometryModel3D(m, woodMaterial);
         }
 
         /// <summary>
@@ -372,7 +371,7 @@ namespace Schifterschnitt
             m.TriangleIndices.Add(1);
             m.TriangleIndices.Add(2);
 
-            return new GeometryModel3D(m, holzmaterial);
+            return new GeometryModel3D(m, woodMaterial);
         }
 
         #endregion

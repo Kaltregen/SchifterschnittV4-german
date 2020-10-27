@@ -26,7 +26,7 @@ namespace Schifterschnitt
     /// <summary>
     /// Eine Pyramide mit Schifterschnitt.
     /// </summary>
-    class Pyramide : SchifterObjekt
+    class Pyramide : CompoundMiterObject
     {
         #region Eigenschaften
 
@@ -55,7 +55,7 @@ namespace Schifterschnitt
         /// <param name="modell">Das 3D-Modell in dem die Pyramide gebaut werden soll.</param>
         public override void ModellErzeugen(ModelVisual3D modell)
         {
-            double schrägeS = MaterialstaerkeEins / Math.Cos(Calculate.DegreeToRadian(WinkelAlphaEins));
+            double schrägeS = ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(AngleAlphaFirstBoard));
 
             // Berechnet die Radien der Umkreise und fügt sie einem Array hinzu.
             double umkreisradiusUnten = Calculate.CircumscribedCircleRadius(Grundlinie, AnzahlSeiten);
@@ -68,14 +68,14 @@ namespace Schifterschnitt
             double referenz;
 
             // Die größte Größe in der Pyramide herausfinden und der Referenz zuweisen.
-            if (Hoehe > umkreisradiusUnten && Hoehe > umkreisradiusOben)
-                referenz = Hoehe;
-            else if (umkreisradiusUnten > Hoehe && umkreisradiusUnten > umkreisradiusOben)
+            if (Height > umkreisradiusUnten && Height > umkreisradiusOben)
+                referenz = Height;
+            else if (umkreisradiusUnten > Height && umkreisradiusUnten > umkreisradiusOben)
                 referenz = umkreisradiusUnten;
-            else if (umkreisradiusOben > Hoehe && umkreisradiusOben > umkreisradiusUnten)
+            else if (umkreisradiusOben > Height && umkreisradiusOben > umkreisradiusUnten)
                 referenz = umkreisradiusOben;
             else
-                referenz = Hoehe;
+                referenz = Height;
 
             // Erstellt Listen für 3D-Punkte und fügt sie einem Array hinzu.
             List<Point3D> punkteUnten = new List<Point3D>();
@@ -85,7 +85,7 @@ namespace Schifterschnitt
             List<Point3D>[] punkteListen = { punkteUnten, punkteOben, punkteInnenUnten, punkteInnenOben };
 
             // Erstellt ein Array für die For-Schleife.
-            double[] schleifenWerte = { Hoehe / referenz * -1, Hoehe / referenz, Hoehe / referenz * -1, Hoehe / referenz };
+            double[] schleifenWerte = { Height / referenz * -1, Height / referenz, Height / referenz * -1, Height / referenz };
 
             // Berechnet die 3D-Punkte und fügt sie den Listen hinzu.
             double w = 360.0 / AnzahlSeiten / 2.0;
@@ -126,8 +126,8 @@ namespace Schifterschnitt
             }
 
             // Einen Punkt unten in der Mitte erstellen, falls der Neigungswinkel negativ und die Grundlinie sehr klein ist.
-            Point3D innenMitteUnten = new Point3D(0, 0, Hoehe / referenz * -1 + (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(WinkelAlphaEins))) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
-            Point3D innenMitteOben = new Point3D(0, 0, Hoehe / referenz - (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(WinkelAlphaEins))) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
+            Point3D innenMitteUnten = new Point3D(0, 0, Height / referenz * -1 + (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
+            Point3D innenMitteOben = new Point3D(0, 0, Height / referenz - (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
 
             Model3DGroup group = new Model3DGroup();
 
@@ -170,7 +170,7 @@ namespace Schifterschnitt
             if (umkreisradiusInnenOben <= 0)
             {
                 // Füllt die obere Fläche mit Dreiecken.
-                Point3D middle = new Point3D(0, 0, Hoehe / referenz);
+                Point3D middle = new Point3D(0, 0, Height / referenz);
 
                 group.Children.Add(Dreieck(punkteOben[0], punkteOben[AnzahlSeiten - 1], middle));
 
@@ -190,7 +190,7 @@ namespace Schifterschnitt
             if (umkreisradiusInnenUnten <= 0)
             {
                 // Füllt die untere Fläche mit Dreiecken.
-                Point3D middle = new Point3D(0, 0, Hoehe / referenz * -1);
+                Point3D middle = new Point3D(0, 0, Height / referenz * -1);
 
                 group.Children.Add(Dreieck(punkteUnten[AnzahlSeiten - 1], punkteUnten[0], middle));
 

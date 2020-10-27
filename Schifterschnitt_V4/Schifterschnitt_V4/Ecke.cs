@@ -25,7 +25,7 @@ namespace Schifterschnitt
     /// <summary>
     /// Eine Ecke mit Schifterschnitt.
     /// </summary>
-    class Ecke : SchifterObjekt
+    class Ecke : CompoundMiterObject
     {
         #region Methoden
 
@@ -36,19 +36,19 @@ namespace Schifterschnitt
         public override void ModellErzeugen(ModelVisual3D modell)
         {
             // Erstellt eine Referenzgröße zur Anpassung an die Viewport3D-Größe.
-            double referenz = BreiteEins < BreiteZwei ? referenz = BreiteZwei : referenz = BreiteEins;
+            double referenz = WidthFirstBoard < WidthSecondBoard ? referenz = WidthSecondBoard : referenz = WidthFirstBoard;
 
-            double movx = Math.Tan(Calculate.DegreeToRadian(WinkelAlphaZwei)) * (Hoehe / referenz);
-            double movy = Math.Cos(Calculate.DegreeToRadian(WinkelBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(WinkelAlphaEins)) * (Hoehe / referenz) -
-                (Math.Tan(Calculate.DegreeToRadian(WinkelBeta - 90)) * (Math.Tan(Calculate.DegreeToRadian(WinkelAlphaZwei)) * (Hoehe / referenz) -
-                Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(WinkelAlphaEins)) * (Hoehe / referenz)));
-            double mohxAdd = (MaterialstaerkeZwei / referenz) / Math.Cos(Calculate.DegreeToRadian(WinkelAlphaZwei));
+            double movx = Math.Tan(Calculate.DegreeToRadian(AngleAlphaSecondBoard)) * (Height / referenz);
+            double movy = Math.Cos(Calculate.DegreeToRadian(AngleBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(AngleAlphaFirstBoard)) * (Height / referenz) -
+                (Math.Tan(Calculate.DegreeToRadian(AngleBeta - 90)) * (Math.Tan(Calculate.DegreeToRadian(AngleAlphaSecondBoard)) * (Height / referenz) -
+                Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(AngleAlphaFirstBoard)) * (Height / referenz)));
+            double mohxAdd = (ThicknessSecondBoard / referenz) / Math.Cos(Calculate.DegreeToRadian(AngleAlphaSecondBoard));
 
             // Berechnung des Y-Versatzes von Mitte-Oben-Hinten zu Mitte-Oben-Vorne.
-            double schraegeEins = (MaterialstaerkeEins / referenz) / Math.Cos(Calculate.DegreeToRadian(WinkelAlphaEins));
-            double schraegeZwei = (MaterialstaerkeZwei / referenz) / Math.Cos(Calculate.DegreeToRadian(WinkelAlphaZwei));
+            double schraegeEins = (ThicknessFirstBoard / referenz) / Math.Cos(Calculate.DegreeToRadian(AngleAlphaFirstBoard));
+            double schraegeZwei = (ThicknessSecondBoard / referenz) / Math.Cos(Calculate.DegreeToRadian(AngleAlphaSecondBoard));
 
-            double linie = Math.Sqrt(Math.Pow(schraegeEins, 2) + Math.Pow(schraegeZwei, 2) - 2 * schraegeEins * schraegeZwei * Math.Cos(Calculate.DegreeToRadian(360 - WinkelBeta - 180)));
+            double linie = Math.Sqrt(Math.Pow(schraegeEins, 2) + Math.Pow(schraegeZwei, 2) - 2 * schraegeEins * schraegeZwei * Math.Cos(Calculate.DegreeToRadian(360 - AngleBeta - 180)));
 
             double winkelgruenEins = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(schraegeEins, 2) - Math.Pow(schraegeZwei, 2)) / (2 * linie * schraegeEins)));
             double winkelgruenZwei = Calculate.RadianToDegree(Math.Acos((Math.Pow(linie, 2) + Math.Pow(schraegeZwei, 2) - Math.Pow(schraegeEins, 2)) / (2 * linie * schraegeZwei)));
@@ -77,8 +77,8 @@ namespace Schifterschnitt
 
             // Sorgt für eine Größenanpassung bei sehr stark negativen Queranschlagswinkeln.
             double laenge = 2.5;
-            double zusatzEins = Math.Tan(Calculate.DegreeToRadian(WinkelQueranschlagEins)) * BreiteEins;
-            double zusatzZwei = Math.Tan(Calculate.DegreeToRadian(WinkelQueranschlagZwei)) * BreiteZwei;
+            double zusatzEins = Math.Tan(Calculate.DegreeToRadian(AngleCrossCutFirstBoard)) * WidthFirstBoard;
+            double zusatzZwei = Math.Tan(Calculate.DegreeToRadian(AngleCrossCutSecondBoard)) * WidthSecondBoard;
 
             if (2.5 * referenz < zusatzZwei)
                 laenge = zusatzZwei / referenz;
@@ -92,26 +92,26 @@ namespace Schifterschnitt
                 mohyAdd = 0;
 
             // Berechnet und erstellt die Punkte im Raum.
-            double luvx = -1 * Math.Cos(Calculate.DegreeToRadian(Math.Abs(WinkelBeta - 90))) * laenge;
-            double luvy = Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90)) * laenge;
-            double lovx = luvx + Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(WinkelAlphaEins)) * (Hoehe / referenz);
-            double lovy = luvy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(WinkelBeta - 90))) * Math.Tan(Calculate.DegreeToRadian(WinkelAlphaEins)) * (Hoehe / referenz);
+            double luvx = -1 * Math.Cos(Calculate.DegreeToRadian(Math.Abs(AngleBeta - 90))) * laenge;
+            double luvy = Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * laenge;
+            double lovx = luvx + Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * Math.Tan(Calculate.DegreeToRadian(AngleAlphaFirstBoard)) * (Height / referenz);
+            double lovy = luvy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(AngleBeta - 90))) * Math.Tan(Calculate.DegreeToRadian(AngleAlphaFirstBoard)) * (Height / referenz);
 
-            double halbeHöheModell = Hoehe / referenz / 2;
+            double halbeHöheModell = Height / referenz / 2;
 
             Point3D ruv = new Point3D(0, -laenge, halbeHöheModell * -1);
             Point3D ruh = new Point3D(schraegeZwei, -laenge, halbeHöheModell * -1);
-            Point3D rov = new Point3D(Math.Tan(Calculate.DegreeToRadian(WinkelAlphaZwei)) * (Hoehe / referenz), -laenge, halbeHöheModell);
-            Point3D roh = new Point3D(Math.Tan(Calculate.DegreeToRadian(WinkelAlphaZwei)) * (Hoehe / referenz) + schraegeZwei, -laenge, halbeHöheModell);
+            Point3D rov = new Point3D(Math.Tan(Calculate.DegreeToRadian(AngleAlphaSecondBoard)) * (Height / referenz), -laenge, halbeHöheModell);
+            Point3D roh = new Point3D(Math.Tan(Calculate.DegreeToRadian(AngleAlphaSecondBoard)) * (Height / referenz) + schraegeZwei, -laenge, halbeHöheModell);
             Point3D muv = new Point3D(0, 0, halbeHöheModell * -1);
             Point3D muh = new Point3D(mohxAdd, mohyAdd, halbeHöheModell * -1);
             Point3D mov = new Point3D(movx, movy, halbeHöheModell);
             Point3D moh = new Point3D(movx + mohxAdd, movy + mohyAdd, halbeHöheModell);
             Point3D luv = new Point3D(luvx, luvy, halbeHöheModell * -1);
-            Point3D luh = new Point3D(luvx + Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90)) * schraegeEins, luvy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(WinkelBeta - 90))) * schraegeEins,
+            Point3D luh = new Point3D(luvx + Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * schraegeEins, luvy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(AngleBeta - 90))) * schraegeEins,
                 halbeHöheModell * -1);
             Point3D lov = new Point3D(lovx, lovy, halbeHöheModell);
-            Point3D loh = new Point3D(lovx + Math.Sin(Calculate.DegreeToRadian(WinkelBeta - 90)) * schraegeEins, lovy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(WinkelBeta - 90))) * schraegeEins,
+            Point3D loh = new Point3D(lovx + Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * schraegeEins, lovy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(AngleBeta - 90))) * schraegeEins,
                 halbeHöheModell);
 
             // Erstellt eine Gruppe, erstellt die Vierecke und fügt sie hinzu.

@@ -85,7 +85,7 @@
     </ApplicationDefinition>
     <Compile Include="Ecke.cs" />
     <Compile Include="Calculate.cs" />
-    <Compile Include="SchifterObjekt.cs" />
+    <Compile Include="CompoundMiterObject.cs" />
     <Compile Include="Pyramide.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
