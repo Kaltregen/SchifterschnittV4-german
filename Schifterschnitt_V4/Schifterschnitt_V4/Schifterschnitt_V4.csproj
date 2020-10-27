@@ -83,10 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Ecke.cs" />
+    <Compile Include="Corner.cs" />
     <Compile Include="Calculate.cs" />
     <Compile Include="CompoundMiterObject.cs" />
-    <Compile Include="Pyramide.cs" />
+    <Compile Include="Pyramid.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

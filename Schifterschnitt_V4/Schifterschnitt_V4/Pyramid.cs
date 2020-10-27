@@ -24,50 +24,50 @@ using System.Windows.Media.Media3D;
 namespace Schifterschnitt
 {
     /// <summary>
-    /// Eine Pyramide mit Schifterschnitt.
+    /// A pyramid with a compound miter cut.
     /// </summary>
-    class Pyramide : CompoundMiterObject
+    class Pyramid : CompoundMiterObject
     {
-        #region Eigenschaften
+        #region Properties
 
         /// <summary>
-        /// Die Grundlinie bei einer Pyramide.
+        /// The bottom side length of the pyramid.
         /// </summary>
-        public double Grundlinie { get; set; }
+        public double BottomSideLength { get; set; }
 
         /// <summary>
-        /// Die Oberlinie bei einer Pyramide.
+        /// The top side length of the pyramid.
         /// </summary>
-        public double Oberlinie { get; set; }
+        public double TopSideLength { get; set; }
 
         /// <summary>
-        /// Die Anzahl der Seiten bei einer Pyramide.
+        /// The number of sides of the pyramid.
         /// </summary>
-        public short AnzahlSeiten { get; set; }
+        public short NumberOfSides { get; set; }
 
         #endregion
 
-        #region Methoden
+        #region Methods
 
         /// <summary>
-        /// Erzeugt ein 3D-Modell einer Pyramide.
+        /// Creates a 3D model of a pyramid.
         /// </summary>
-        /// <param name="modell">Das 3D-Modell in dem die Pyramide gebaut werden soll.</param>
-        public override void ModellErzeugen(ModelVisual3D modell)
+        /// <param name="model">The model in which the pyramid will be build.</param>
+        public override void CreateModel(ModelVisual3D model)
         {
             double schrägeS = ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(AngleAlphaFirstBoard));
 
             // Berechnet die Radien der Umkreise und fügt sie einem Array hinzu.
-            double umkreisradiusUnten = Calculate.CircumscribedCircleRadius(Grundlinie, AnzahlSeiten);
-            double umkreisradiusOben = Calculate.CircumscribedCircleRadius(Oberlinie, AnzahlSeiten);
-            double umkreisradiusInnenUnten = Calculate.CircumscribedCircleRadius(Grundlinie, AnzahlSeiten) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((AnzahlSeiten - 2.0) / AnzahlSeiten * 180.0 / 2)));
-            double umkreisradiusInnenOben = Calculate.CircumscribedCircleRadius(Oberlinie, AnzahlSeiten) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((AnzahlSeiten - 2.0) / AnzahlSeiten * 180.0 / 2)));
+            double umkreisradiusUnten = Calculate.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
+            double umkreisradiusOben = Calculate.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
+            double umkreisradiusInnenUnten = Calculate.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2)));
+            double umkreisradiusInnenOben = Calculate.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2)));
             double[] umkreise = { umkreisradiusUnten, umkreisradiusOben, umkreisradiusInnenUnten, umkreisradiusInnenOben };
 
-            // Erstellt eine Referenzgröße.
+            // We need a reference length to make all pyramids the same size.
+            // This makes sure they will be the same size in the view area.
             double referenz;
 
-            // Die größte Größe in der Pyramide herausfinden und der Referenz zuweisen.
             if (Height > umkreisradiusUnten && Height > umkreisradiusOben)
                 referenz = Height;
             else if (umkreisradiusUnten > Height && umkreisradiusUnten > umkreisradiusOben)
@@ -77,25 +77,22 @@ namespace Schifterschnitt
             else
                 referenz = Height;
 
-            // Erstellt Listen für 3D-Punkte und fügt sie einem Array hinzu.
-            List<Point3D> punkteUnten = new List<Point3D>();
-            List<Point3D> punkteOben = new List<Point3D>();
-            List<Point3D> punkteInnenUnten = new List<Point3D>();
-            List<Point3D> punkteInnenOben = new List<Point3D>();
+            var punkteUnten = new List<Point3D>();
+            var punkteOben = new List<Point3D>();
+            var punkteInnenUnten = new List<Point3D>();
+            var punkteInnenOben = new List<Point3D>();
             List<Point3D>[] punkteListen = { punkteUnten, punkteOben, punkteInnenUnten, punkteInnenOben };
 
-            // Erstellt ein Array für die For-Schleife.
             double[] schleifenWerte = { Height / referenz * -1, Height / referenz, Height / referenz * -1, Height / referenz };
 
-            // Berechnet die 3D-Punkte und fügt sie den Listen hinzu.
-            double w = 360.0 / AnzahlSeiten / 2.0;
+            double w = 360.0 / NumberOfSides / 2.0;
             double x;
             double y;
 
             for (int i = 0; i < 4; i++)
             {
                 double item = umkreise[i];
-                for (int j = 0; j < AnzahlSeiten; j++)
+                for (int j = 0; j < NumberOfSides; j++)
                 {
                     if (w < 90)
                     {
@@ -120,49 +117,49 @@ namespace Schifterschnitt
 
                     punkteListen[i].Add(new Point3D(x, y, schleifenWerte[i]));
 
-                    w += (360.0 / AnzahlSeiten);
+                    w += (360.0 / NumberOfSides);
                 }
-                w = 360.0 / AnzahlSeiten / 2.0;
+                w = 360.0 / NumberOfSides / 2.0;
             }
 
-            // Einen Punkt unten in der Mitte erstellen, falls der Neigungswinkel negativ und die Grundlinie sehr klein ist.
+            // When the top or bottem side lengths are to small we need a point for the inner planes.
             Point3D innenMitteUnten = new Point3D(0, 0, Height / referenz * -1 + (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
             Point3D innenMitteOben = new Point3D(0, 0, Height / referenz - (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
 
-            Model3DGroup group = new Model3DGroup();
+            var group = new Model3DGroup();
 
             // Verbindet die Punkte und füllt die Flächen.
 
             // Füllt die äußeren Flächen.
-            group.Children.Add(Viereck(punkteUnten[0], punkteUnten[AnzahlSeiten - 1], punkteOben[AnzahlSeiten - 1], punkteOben[0]));
+            group.Children.Add(Square(punkteUnten[0], punkteUnten[NumberOfSides - 1], punkteOben[NumberOfSides - 1], punkteOben[0]));
 
-            for (int i = 0; i < AnzahlSeiten - 1; i++)
-                group.Children.Add(Viereck(punkteUnten[i + 1], punkteUnten[i], punkteOben[i], punkteOben[i + 1]));
+            for (int i = 0; i < NumberOfSides - 1; i++)
+                group.Children.Add(Square(punkteUnten[i + 1], punkteUnten[i], punkteOben[i], punkteOben[i + 1]));
 
             // Füllt die inneren Flächen wenn oben und unten ein Loch entsteht.
             if (umkreisradiusInnenOben > 0 && umkreisradiusInnenUnten > 0)
             {
-                group.Children.Add(Viereck(punkteInnenUnten[AnzahlSeiten - 1], punkteInnenUnten[0], punkteInnenOben[0], punkteInnenOben[AnzahlSeiten - 1]));
+                group.Children.Add(Square(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1]));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
-                    group.Children.Add(Viereck(punkteInnenUnten[i], punkteInnenUnten[i + 1], punkteInnenOben[i + 1], punkteInnenOben[i]));
+                for (int i = 0; i < NumberOfSides - 1; i++)
+                    group.Children.Add(Square(punkteInnenUnten[i], punkteInnenUnten[i + 1], punkteInnenOben[i + 1], punkteInnenOben[i]));
             }
 
             // Füllt die inneren Flächen wenn nur oben ein Loch entsteht.
             if (umkreisradiusInnenOben > 0 && umkreisradiusInnenUnten <= 0)
             {
-                group.Children.Add(Dreieck(punkteInnenOben[0], punkteInnenOben[AnzahlSeiten - 1], innenMitteUnten));
+                group.Children.Add(Dreieck(punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1], innenMitteUnten));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
+                for (int i = 0; i < NumberOfSides - 1; i++)
                     group.Children.Add(Dreieck(punkteInnenOben[i + 1], punkteInnenOben[i], innenMitteUnten));
             }
 
             // Füllt die inneren Flächen wenn nur unten ein Loch entsteht.
             if (umkreisradiusInnenUnten > 0 && umkreisradiusInnenOben <= 0)
             {
-                group.Children.Add(Dreieck(punkteInnenUnten[AnzahlSeiten - 1], punkteInnenUnten[0], innenMitteOben));
+                group.Children.Add(Dreieck(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], innenMitteOben));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
+                for (int i = 0; i < NumberOfSides - 1; i++)
                     group.Children.Add(Dreieck(punkteInnenUnten[i], punkteInnenUnten[i + 1], innenMitteOben));
             }
 
@@ -172,18 +169,18 @@ namespace Schifterschnitt
                 // Füllt die obere Fläche mit Dreiecken.
                 Point3D middle = new Point3D(0, 0, Height / referenz);
 
-                group.Children.Add(Dreieck(punkteOben[0], punkteOben[AnzahlSeiten - 1], middle));
+                group.Children.Add(Dreieck(punkteOben[0], punkteOben[NumberOfSides - 1], middle));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
+                for (int i = 0; i < NumberOfSides - 1; i++)
                     group.Children.Add(Dreieck(punkteOben[i + 1], punkteOben[i], middle));
             }
             else
             {
                 // Füllt die oberen Flächen.
-                group.Children.Add(Viereck(punkteOben[0], punkteOben[AnzahlSeiten - 1], punkteInnenOben[AnzahlSeiten - 1], punkteInnenOben[0]));
+                group.Children.Add(Square(punkteOben[0], punkteOben[NumberOfSides - 1], punkteInnenOben[NumberOfSides - 1], punkteInnenOben[0]));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
-                    group.Children.Add(Viereck(punkteOben[i + 1], punkteOben[i], punkteInnenOben[i], punkteInnenOben[i + 1]));
+                for (int i = 0; i < NumberOfSides - 1; i++)
+                    group.Children.Add(Square(punkteOben[i + 1], punkteOben[i], punkteInnenOben[i], punkteInnenOben[i + 1]));
             }
 
             // Wenn unten kein Loch entsteht.
@@ -192,26 +189,25 @@ namespace Schifterschnitt
                 // Füllt die untere Fläche mit Dreiecken.
                 Point3D middle = new Point3D(0, 0, Height / referenz * -1);
 
-                group.Children.Add(Dreieck(punkteUnten[AnzahlSeiten - 1], punkteUnten[0], middle));
+                group.Children.Add(Dreieck(punkteUnten[NumberOfSides - 1], punkteUnten[0], middle));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
+                for (int i = 0; i < NumberOfSides - 1; i++)
                     group.Children.Add(Dreieck(punkteUnten[i], punkteUnten[i + 1], middle));
             }
             else
             {
                 // Füllt die unteren Flächen.
-                group.Children.Add(Viereck(punkteUnten[AnzahlSeiten - 1], punkteUnten[0], punkteInnenUnten[0], punkteInnenUnten[AnzahlSeiten - 1]));
+                group.Children.Add(Square(punkteUnten[NumberOfSides - 1], punkteUnten[0], punkteInnenUnten[0], punkteInnenUnten[NumberOfSides - 1]));
 
-                for (int i = 0; i < AnzahlSeiten - 1; i++)
-                    group.Children.Add(Viereck(punkteUnten[i], punkteUnten[i + 1], punkteInnenUnten[i + 1], punkteInnenUnten[i]));
+                for (int i = 0; i < NumberOfSides - 1; i++)
+                    group.Children.Add(Square(punkteUnten[i], punkteUnten[i + 1], punkteInnenUnten[i + 1], punkteInnenUnten[i]));
             }
 
-            // Lichtquellen hinzufügen.
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(2, 1, -1)));
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-2, 1, -1)));
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(0, -2, -1)));
 
-            modell.Content = group;
+            model.Content = group;
         }
 
         #endregion

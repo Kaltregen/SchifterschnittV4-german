@@ -23,19 +23,20 @@ using System.Windows.Media.Media3D;
 namespace Schifterschnitt
 {
     /// <summary>
-    /// Eine Ecke mit Schifterschnitt.
+    /// A corner with a compound miter cut.
     /// </summary>
-    class Ecke : CompoundMiterObject
+    class Corner : CompoundMiterObject
     {
-        #region Methoden
+        #region Methods
 
         /// <summary>
-        /// Erzeugt ein 3D-Modell einer Ecke.
+        /// Creates a 3D model of the corner.
         /// </summary>
-        /// <param name="modell">Das 3D-Modell in dem die Ecke gebaut werden soll.</param>
-        public override void ModellErzeugen(ModelVisual3D modell)
+        /// <param name="model">The model in which the corner will be build.</param>
+        public override void CreateModel(ModelVisual3D model)
         {
-            // Erstellt eine Referenzgröße zur Anpassung an die Viewport3D-Größe.
+            // We need a reference length to make all models equal size.
+            // This makes sure a model of any size fits in the view area.
             double referenz = WidthFirstBoard < WidthSecondBoard ? referenz = WidthSecondBoard : referenz = WidthFirstBoard;
 
             double movx = Math.Tan(Calculate.DegreeToRadian(AngleAlphaSecondBoard)) * (Height / referenz);
@@ -87,7 +88,6 @@ namespace Schifterschnitt
 
             double mohyAdd = yVersatz;
 
-            // Setzt die Variable auf Null wenn sie keine Zahl ist.
             if (System.Double.IsNaN(mohyAdd))
                 mohyAdd = 0;
 
@@ -114,25 +114,23 @@ namespace Schifterschnitt
             Point3D loh = new Point3D(lovx + Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90)) * schraegeEins, lovy + Math.Cos(Calculate.DegreeToRadian(Math.Abs(AngleBeta - 90))) * schraegeEins,
                 halbeHöheModell);
 
-            // Erstellt eine Gruppe, erstellt die Vierecke und fügt sie hinzu.
-            Model3DGroup group = new Model3DGroup();
+            var group = new Model3DGroup();
 
-            group.Children.Add(Viereck(ruv, ruh, roh, rov));
-            group.Children.Add(Viereck(muv, ruv, rov, mov));
-            group.Children.Add(Viereck(mov, rov, roh, moh));
-            group.Children.Add(Viereck(lov, mov, moh, loh));
-            group.Children.Add(Viereck(luv, muv, mov, lov));
-            group.Children.Add(Viereck(luh, luv, lov, loh));
-            group.Children.Add(Viereck(muh, luh, loh, moh));
-            group.Children.Add(Viereck(ruh, muh, moh, roh));
-            group.Children.Add(Viereck(ruv, muv, muh, ruh));
-            group.Children.Add(Viereck(muv, luv, luh, muh));
+            group.Children.Add(Square(ruv, ruh, roh, rov));
+            group.Children.Add(Square(muv, ruv, rov, mov));
+            group.Children.Add(Square(mov, rov, roh, moh));
+            group.Children.Add(Square(lov, mov, moh, loh));
+            group.Children.Add(Square(luv, muv, mov, lov));
+            group.Children.Add(Square(luh, luv, lov, loh));
+            group.Children.Add(Square(muh, luh, loh, moh));
+            group.Children.Add(Square(ruh, muh, moh, roh));
+            group.Children.Add(Square(ruv, muv, muh, ruh));
+            group.Children.Add(Square(muv, luv, luh, muh));
 
-            // Lichtquellen hinzufügen.
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(2, 1, -1)));
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-2, -1, -1)));
 
-            modell.Content = group;
+            model.Content = group;
         }
 
         #endregion
