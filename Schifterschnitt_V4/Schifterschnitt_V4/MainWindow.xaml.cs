@@ -32,7 +32,6 @@ namespace Schifterschnitt
     {
         #region Variablen
 
-        // Die Objekte erstellen.
         Corner ecke = new Corner();
         Pyramid pyramideLinie = new Pyramid();
         Pyramid pyramideWinkel = new Pyramid();
@@ -1375,67 +1374,59 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <param name="e"></param>
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // Wenn die Breite des Grids kleiner als 1112 ist sollen alle Spalten gleich groß sein.
             if (((Grid)sender).ActualWidth < 1112)
             {
                 ((Grid)sender).ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
                 ((Grid)sender).ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
-                ((Grid)sender).ColumnDefinitions[4].Width = new GridLength(370.0);
+                ((Grid)sender).ColumnDefinitions[4].Width = new GridLength(370);
             }
-            // Ansonsten sollen die beiden linken Spalten auf 370 bleiben.
             else
             {
-                ((Grid)sender).ColumnDefinitions[0].Width = new GridLength(370.0);
-                ((Grid)sender).ColumnDefinitions[2].Width = new GridLength(370.0);
+                ((Grid)sender).ColumnDefinitions[0].Width = new GridLength(370);
+                ((Grid)sender).ColumnDefinitions[2].Width = new GridLength(370);
                 ((Grid)sender).ColumnDefinitions[4].Width = new GridLength(1, GridUnitType.Star);
             }
         }
 
         /// <summary>
-        /// Stellt die Breite der Spalte auf der die Maus ist breiter wenn die Breite des Grids kleiner als 1112 ist.
+        /// Shows the column the mouse is over fully when the window is to small for all columns.
         /// </summary>
-        /// <param name="sender">Die Spalte die die Methode ausgelöst hat.</param>
+        /// <param name="sender">The grid with multiple columns.</param>
         /// <param name="e"></param>
-        private void Spalte_MouseEnter(object sender, MouseEventArgs e)
+        private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            // Wenn der sender ein ScrollViewer ist.
-            if (sender.GetType() == typeof(ScrollViewer))
+            var senderGrid = (Grid)sender;
+
+            if (senderGrid.ActualWidth >= 1112)
+                return;
+
+            double positionX = e.GetPosition(senderGrid).X;
+            int numberOfColumns = senderGrid.ColumnDefinitions.Count;
+            var currentColumn = new ColumnDefinition();
+
+            for (int i = 0; i < numberOfColumns; i += 2)
             {
-                // Wenn die Breite des Grids größer gleich 1112 ist return.
-                if (((Grid)((ScrollViewer)sender).Parent).ActualWidth >= 1112)
-                    return;
+                double leftStop = 0;
 
-                // Für alle Columndefinitions der anderen Spalten die Breite auf Stern setzen und für die des senders auf 370.
-                foreach (var columnDefinition in ((Grid)((ScrollViewer)sender).Parent).ColumnDefinitions)
+                for (int l = 0; l < i; l++)
+                    leftStop += senderGrid.ColumnDefinitions[l].ActualWidth;
+
+                double rightStop = leftStop + senderGrid.ColumnDefinitions[i].ActualWidth;
+
+                if ((positionX >= leftStop) && (positionX <= rightStop))
                 {
-                    if (columnDefinition == ((Grid)((ScrollViewer)sender).Parent).ColumnDefinitions[1] || columnDefinition == ((Grid)((ScrollViewer)sender).Parent).ColumnDefinitions[3])
-                        continue;
-
-                    if (!(columnDefinition == ((Grid)((ScrollViewer)sender).Parent).ColumnDefinitions[Grid.GetColumn(((ScrollViewer)sender))]))
-                        columnDefinition.Width = new GridLength(1, GridUnitType.Star);
-                    else
-                        columnDefinition.Width = new GridLength(370.0);
+                    currentColumn = senderGrid.ColumnDefinitions[i];
+                    break;
                 }
             }
 
-            // Wenn der sender ein Grid ist.
-            if (sender.GetType() == typeof(Grid))
+            for (int i = 0; i < numberOfColumns; i += 2)
             {
-                // Wenn die Breite des Grids größer gleich 1112 ist return.
-                if (((Grid)((Grid)sender).Parent).ActualWidth >= 1112)
-                    return;
-
-                // Für alle Columndefinitions der anderen Spalten die Breite auf Stern setzen und für die des senders auf 370.
-                foreach (var columnDefinition in ((Grid)((Grid)sender).Parent).ColumnDefinitions)
-                {
-                    if (columnDefinition == ((Grid)((Grid)sender).Parent).ColumnDefinitions[1] || columnDefinition == ((Grid)((Grid)sender).Parent).ColumnDefinitions[3])
-                        continue;
-
-                    if (!(columnDefinition == ((Grid)((Grid)sender).Parent).ColumnDefinitions[Grid.GetColumn(((Grid)sender))]))
-                        columnDefinition.Width = new GridLength(1, GridUnitType.Star);
-                    else
-                        columnDefinition.Width = new GridLength(370.0);
-                }
+                var column = senderGrid.ColumnDefinitions[i];
+                if (column == currentColumn)
+                    column.Width = new GridLength(370);
+                else
+                    column.Width = new GridLength(1, GridUnitType.Star);
             }
         }
 
