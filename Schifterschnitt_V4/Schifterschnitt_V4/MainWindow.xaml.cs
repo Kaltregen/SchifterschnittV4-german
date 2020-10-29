@@ -47,7 +47,7 @@ namespace Schifterschnitt
         AxisAngleRotation3D pyramideWinkelRotation;
 
         // Einen Punkt für die Position der Maus auf der Grafik anlegen.
-        Point mausPosition = new Point(0, 0);
+        Point mousePosition = new Point(0, 0);
 
         // Die Winkel für die Kamera in der Grafik anlegen.
         double eckeKameraWinkel = new double();
@@ -162,7 +162,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridEckeGrafik_MouseMove(object sender, MouseEventArgs e)
         {
-            MausBewegung(eckeRotation, ref eckeKameraWinkel, perspectiveCameraEcke, sender, e);
+            Grid_MouseMove(eckeRotation, ref eckeKameraWinkel, perspectiveCameraEcke, sender, e);
         }
 
         /// <summary>
@@ -269,22 +269,22 @@ namespace Schifterschnitt
             }
 
             // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (!EingabeGültig(textBoxEckeHoehe, ref höhe) || höhe <= 0)
+            if (!InputValid(textBoxEckeHoehe, ref höhe) || höhe <= 0)
                 textBoxEckeHoehe.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxEckeMaterialstaerkeEins, ref materialstärkeEins) || materialstärkeEins <= 0)
+            if (!InputValid(textBoxEckeMaterialstaerkeEins, ref materialstärkeEins) || materialstärkeEins <= 0)
                 textBoxEckeMaterialstaerkeEins.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxEckeMaterialstaerkeZwei, ref materialstärkeZwei) || materialstärkeZwei <= 0)
+            if (!InputValid(textBoxEckeMaterialstaerkeZwei, ref materialstärkeZwei) || materialstärkeZwei <= 0)
                 textBoxEckeMaterialstaerkeZwei.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxEckeWinkelAlphaEins, ref winkelAlphaEins) || winkelAlphaEins < -90 || winkelAlphaEins > 90)
+            if (!InputValid(textBoxEckeWinkelAlphaEins, ref winkelAlphaEins) || winkelAlphaEins < -90 || winkelAlphaEins > 90)
                 textBoxEckeWinkelAlphaEins.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxEckeWinkelAlphaZwei, ref winkelAlphaZwei) || winkelAlphaZwei < -90 || winkelAlphaZwei > 90)
+            if (!InputValid(textBoxEckeWinkelAlphaZwei, ref winkelAlphaZwei) || winkelAlphaZwei < -90 || winkelAlphaZwei > 90)
                 textBoxEckeWinkelAlphaZwei.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxEckeWinkelBeta, ref winkelBeta) || winkelBeta <= 0 || winkelBeta >= 180)
+            if (!InputValid(textBoxEckeWinkelBeta, ref winkelBeta) || winkelBeta <= 0 || winkelBeta >= 180)
                 textBoxEckeWinkelBeta.Background = Brushes.Red;
             
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
@@ -375,16 +375,16 @@ namespace Schifterschnitt
                 eckeEingaben[i].Background = Brushes.White;
 
             // Überprüfen ob die Eingaben gültig sind.
-            if (textBoxEckeLinieYEins.Text != "" && !EingabeGültig(textBoxEckeLinieYEins, ref LinieYEins))
+            if (textBoxEckeLinieYEins.Text != "" && !InputValid(textBoxEckeLinieYEins, ref LinieYEins))
                 textBoxEckeLinieYEins.Background = Brushes.Red;
 
-            if (textBoxEckeLinieYZwei.Text != "" && !EingabeGültig(textBoxEckeLinieYZwei, ref LinieYZwei))
+            if (textBoxEckeLinieYZwei.Text != "" && !InputValid(textBoxEckeLinieYZwei, ref LinieYZwei))
                 textBoxEckeLinieYZwei.Background = Brushes.Red;
 
-            if (textBoxEckeLinieXEins.Text != "" && !EingabeGültig(textBoxEckeLinieXEins, ref LinieXEins))
+            if (textBoxEckeLinieXEins.Text != "" && !InputValid(textBoxEckeLinieXEins, ref LinieXEins))
                 textBoxEckeLinieXEins.Background = Brushes.Red;
 
-            if (textBoxEckeLinieXZwei.Text != "" && !EingabeGültig(textBoxEckeLinieXZwei, ref LinieXZwei))
+            if (textBoxEckeLinieXZwei.Text != "" && !InputValid(textBoxEckeLinieXZwei, ref LinieXZwei))
                 textBoxEckeLinieXZwei.Background = Brushes.Red;
 
             // Wenn der Hintergrund einer der Eingabefelder rot ist.
@@ -461,13 +461,13 @@ namespace Schifterschnitt
             double breitenversatzZwei = 0;
 
             // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (textBoxEckeHoehe.Text != "" && (!EingabeGültig(textBoxEckeHoehe, ref höhe) || höhe <= 0))
+            if (textBoxEckeHoehe.Text != "" && (!InputValid(textBoxEckeHoehe, ref höhe) || höhe <= 0))
                 textBoxEckeHoehe.Background = Brushes.Red;
 
-            if (textBoxEckeBreitenversatzEins.Text != "" && (!EingabeGültig(textBoxEckeBreitenversatzEins, ref breitenversatzEins)))
+            if (textBoxEckeBreitenversatzEins.Text != "" && (!InputValid(textBoxEckeBreitenversatzEins, ref breitenversatzEins)))
                 textBoxEckeBreitenversatzEins.Background = Brushes.Red;
 
-            if (textBoxEckeBreitenversatzZwei.Text != "" && (!EingabeGültig(textBoxEckeBreitenversatzZwei, ref breitenversatzZwei)))
+            if (textBoxEckeBreitenversatzZwei.Text != "" && (!InputValid(textBoxEckeBreitenversatzZwei, ref breitenversatzZwei)))
                 textBoxEckeBreitenversatzZwei.Background = Brushes.Red;
 
             // Überprüfen ob ein Eingabefeld rot ist.
@@ -521,7 +521,7 @@ namespace Schifterschnitt
                 return;
 
             // Überprüfen ob die Eingabe in dem Eingabefeld gültig ist und wenn nicht den Hintergrund rot setzen.
-            if (!EingabeGültig(textBoxEckeAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(textBoxEckeAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
             {
                 textBoxEckeAnzahlSeiten.Background = Brushes.Red;
 
@@ -660,7 +660,7 @@ namespace Schifterschnitt
                 double x = 0;
                 
                 // Wenn eine Eingabe ungültig ist.
-                if ((eckeEingaben[i].Background == Brushes.Red) && (eckeEingaben[i].Text != "") && (!EingabeGültig(eckeEingaben[i], ref x) || x < 0))
+                if ((eckeEingaben[i].Background == Brushes.Red) && (eckeEingaben[i].Text != "") && (!InputValid(eckeEingaben[i], ref x) || x < 0))
                 {
                     return;
                 }
@@ -711,7 +711,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridPyramideLinieGrafik_MouseMove(object sender, MouseEventArgs e)
         {
-            MausBewegung(pyramideLinieRotation, ref pyramideLinieKameraWinkel, perspectiveCameraPyramideLinie, sender, e);
+            Grid_MouseMove(pyramideLinieRotation, ref pyramideLinieKameraWinkel, perspectiveCameraPyramideLinie, sender, e);
         }
 
         /// <summary>
@@ -810,19 +810,19 @@ namespace Schifterschnitt
             }
 
             // Prüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (!EingabeGültig(textBoxPyramideLinieHoehe, ref höhe) || höhe <= 0)
+            if (!InputValid(textBoxPyramideLinieHoehe, ref höhe) || höhe <= 0)
                 textBoxPyramideLinieHoehe.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideLinieStaerke, ref materialstärke) || materialstärke <= 0)
+            if (!InputValid(textBoxPyramideLinieStaerke, ref materialstärke) || materialstärke <= 0)
                 textBoxPyramideLinieStaerke.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideLinieAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(textBoxPyramideLinieAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
                 textBoxPyramideLinieAnzahlSeiten.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideLinieGrundlinie, ref grundlinie) || grundlinie < 0)
+            if (!InputValid(textBoxPyramideLinieGrundlinie, ref grundlinie) || grundlinie < 0)
                 textBoxPyramideLinieGrundlinie.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideLinieOberlinie, ref oberlinie) || oberlinie < 0)
+            if (!InputValid(textBoxPyramideLinieOberlinie, ref oberlinie) || oberlinie < 0)
                 textBoxPyramideLinieOberlinie.Background = Brushes.Red;
 
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
@@ -972,7 +972,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridPyramideWinkel_MouseMove(object sender, MouseEventArgs e)
         {
-            MausBewegung(pyramideWinkelRotation, ref pyramideWinkelKameraWinkel, perspectiveCameraPyramideWinkel, sender, e);
+            Grid_MouseMove(pyramideWinkelRotation, ref pyramideWinkelKameraWinkel, perspectiveCameraPyramideWinkel, sender, e);
         }
 
         /// <summary>
@@ -1074,19 +1074,19 @@ namespace Schifterschnitt
             }
 
             // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (!EingabeGültig(textBoxPyramideWinkelAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(textBoxPyramideWinkelAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
                 textBoxPyramideWinkelAnzahlSeiten.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideWinkelStaerke, ref materialstärke) || materialstärke <= 0)
+            if (!InputValid(textBoxPyramideWinkelStaerke, ref materialstärke) || materialstärke <= 0)
                 textBoxPyramideWinkelStaerke.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideWinkelGrundlinie, ref grundlinie) || grundlinie < 0)
+            if (!InputValid(textBoxPyramideWinkelGrundlinie, ref grundlinie) || grundlinie < 0)
                 textBoxPyramideWinkelGrundlinie.Background = Brushes.Red;
 
-            if (!EingabeGültig(textBoxPyramideWinkelNeigungswinkel, ref neigungswinkel) || neigungswinkel < -90 || neigungswinkel > 90)
+            if (!InputValid(textBoxPyramideWinkelNeigungswinkel, ref neigungswinkel) || neigungswinkel < -90 || neigungswinkel > 90)
                 textBoxPyramideWinkelNeigungswinkel.Background = Brushes.Red;
 
-            if ((textBoxPyramideWinkelHoehe.Text != "") && (!EingabeGültig(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
+            if ((textBoxPyramideWinkelHoehe.Text != "") && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
                 textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
@@ -1267,10 +1267,10 @@ namespace Schifterschnitt
                 return;
 
             // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (textBoxPyramideWinkelHoehe.Text != "" && (!EingabeGültig(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
+            if (textBoxPyramideWinkelHoehe.Text != "" && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
                 textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
-            if (textBoxPyramideWinkelBreitenversatz.Text != "" && (!EingabeGültig(textBoxPyramideWinkelBreitenversatz, ref breitenversatz)))
+            if (textBoxPyramideWinkelBreitenversatz.Text != "" && (!InputValid(textBoxPyramideWinkelBreitenversatz, ref breitenversatz)))
                 textBoxPyramideWinkelBreitenversatz.Background = Brushes.Red;
 
             // Überprüfen ob ein Eingabefeld rot ist.
@@ -1365,12 +1365,12 @@ namespace Schifterschnitt
 
         #endregion
 
-        #region Gemeinsame Methoden
+        #region Shared methods
 
         /// <summary>
-        /// Zeigt die Lizenz an.
+        /// Shows the license.
         /// </summary>
-        /// <param name="sender">Der About-Button.</param>
+        /// <param name="sender">The button.</param>
         /// <param name="e"></param>
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
@@ -1393,230 +1393,202 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         }
 
         /// <summary>
-        /// Prüft ob die Eingabe in einer TextBox gültig ist und in eine Zahl konvertiert werden kann.
+        /// Checks if the input is valid.
         /// </summary>
-        /// <param name="textBox">Die TextBox deren Text geprüft werden soll.</param>
-        /// <param name="zahl">Die Variable der die Zahl aus der Konvertierung zugewiesen werden soll.</param>
-        /// <returns>True wenn der Text gültig ist und in eine Zahl konvertiert werden kann.</returns>
-        private bool EingabeGültig(TextBox textBox, ref double zahl)
+        /// <param name="textBox">The textbox in which the input is.</param>
+        /// <param name="number">The variable to store the input in if it is valid.</param>
+        /// <returns>True if the input is valid.</returns>
+        private bool InputValid(TextBox textBox, ref double number)
         {
-            // Wenn der Text nicht gültig ist false zurückgeben.
             if (!TextGültig(textBox))
                 return false;
 
-            // Wenn der Text nicht in eine Zahl konvertiert werden kann false zurückgeben.
-            if (!double.TryParse(textBox.Text, out zahl))
+            if (!double.TryParse(textBox.Text, out number))
                 return false;
 
-            // Ansonsten true zurückgeben.
             return true;
         }
 
         /// <summary>
-        /// Prüft ob die Eingabe in einer TextBox gültig ist und in eine Zahl konvertiert werden kann.
+        /// Checks if the input is valid.
         /// </summary>
-        /// <param name="textBox">Die TextBox deren Text geprüft werden soll.</param>
-        /// <param name="zahl">Die Variable der die Zahl aus der Konvertierung zugewiesen werden soll.</param>
-        /// <returns>True wenn der Text gültig ist und in eine Zahl konvertiert werden kann.</returns>
-        private bool EingabeGültig(TextBox textBox, ref short zahl)
+        /// <param name="textBox">The textbox in which the input is.</param>
+        /// <param name="number">The variable to store the input in if it is valid.</param>
+        /// <returns>True if the input is valid.</returns>
+        private bool InputValid(TextBox textBox, ref short number)
         {
-            // Wenn der Text nicht gültig ist false zurückgeben.
             if (!TextGültig(textBox))
                 return false;
 
-            // Wenn der Text nicht in eine Zahl konvertiert werden kann false zurückgeben.
-            if (!short.TryParse(textBox.Text, out zahl))
+            if (!short.TryParse(textBox.Text, out number))
                 return false;
 
-            // Ansonsten true zurückgeben.
             return true;
         }
         
         /// <summary>
-        /// Lädt alle Tabs nachdem das Fenster geladen ist.
+        /// Loads all tabs after the window is loaded.
         /// </summary>
-        /// <param name="sender">Das Fenster.</param>
+        /// <param name="sender">The window.</param>
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Den Index des aktiven Tabs einer Variablen zuweisen.
-            var ausgewählt = tabControl.SelectedIndex;
+            int selected = tabControl.SelectedIndex;
 
-            // Sicherstellen, dass für die Viewport3D-Elemente in allen Tabs die Größe geladen ist.
             foreach (var item in tabControl.Items)
             {
-                // Den Tab anwählen und laden.
                 ((TabItem)item).IsSelected = true;
                 ((TabItem)item).UpdateLayout();
             }
 
-            // Den Index des ursprünglich aktiven Tabs an die TabControl geben.
-            tabControl.SelectedIndex = ausgewählt;
+            tabControl.SelectedIndex = selected;
         }
 
-        #region Grafik
+        #region Graphic
 
         /// <summary>
-        /// Passt die Größe der Grafik an die Größe des Viewport3D an.
+        /// Changes the size of the graphic to fit the size of the viewmodel.
         /// </summary>
-        /// <param name="sender">Das Viewport3D das die Methode ausgelöst hat.</param>
+        /// <param name="sender">The viewport3D that shows the graphic.</param>
         /// <param name="e"></param>
         private void Viewport3D_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // Stellt sicher dass beim Initialisieren nicht durch null geteilt wird.
+            // Make sure we don't divide by zero when the window is loaded.
             if (e.PreviousSize.Width == 0 || e.PreviousSize.Height == 0)
                 return;
             
-            // Die Kamera des senders einer Variablen zuweisen.
-            PerspectiveCamera kamera = (PerspectiveCamera)((Viewport3D)sender).Camera;
+            PerspectiveCamera camera = (PerspectiveCamera)((Viewport3D)sender).Camera;
             
-            // Das Verhältnis von der aktuellen Breite zur vorherigen Breite herausfinden.
-            // Die Grafik soll bei Breitenänderung gleich groß bleiben.
-            double verhältnisBreite = e.NewSize.Width / e.PreviousSize.Width;
+            // The graphic should stay the same if the width gets bigger.
+            double widthChangeValue = e.NewSize.Width / e.PreviousSize.Width;
 
-            // Das Verhältnis von der vorherigen Höhe zur aktuellen Höhe herausfinden.
-            // Die Grafik soll bei Höhenänderung größer oder kleiner werden.
-            double verhältnisHöhe = e.PreviousSize.Height / e.NewSize.Height;
+            // The graphic should adjust its size if the height gets bigger.
+            double heightChangeValue = e.PreviousSize.Height / e.NewSize.Height;
 
-            // Einen 3D-Punkt für die aktuelle Position der Kamera festlegen.
-            Point3D position = kamera.Position;
+            Point3D position = camera.Position;
 
-            // Die Position entsprechend ändern.
-            position.X *= verhältnisBreite * verhältnisHöhe;
-            position.Y *= verhältnisBreite * verhältnisHöhe;
-            position.Z *= verhältnisBreite * verhältnisHöhe;
+            position.X *= widthChangeValue * heightChangeValue;
+            position.Y *= widthChangeValue * heightChangeValue;
+            position.Z *= widthChangeValue * heightChangeValue;
             
-            // Die neue Position an die Kamera weitergeben.
-            kamera.SetValue(PerspectiveCamera.PositionProperty, position);
+            camera.SetValue(PerspectiveCamera.PositionProperty, position);
 
-            // Einen Vektor für die Blickrichtung der Kamera erstellen.
-            Vector3D blickrichtung = new Vector3D(position.X * -1, position.Y * -1, position.Z * -1);
+            var lookDirection = new Vector3D(position.X * -1, position.Y * -1, position.Z * -1);
 
-            // Die Blickrichtung der Kamera einstellen.
-            kamera.SetValue(PerspectiveCamera.LookDirectionProperty, blickrichtung);
+            camera.SetValue(PerspectiveCamera.LookDirectionProperty, lookDirection);
         }
 
         /// <summary>
-        /// Steuert den Zoom durch verändern der Kameraposition und Blickrichtung beim Scrollen über der Grafik.
+        /// Controls the zoom in the viewport3D.
         /// </summary>
-        /// <param name="kamera">Die Kamera der Grafik.</param>
+        /// <param name="camera">The camera of the viewport3D.</param>
         /// <param name="e"></param>
-        private void MausRad(PerspectiveCamera kamera, double kameraWinkel, MouseWheelEventArgs e)
+        private void MausRad(PerspectiveCamera camera, double cameraAngle, MouseWheelEventArgs e)
         {
-            // Die aktuelle Position der Kamera in einem 3D-Punkt speichern.
-            Point3D actualPosition = kamera.Position;
+            var newPosition = camera.Position;
+            double distanceFlat = Math.Abs(camera.Position.X) * Math.Sqrt(2);
+            double distanceToZero = Math.Sqrt(Math.Pow(Math.Abs(camera.Position.Z), 2) + Math.Pow(distanceFlat, 2));
+            double cameraAngleRadian = Calculate.DegreeToRadian(cameraAngle);
+            var zoomSpeed = 0.7;
 
-            // Die Länge der Entfernung von der Kamera zum Nullpunkt herausfinden.
-            double entfernung = Math.Sqrt(Math.Pow(Math.Abs(kamera.Position.Z), 2) + Math.Pow(Math.Abs(kamera.Position.X) * Math.Sqrt(2), 2));
-
-            // Wenn das Scrollrad nach oben bewegt wurde und die Position weit genug vom Nullpunkt weg ist die Position der Kamera an den Mittelpunkt annähern.
-            if (e.Delta > 0 && entfernung > 2.5)
+            if (e.Delta > 0 && distanceToZero > 2.5)
             {
-                actualPosition.X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung - 0.7);
+                double newDistance = distanceToZero - zoomSpeed;
+                double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * newDistance / Math.Sqrt(2)) * -1;
+                newPosition.X = newXYPosition;
+                newPosition.Y = newXYPosition;
+                newPosition.Z = Math.Sin(cameraAngleRadian) * newDistance;
             }
 
-            // Wenn das Scrollrad nach unten bewegt wurde und die Position nah genug am Nullpunkt ist die Position der Kamera vom Mittelpunkt entfernen.
-            if (e.Delta < 0 && entfernung < 20)
+            if (e.Delta < 0 && distanceToZero < 20)
             {
-                actualPosition.X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7) / Math.Sqrt(2)) * -1;
-                actualPosition.Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * (entfernung + 0.7);
+                double newDistance = distanceToZero + zoomSpeed;
+                double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * newDistance / Math.Sqrt(2)) * -1;
+                newPosition.X = newXYPosition;
+                newPosition.Y = newXYPosition;
+                newPosition.Z = Math.Sin(cameraAngleRadian) * newDistance;
             }
 
-            // Die neue Position der Kamera zuweisen.
-            kamera.SetValue(PerspectiveCamera.PositionProperty, actualPosition);
+            camera.SetValue(PerspectiveCamera.PositionProperty, newPosition);
 
-            // Einen Vektor für die Blickrichtung der Kamera erstellen.
-            Vector3D blickrichtung = new Vector3D(actualPosition.X * -1, actualPosition.Y * -1, actualPosition.Z * -1);
+            var lookDirection = new Vector3D(newPosition.X * -1, newPosition.Y * -1, newPosition.Z * -1);
 
-            // Die Blickrichtung der Kamera einstellen.
-            kamera.SetValue(PerspectiveCamera.LookDirectionProperty, blickrichtung);
+            camera.SetValue(PerspectiveCamera.LookDirectionProperty, lookDirection);
         }
 
         /// <summary>
-        /// Speichert die Mausposition wenn die linke Maustaste gedrückt wurde.
+        /// Saves the mouse position when the mouse button is clicked.
         /// </summary>
-        /// <param name="sender">Das Viewport3D das die Methode ausgelöst hat.</param>
+        /// <param name="sender">The viewport3D which the mouse is over.</param>
         /// <param name="e"></param>
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            mausPosition = e.GetPosition((Grid)sender);
+            mousePosition = e.GetPosition((Grid)sender);
         }
 
         /// <summary>
-        /// Dreht das 3D-Modell bei Bewegung der Maus in die entsprechende Richtung.
+        /// Turns the 3D model based on the mouse movement when the left button is clicked.
         /// </summary>
-        /// <param name="rotation">Die Rotation die verändert werden soll.</param>
-        /// <param name="sender">Das Grid das die Methode ausgelöst hat.</param>
+        /// <param name="rotation">The rotation to change.</param>
+        /// <param name="sender">The grid on which the mouse is moved.</param>
         /// <param name="e"></param>
-        private void MausBewegung(AxisAngleRotation3D rotation, ref double kameraWinkel, PerspectiveCamera kamera, object sender, MouseEventArgs e)
+        private void Grid_MouseMove(
+            AxisAngleRotation3D rotation, 
+            ref double cameraAngle, 
+            PerspectiveCamera camera, 
+            object sender, 
+            MouseEventArgs e)
         {
-            // Nur wenn die linke Maustaste gedrückt ist weiter machen.
             if (e.LeftButton == MouseButtonState.Released)
                 return;
 
-            // Die neue Mausposition speichern.
-            Point neueMausPosition = e.GetPosition((Grid)sender);
+            Point newMousePosition = e.GetPosition((Grid)sender);
 
-            // Die Sensitivität der Mausbewegung in einer Variablen speichern.
-            var sensitivität = 0.7;
+            var sensitivity = 0.7;
 
-            // Die Länge der Bewegung nach links oder rechts einer Variablen zuweisen.
-            var versatzLinksRechts = neueMausPosition.X - mausPosition.X;
+            var movementLeftRight = newMousePosition.X - mousePosition.X;
 
-            // Wenn die Maus nach links oder rechts bewegt wurde den Winkel der Rotation anpassen.
-            if (versatzLinksRechts > 0)
-                rotation.Angle += versatzLinksRechts * sensitivität;
-            else if (versatzLinksRechts < 0)
-                rotation.Angle += versatzLinksRechts * sensitivität;
+            if (movementLeftRight > 0)
+                rotation.Angle += movementLeftRight * sensitivity;
+            if (movementLeftRight < 0)
+                rotation.Angle += movementLeftRight * sensitivity;
 
-            // Die Länge der Bewegung nach oben oder unten einer Variablen zuweisen.
-            var versatzObenUnten = neueMausPosition.Y - mausPosition.Y;
+            var movementUpDown = newMousePosition.Y - mousePosition.Y;
 
-            // Wenn die Maus nach oben oder unten bewegt wurde den Winkel der Kamera anpassen.
-            if (versatzObenUnten > 0 && kameraWinkel < 90)
-                kameraWinkel += versatzObenUnten * sensitivität;
-            else if (versatzObenUnten < 0 && kameraWinkel > -90)
-                kameraWinkel += versatzObenUnten * sensitivität;
+            if (movementUpDown > 0 && cameraAngle < 90)
+                cameraAngle += movementUpDown * sensitivity;
+            if (movementUpDown < 0 && cameraAngle > -90)
+                cameraAngle += movementUpDown * sensitivity;
 
-            // Den Winkel der Kamera auf den Grenzwert setzen wenn dieser überschritten wurde.
-            if (kameraWinkel < -90)
-                kameraWinkel = -90;
-            else if (kameraWinkel > 90)
-                kameraWinkel = 90;
-            
-            // Die Länge der Entfernung von der Kamera zum Nullpunkt herausfinden.
-            double entfernung = Math.Sqrt(Math.Pow(Math.Abs(kamera.Position.Z), 2) + Math.Pow(Math.Abs(kamera.Position.X) * Math.Sqrt(2), 2));
+            if (cameraAngle < -90)
+                cameraAngle = -90;
+            if (cameraAngle > 90)
+                cameraAngle = 90;
 
-            // Variable für die neue Kameraposition festlegen.
-            Point3D kameraPositionNeu = new Point3D
+            double distanceFlat = Math.Abs(camera.Position.X) * Math.Sqrt(2);
+            double distance = Math.Sqrt(Math.Pow(Math.Abs(camera.Position.Z), 2) + Math.Pow(distanceFlat, 2));
+            double cameraAngleRadian = Calculate.DegreeToRadian(cameraAngle);
+            double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * distance / Math.Sqrt(2)) * -1;
+
+            var newPosition = new Point3D
             {
-                // Die neuen Werte für die Position berechnen.
-                Z = Math.Sin(Calculate.DegreeToRadian(kameraWinkel)) * entfernung,
-                X = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1,
-                Y = Math.Abs(Math.Cos(Calculate.DegreeToRadian(kameraWinkel)) * entfernung / Math.Sqrt(2)) * -1
+                Z = Math.Sin(Calculate.DegreeToRadian(cameraAngle)) * distance,
+                X = newXYPosition,
+                Y = newXYPosition
             };
 
-            // Die neue Position der Kamera zuweisen.
-            kamera.Position = kameraPositionNeu;
+            camera.Position = newPosition;
 
-            // Variable für die neue Blickrichtung der Kamera festlegen.
-            Vector3D kameraBlickrichtungNeu = new Vector3D(kameraPositionNeu.X * -1, kameraPositionNeu.Y * -1, kameraPositionNeu.Z * -1);
+            var newLookDirection = new Vector3D(newPosition.X * -1, newPosition.Y * -1, newPosition.Z * -1);
 
-            // Die neue Blickrichtung der Kamera zuweisen.
-            kamera.LookDirection = kameraBlickrichtungNeu;
+            camera.LookDirection = newLookDirection;
 
-            // Die Mausposition auf die neue Mausposition setzen.
-            mausPosition = neueMausPosition;
+            mousePosition = newMousePosition;
         }
 
         #endregion
 
         #endregion
-
-        #region Private Helfer
 
         /// <summary>
         /// Rechnet einen Winkel um nach der Formel: 90° - Winkel.
@@ -1625,27 +1597,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <param name="textBlock">Das Ergebnisfeld.</param>
         private void Winkelumrechnung(TextBox textBox, TextBlock textBlock)
         {
-            // Hilfsvariable erstellen.
             double x = 0;
             
-            // Wenn das Eingabefeld leer ist.
             if (textBox.Text == "")
             {
-                // Den Hintergrund des Eingabefeldes weiß setzen und das Ergebnisfeld leer setzen.
                 textBox.Background = Brushes.White;
                 textBlock.Text = "";
             }
-            // Wenn man die Eingabe in eine Zahl umwandeln kann.
-            else if (EingabeGültig(textBox, ref x))
+            else if (InputValid(textBox, ref x))
             {
-                // Den Hintergrund des Eingabefelds weiß setzen, die Berechnung durchführen und in das Ergebnisfeld einsetzen.
                 textBox.Background = Brushes.White;
                 textBlock.Text = Convert.ToString(90 - x) + "°";
             }
-            // Sonst.
             else
             {
-                // Den Hintergrund des Eingabefelds rot setzen und das Ergebnisfeld leer setzen.
                 textBox.Background = Brushes.Red;
                 textBlock.Text = "";
             }
@@ -1660,17 +1625,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True wenn der Hintergrund einer TextBox rot ist.</returns>
         private bool TextBoxIstRot(TextBox[] textBoxes, int start, int ende)
         {
-            // Die TextBoxen durchlaufen. 
             for (int i = start; i <= ende; i++)
             {
-                // Prüfen ob der Hintergrund rot ist.
                 if (textBoxes[i].Background == Brushes.Red)
                 {
-                    // True ausgeben.
                     return true;
                 }
             }
-            // False ausgeben.
             return false;
         }
 
@@ -1683,17 +1644,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True wenn der Text einer TextBox leer ist.</returns>
         private bool TextBoxIstLeer(TextBox[] textBoxes, int start, int ende)
         {
-            // Die TextBoxen durchlaufen. 
             for (int i = start; i <= ende; i++)
             {
-                // Prüfen ob der Text leer ist.
                 if (textBoxes[i].Text == "")
                 {
-                    // True ausgeben.
                     return true;
                 }
             }
-            // False ausgeben.
             return false;
         }
 
@@ -1705,7 +1662,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         {
             double x = 0;
 
-            if (EingabeGültig(textBox, ref x) && x >= 0)
+            if (InputValid(textBox, ref x) && x >= 0)
             {
                 textBox.Background = Brushes.White;
             }
@@ -1718,15 +1675,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True wenn keine problematische Eingabe vorhanden ist.</returns>
         private bool TextGültig(TextBox textBox)
         {
-            // Wenn der Text eine problematische Eingabe enthält false zurückgeben.
             if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
                 return false;
 
-            // Ansonsten true zurück geben.
             return true;
         }
-
-
-        #endregion
     }
 }
