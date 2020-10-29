@@ -22,6 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace Schifterschnitt
 {
@@ -30,7 +31,7 @@ namespace Schifterschnitt
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Variablen
+        #region Fields
 
         Corner ecke = new Corner();
         Pyramid pyramideLinie = new Pyramid();
@@ -63,6 +64,10 @@ namespace Schifterschnitt
         TextBox[] pyramideLinieEingaben;
         TextBox[] pyramideWinkelEingaben;
 
+        GridColumnResize cornerColumnResize;
+        GridColumnResize pyramidLineColumnResize;
+        GridColumnResize pyramidAngleColumnResize;
+
         #endregion
 
         #region ctor
@@ -73,6 +78,28 @@ namespace Schifterschnitt
         public MainWindow()
         {
             InitializeComponent();
+
+            #region Grid column resizing
+
+            // The default values of the columns need to be saved to restore them in resizing later.
+            var cornerColumnWidths = new List<double>();
+            var pyramidLineColumnWidths = new List<double>();
+            var pyramidAngleColumnWidths = new List<double>();
+
+            foreach (var columnDefinition in gridCorner.ColumnDefinitions)
+                cornerColumnWidths.Add(columnDefinition.Width.Value);
+
+            foreach (var columnDefinition in gridPyramidLine.ColumnDefinitions)
+                pyramidLineColumnWidths.Add(columnDefinition.Width.Value);
+
+            foreach (var columnDefinition in gridPyramidAngle.ColumnDefinitions)
+                pyramidAngleColumnWidths.Add(columnDefinition.Width.Value);
+
+            cornerColumnResize = new GridColumnResize(cornerColumnWidths);
+            pyramidLineColumnResize = new GridColumnResize(pyramidLineColumnWidths);
+            pyramidAngleColumnResize = new GridColumnResize(pyramidAngleColumnWidths);
+
+            #endregion
 
             // Neue Transformationen für die Grafiken erzeugen.
             eckeRotation = new AxisAngleRotation3D(new Vector3D(0, 0, 1), 1);
@@ -643,6 +670,26 @@ namespace Schifterschnitt
             eckeFeedback.Deactivate(eckeFeedback.LineXYInvalidValues);
         }
 
+        /// <summary>
+        /// Resizes the columns of the grid so only the most right one gets bigger if the window gets bigger.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void CornerGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            cornerColumnResize.ExpandMostRightIfBigger(sender, e);
+        }
+
+        /// <summary>
+        /// Resizes the columns of the grid so only the one below the mouse is fully shown if the window gets smaller.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void CornerGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+            cornerColumnResize.ShowFullyIfSmaller(sender, e);
+        }
+
         #endregion
 
         #region Methoden Pyramide mit Grund- und Oberlinie
@@ -884,10 +931,30 @@ namespace Schifterschnitt
             }
         }
 
+        /// <summary>
+        /// Resizes the columns of the grid so only the most right one gets bigger if the window gets bigger.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void PyramidLineGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            pyramidLineColumnResize.ExpandMostRightIfBigger(sender, e);
+        }
+
+        /// <summary>
+        /// Resizes the columns of the grid so only the one below the mouse is fully shown if the window gets smaller.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void PyramidLineGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+            pyramidLineColumnResize.ShowFullyIfSmaller(sender, e);
+        }
+
         #endregion
 
         #region Methoden Pyramide mit Neigungswinkel
-        
+
         /// <summary>
         /// Steuert den Zoom durch verändern der Kameraposition und Blickrichtung beim Scrollen über der Grafik.
         /// </summary>
@@ -1276,6 +1343,26 @@ namespace Schifterschnitt
             }
         }
 
+        /// <summary>
+        /// Resizes the columns of the grid so only the most right one gets bigger if the window gets bigger.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void PyramidAngleGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            pyramidAngleColumnResize.ExpandMostRightIfBigger(sender, e);
+        }
+
+        /// <summary>
+        /// Resizes the columns of the grid so only the one below the mouse is fully shown if the window gets smaller.
+        /// </summary>
+        /// <param name="sender">The grid to resize the columns in.</param>
+        /// <param name="e"></param>
+        private void PyramidAngleGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+            pyramidAngleColumnResize.ShowFullyIfSmaller(sender, e);
+        }
+
         #endregion
 
         #region Gemeinsame Methoden
@@ -1365,69 +1452,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
 
             // Den Index des ursprünglich aktiven Tabs an die TabControl geben.
             tabControl.SelectedIndex = ausgewählt;
-        }
-
-        /// <summary>
-        /// Passt die Spaltenbreite an wenn die Größe des Grids verändert wird.
-        /// </summary>
-        /// <param name="sender">Das Grid das die Methode ausgelöst hat.</param>
-        /// <param name="e"></param>
-        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (((Grid)sender).ActualWidth < 1112)
-            {
-                ((Grid)sender).ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-                ((Grid)sender).ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
-                ((Grid)sender).ColumnDefinitions[4].Width = new GridLength(370);
-            }
-            else
-            {
-                ((Grid)sender).ColumnDefinitions[0].Width = new GridLength(370);
-                ((Grid)sender).ColumnDefinitions[2].Width = new GridLength(370);
-                ((Grid)sender).ColumnDefinitions[4].Width = new GridLength(1, GridUnitType.Star);
-            }
-        }
-
-        /// <summary>
-        /// Shows the column the mouse is over fully when the window is to small for all columns.
-        /// </summary>
-        /// <param name="sender">The grid with multiple columns.</param>
-        /// <param name="e"></param>
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
-        {
-            var senderGrid = (Grid)sender;
-
-            if (senderGrid.ActualWidth >= 1112)
-                return;
-
-            double positionX = e.GetPosition(senderGrid).X;
-            int numberOfColumns = senderGrid.ColumnDefinitions.Count;
-            var currentColumn = new ColumnDefinition();
-
-            for (int i = 0; i < numberOfColumns; i += 2)
-            {
-                double leftStop = 0;
-
-                for (int l = 0; l < i; l++)
-                    leftStop += senderGrid.ColumnDefinitions[l].ActualWidth;
-
-                double rightStop = leftStop + senderGrid.ColumnDefinitions[i].ActualWidth;
-
-                if ((positionX >= leftStop) && (positionX <= rightStop))
-                {
-                    currentColumn = senderGrid.ColumnDefinitions[i];
-                    break;
-                }
-            }
-
-            for (int i = 0; i < numberOfColumns; i += 2)
-            {
-                var column = senderGrid.ColumnDefinitions[i];
-                if (column == currentColumn)
-                    column.Width = new GridLength(370);
-                else
-                    column.Width = new GridLength(1, GridUnitType.Star);
-            }
         }
 
         #region Grafik

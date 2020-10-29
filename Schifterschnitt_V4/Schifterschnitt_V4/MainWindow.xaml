@@ -82,13 +82,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="147"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Name="gridEcke" MouseMove="Grid_MouseMove" SizeChanged="Grid_SizeChanged">
+                    <Grid Grid.Row="0" Name="gridCorner" MouseMove="CornerGrid_MouseMove" SizeChanged="CornerGrid_SizeChanged">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="370"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -457,13 +457,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="147"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" MouseMove="Grid_MouseMove" SizeChanged="Grid_SizeChanged">
+                    <Grid Grid.Row="0" Name="gridPyramidLine" MouseMove="PyramidLineGrid_MouseMove" SizeChanged="PyramidLineGrid_SizeChanged">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="370"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -755,13 +755,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="147"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" MouseMove="Grid_MouseMove" SizeChanged="Grid_SizeChanged">
+                    <Grid Grid.Row="0" Name="gridPyramidAngle" MouseMove="PyramidAngleGrid_MouseMove" SizeChanged="PyramidAngleGrid_SizeChanged">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
                             <ColumnDefinition Width="370"/>
                             <ColumnDefinition Width="1"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="370"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
