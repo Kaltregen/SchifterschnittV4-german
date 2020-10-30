@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Schifterschnitt
 {
@@ -152,7 +153,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridEckeGrafik_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MausRad(perspectiveCameraEcke, eckeKameraWinkel, e);
+            Viewport3D_MouseWheel(perspectiveCameraEcke, eckeKameraWinkel, e);
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void TextBoxEckeWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Winkelumrechnung(textBoxEckeWinkelumrechnung, textBlockEckeWinkelumrechnung);
+            AngleConversion(textBoxEckeWinkelumrechnung, textBlockEckeWinkelumrechnung);
         }
 
         /// <summary>
@@ -251,7 +252,7 @@ namespace Schifterschnitt
             double winkelBeta = 0;
 
             // Überprüfen ob ein Eingabefeld leer ist.
-            if (TextBoxIstLeer(eckeEingaben, 0, 5))
+            if (TextBoxIsEmpty(eckeEingaben, 0, 5))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 EckeErgebnisReset();
@@ -288,7 +289,7 @@ namespace Schifterschnitt
                 textBoxEckeWinkelBeta.Background = Brushes.Red;
             
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
-            if (TextBoxIstRot(eckeEingaben, 0, 5))
+            if (TextBoxIsRed(eckeEingaben, 0, 5))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 EckeErgebnisReset();
@@ -388,7 +389,7 @@ namespace Schifterschnitt
                 textBoxEckeLinieXZwei.Background = Brushes.Red;
 
             // Wenn der Hintergrund einer der Eingabefelder rot ist.
-            if (TextBoxIstRot(eckeEingaben, 9, 12))
+            if (TextBoxIsRed(eckeEingaben, 9, 12))
             {
                 // Aktiviert die Meldung [LiniexyUngültigeWerte].
                 eckeFeedback.Activate(eckeFeedback.LineXYInvalidValues);
@@ -414,7 +415,7 @@ namespace Schifterschnitt
             }
             
             // Wenn die Ecke erfolgreich berechnet wurde und kein Eingabefeld rot ist.
-            if (eckeFeedback.Calculated.Active && !TextBoxIstRot(eckeEingaben, 9, 12))
+            if (eckeFeedback.Calculated.Active && !TextBoxIsRed(eckeEingaben, 9, 12))
             {
                 // Die Zusätze berechnen.
                 double zusatzEins = Math.Tan(Calculate.DegreeToRadian(ecke.AngleCrossCutFirstBoard)) * ecke.WidthFirstBoard;
@@ -471,7 +472,7 @@ namespace Schifterschnitt
                 textBoxEckeBreitenversatzZwei.Background = Brushes.Red;
 
             // Überprüfen ob ein Eingabefeld rot ist.
-            if (textBoxEckeHoehe.Background == Brushes.Red || TextBoxIstRot(eckeEingaben, 6, 7))
+            if (textBoxEckeHoehe.Background == Brushes.Red || TextBoxIsRed(eckeEingaben, 6, 7))
             {
                 // Aktiviert die Meldung [UngültigeWerte].
                 eckeFeedback.Activate(eckeFeedback.InvalidValues);
@@ -549,7 +550,7 @@ namespace Schifterschnitt
             ((TextBox)sender).Background = Brushes.White;
 
             // Wenn kein Hintergrund der Eingabefelder rot ist.
-            if (!TextBoxIstRot(eckeEingaben, 0, 8))
+            if (!TextBoxIsRed(eckeEingaben, 0, 8))
             {
                 // Deaktivert die Meldung [UngültigeWerte].
                 eckeFeedback.Deactivate(eckeFeedback.InvalidValues);
@@ -633,16 +634,16 @@ namespace Schifterschnitt
             if (!(textBoxEckeLinieYEins.Background == Brushes.Red && textBoxEckeLinieXEins.Background == Brushes.Red))
             {
                 // Den Hintergrund der Eingabefelder weiß setzen wenn sie gültig sind.
-                WeißWennGültig(textBoxEckeLinieYEins);
-                WeißWennGültig(textBoxEckeLinieXEins);
+                WhiteIfValid(textBoxEckeLinieYEins);
+                WhiteIfValid(textBoxEckeLinieXEins);
             }
 
             // Wenn bei der Funktion Linie XY beim Teil Zwei nicht beide Eingabefelder gleichzeitig rot sind.
             if (!(textBoxEckeLinieYZwei.Background == Brushes.Red && textBoxEckeLinieXZwei.Background == Brushes.Red))
             {
                 // Den Hintergrund der Eingabefelder weiß setzen wenn sie gültig sind.
-                WeißWennGültig(textBoxEckeLinieYZwei);
-                WeißWennGültig(textBoxEckeLinieXZwei);
+                WhiteIfValid(textBoxEckeLinieYZwei);
+                WhiteIfValid(textBoxEckeLinieXZwei);
             }
 
             // Wenn bei der Funktion Linie XY bei beiden Teilen nicht beide Eingabefelder gleichzeitig rot sind.
@@ -701,7 +702,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridPyramideLinieGrafik_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MausRad(perspectiveCameraPyramideLinie, pyramideLinieKameraWinkel, e);
+            Viewport3D_MouseWheel(perspectiveCameraPyramideLinie, pyramideLinieKameraWinkel, e);
         }
 
         /// <summary>
@@ -721,7 +722,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void TextBoxPyramideLinieWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Winkelumrechnung(textBoxPyramideLinieWinkelumrechnung, textBlockPyramideLinieWinkelumrechnung);
+            AngleConversion(textBoxPyramideLinieWinkelumrechnung, textBlockPyramideLinieWinkelumrechnung);
         }
 
         /// <summary>
@@ -792,7 +793,7 @@ namespace Schifterschnitt
             double oberlinie = 0;
 
             // Überprüfen ob ein Eingabefeld leer ist.
-            if (TextBoxIstLeer(pyramideLinieEingaben, 0, 4))
+            if (TextBoxIsEmpty(pyramideLinieEingaben, 0, 4))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 PyramideLinieErgebnisReset();
@@ -826,7 +827,7 @@ namespace Schifterschnitt
                 textBoxPyramideLinieOberlinie.Background = Brushes.Red;
 
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
-            if (TextBoxIstRot(pyramideLinieEingaben, 0, 4))
+            if (TextBoxIsRed(pyramideLinieEingaben, 0, 4))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 PyramideLinieErgebnisReset();
@@ -914,7 +915,7 @@ namespace Schifterschnitt
             ((TextBox)sender).Background = Brushes.White;
 
             // Wenn bei keinem Eingabefeld der Hintergrund rot ist.
-            if (!TextBoxIstRot(pyramideLinieEingaben, 0, 4))
+            if (!TextBoxIsRed(pyramideLinieEingaben, 0, 4))
             {
                 // Deaktiviert die Meldung [UngültigeWerte].
                 pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InvalidValues);
@@ -962,7 +963,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void GridPyramideWinkel_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MausRad(perspectiveCameraPyramideWinkel, pyramideWinkelKameraWinkel, e);
+            Viewport3D_MouseWheel(perspectiveCameraPyramideWinkel, pyramideWinkelKameraWinkel, e);
         }
 
         /// <summary>
@@ -982,7 +983,7 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void TextBoxPyramideWinkelWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Winkelumrechnung(textBoxPyramideWinkelWinkelumrechnung, textBlockPyramideWinkelWinkelumrechnung);
+            AngleConversion(textBoxPyramideWinkelWinkelumrechnung, textBlockPyramideWinkelWinkelumrechnung);
         }
 
         /// <summary>
@@ -1056,7 +1057,7 @@ namespace Schifterschnitt
             double höheErgebend = 0;
 
             // Überprüfen ob ein Eingabefeld leer ist.
-            if (TextBoxIstLeer(pyramideWinkelEingaben, 1, 4))
+            if (TextBoxIsEmpty(pyramideWinkelEingaben, 1, 4))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 PyramideWinkelErgebnisReset();
@@ -1090,7 +1091,7 @@ namespace Schifterschnitt
                 textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
             // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
-            if (TextBoxIstRot(pyramideWinkelEingaben, 0, 4))
+            if (TextBoxIsRed(pyramideWinkelEingaben, 0, 4))
             {
                 // Die Ergebnisfelder zurücksetzen.
                 PyramideWinkelErgebnisReset();
@@ -1290,56 +1291,57 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Stellt den Hintergrund eines veränderten Eingabefeldes weiß und aktualisiert die Feedbackleiste.
+        /// Changes the textbox background to white and updates the feedback area.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld das die Methode ausgelöst hat.</param>
+        /// <param name="sender">The textbox that called the method.</param>
         /// <param name="e"></param>
         private void PyramideWinkelInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Den Hintergrund des Eingabefeldes, das die Methode ausgelöst hat, weiß setzen.
-            ((TextBox)sender).Background = Brushes.White;
+            var senderTextBox = (TextBox)sender;
+            var feedback = pyramideWinkelFeedback;
+            TextBox[] helper;
 
-            // Wenn der Hintergrund von keinem Eingabefeld rot ist.
-            if (!TextBoxIstRot(pyramideWinkelEingaben, 0, 5))
+            senderTextBox.Background = Brushes.White;
+
+            if (!TextBoxIsRed(pyramideWinkelEingaben, 0, 5))
+                feedback.Deactivate(feedback.InvalidValues);
+
+            helper = new TextBox[] {
+                textBoxPyramideWinkelHoehe,
+                textBoxPyramideWinkelStaerke,
+                textBoxPyramideWinkelAnzahlSeiten,
+                textBoxPyramideWinkelGrundlinie
+            };
+
+            if (feedback.Calculated.Active && (helper.Contains(senderTextBox)))
             {
-                // Deaktiviert die Meldung [UngültigeWerte].
-                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InvalidValues);
+                feedback.Activate(feedback.InputChanged);
+                feedback.Deactivate(feedback.Calculated);
             }
 
-            // Wenn das Eingabefeld, das die Methode ausgelöst hat, keines der Funktionen ist und die Ecke erfolgreich berechnet wurde.
-            for (int i = 0; i <= 4; i++)
-            {
-                if (pyramideWinkelFeedback.Calculated.Active && (TextBox)sender == pyramideWinkelEingaben[i])
-                {
-                    // Aktiviert die Meldung [EingabeGeändert].
-                    pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InputChanged);
+            helper = new TextBox[] {
+                textBoxPyramideWinkelHoehe,
+                textBoxPyramideWinkelBreitenversatz,
+                textBoxPyramideWinkelNeigungswinkel
+            };
 
-                    // Deaktiviert die Meldung [Berechnet].
-                    pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
-                }
+            if (feedback.TiltAngleCalculated.Active && (helper.Contains(senderTextBox)))
+            {
+                feedback.Activate(feedback.TiltAngleChanged);
+                feedback.Deactivate(feedback.TiltAngleCalculated);
             }
 
-            // Wenn das Eingabefeld, das die Methode ausgelöst hat, eine der Funktion Neigungswinkel Berechnen ist und diese erfolgreich berechnet wurde.
-            if (pyramideWinkelFeedback.TiltAngleCalculated.Active && ((TextBox)sender == textBoxPyramideWinkelHoehe || (TextBox)sender == textBoxPyramideWinkelBreitenversatz || 
-                (TextBox)sender == textBoxPyramideWinkelNeigungswinkel))
-            {
-                // Aktiviert die Meldung [NeigungswinkelGeändert].
-                pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.TiltAngleChanged);
+            helper = new TextBox[] {
+                textBoxPyramideWinkelHoehe,
+                textBoxPyramideWinkelNeigungswinkel
+            };
 
-                // Deaktiviert die Meldung [NeigungswinkelBerechnet].
-                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.TiltAngleCalculated);
-            }
-
-            // Wenn der sender das Eingabefeld Höhe oder Neigungswinkel ist den Hintergrund des Eingabefelds Höhe weiß setzen und die Feedbackleiste aktualisieren.
-            if (((TextBox)sender) == textBoxPyramideWinkelHoehe || ((TextBox)sender) == textBoxPyramideWinkelNeigungswinkel)
+            if (helper.Contains(senderTextBox))
             {
                 textBoxPyramideWinkelHoehe.Background = Brushes.White;
 
-                // Deaktiviert die Meldung [HöheErforderlich].
-                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.HeightNeeded);
-
-                // Deaktiviert die Meldung [HöheGrößerAlsErgebend].
-                pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.HeightLargerThanResulting);
+                feedback.Deactivate(feedback.HeightNeeded);
+                feedback.Deactivate(feedback.HeightLargerThanResulting);
             }
         }
 
@@ -1400,7 +1402,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True if the input is valid.</returns>
         private bool InputValid(TextBox textBox, ref double number)
         {
-            if (!TextGültig(textBox))
+            if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
                 return false;
 
             if (!double.TryParse(textBox.Text, out number))
@@ -1417,7 +1419,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True if the input is valid.</returns>
         private bool InputValid(TextBox textBox, ref short number)
         {
-            if (!TextGültig(textBox))
+            if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
                 return false;
 
             if (!short.TryParse(textBox.Text, out number))
@@ -1442,6 +1444,78 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
             }
 
             tabControl.SelectedIndex = selected;
+        }
+
+        /// <summary>
+        /// Calculates 90° - angle.
+        /// </summary>
+        /// <param name="textBox">The textbox with the input.</param>
+        /// <param name="textBlock">The textblock to show the result.</param>
+        private void AngleConversion(TextBox textBox, TextBlock textBlock)
+        {
+            double x = 0;
+
+            if (textBox.Text == "")
+            {
+                textBox.Background = Brushes.White;
+                textBlock.Text = "";
+            }
+            else if (InputValid(textBox, ref x))
+            {
+                textBox.Background = Brushes.White;
+                textBlock.Text = Convert.ToString(90 - x) + "°";
+            }
+            else
+            {
+                textBox.Background = Brushes.Red;
+                textBlock.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Checks if a textbox in an array has a red background.
+        /// </summary>
+        /// <param name="textBoxes">The textboxes to check.</param>
+        /// <param name="start">The start index in the array.</param>
+        /// <param name="end">The end index in the array (included).</param>
+        /// <returns>True if the background of at least one textbox is red.</returns>
+        private bool TextBoxIsRed(TextBox[] textBoxes, int start, int end)
+        {
+            for (int i = start; i <= end; i++)
+            {
+                if (textBoxes[i].Background == Brushes.Red)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a textbox in an array is empty.
+        /// </summary>
+        /// <param name="textBoxes">The textboxes to check.</param>
+        /// <param name="start">The start index in the array.</param>
+        /// <param name="end">The end index in the array (included).</param>
+        /// <returns>True if at least one textbox is empty.</returns>
+        private bool TextBoxIsEmpty(TextBox[] textBoxes, int start, int end)
+        {
+            for (int i = start; i <= end; i++)
+            {
+                if (textBoxes[i].Text == "")
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Sets the background of a textbox to white if the input is valid.
+        /// </summary>
+        /// <param name="textBox">The textbox.</param>
+        private void WhiteIfValid(TextBox textBox)
+        {
+            double x = 0;
+
+            if (InputValid(textBox, ref x) && x >= 0)
+                textBox.Background = Brushes.White;
         }
 
         #region Graphic
@@ -1483,7 +1557,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// </summary>
         /// <param name="camera">The camera of the viewport3D.</param>
         /// <param name="e"></param>
-        private void MausRad(PerspectiveCamera camera, double cameraAngle, MouseWheelEventArgs e)
+        private void Viewport3D_MouseWheel(PerspectiveCamera camera, double cameraAngle, MouseWheelEventArgs e)
         {
             var newPosition = camera.Position;
             double distanceFlat = Math.Abs(camera.Position.X) * Math.Sqrt(2);
@@ -1589,96 +1663,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         #endregion
 
         #endregion
-
-        /// <summary>
-        /// Rechnet einen Winkel um nach der Formel: 90° - Winkel.
-        /// </summary>
-        /// <param name="textBox">Das Eingabefeld.</param>
-        /// <param name="textBlock">Das Ergebnisfeld.</param>
-        private void Winkelumrechnung(TextBox textBox, TextBlock textBlock)
-        {
-            double x = 0;
-            
-            if (textBox.Text == "")
-            {
-                textBox.Background = Brushes.White;
-                textBlock.Text = "";
-            }
-            else if (InputValid(textBox, ref x))
-            {
-                textBox.Background = Brushes.White;
-                textBlock.Text = Convert.ToString(90 - x) + "°";
-            }
-            else
-            {
-                textBox.Background = Brushes.Red;
-                textBlock.Text = "";
-            }
-        }
-
-        /// <summary>
-        /// Überprüft ob der Hintergrund von einer der übergebenen TextBoxen rot ist.
-        /// </summary>
-        /// <param name="textBoxes">Das Array der TextBoxen.</param>
-        /// <param name="start">Der Startindex in dem Array.</param>
-        /// <param name="ende">Der Endindex in dem Array inklusive.</param>
-        /// <returns>True wenn der Hintergrund einer TextBox rot ist.</returns>
-        private bool TextBoxIstRot(TextBox[] textBoxes, int start, int ende)
-        {
-            for (int i = start; i <= ende; i++)
-            {
-                if (textBoxes[i].Background == Brushes.Red)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Überprüft ob der Text von einer der übergebenen TextBoxen leer ist.
-        /// </summary>
-        /// <param name="textBoxes">Das Array der TextBoxen.</param>
-        /// <param name="start">Der Startindex in dem Array.</param>
-        /// <param name="ende">Der Endindex in dem Array inklusive.</param>
-        /// <returns>True wenn der Text einer TextBox leer ist.</returns>
-        private bool TextBoxIstLeer(TextBox[] textBoxes, int start, int ende)
-        {
-            for (int i = start; i <= ende; i++)
-            {
-                if (textBoxes[i].Text == "")
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Setzt den Hintergrund einer TextBox weiß wenn die Eingabe gültig und größer als oder gleich Null ist.
-        /// </summary>
-        /// <param name="textBox">Die TextBox.</param>
-        private void WeißWennGültig(TextBox textBox)
-        {
-            double x = 0;
-
-            if (InputValid(textBox, ref x) && x >= 0)
-            {
-                textBox.Background = Brushes.White;
-            }
-        }
-
-        /// <summary>
-        /// Prüft ob der Text einer Textbox Eingaben enthält die ein Problem bei der Konvertierung in eine Zahl machen könnten.
-        /// </summary>
-        /// <param name="textBox">Die TextBox deren Text geprüft werden soll.</param>
-        /// <returns>True wenn keine problematische Eingabe vorhanden ist.</returns>
-        private bool TextGültig(TextBox textBox)
-        {
-            if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
-                return false;
-
-            return true;
-        }
     }
 }
