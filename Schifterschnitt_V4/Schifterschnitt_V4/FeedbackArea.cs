@@ -175,17 +175,29 @@ namespace Schifterschnitt
             Area.ColumnDefinitions.Clear();
             Area.Background = Brushes.White;
 
-            var reports = new Report[] { EnterValues, Calculated, InputChanged, AlphaCalculated, AlphaChanged, TiltAngleCalculated, TiltAngleChanged,
-                    BetaCalculated, BetaChanged, InvalidValues, LineXYInvalidValues, LineXYToManyValues, HeightNeeded, HeightLargerThanResulting };
+            var reports = new Report[] { 
+                EnterValues, 
+                Calculated, 
+                InputChanged, 
+                AlphaCalculated, 
+                AlphaChanged, 
+                TiltAngleCalculated, 
+                TiltAngleChanged,
+                BetaCalculated, 
+                BetaChanged, 
+                InvalidValues, 
+                LineXYInvalidValues, 
+                LineXYToManyValues, 
+                HeightNeeded, 
+                HeightLargerThanResulting 
+            };
 
             var column = 0;
 
             foreach (var report in reports)
             {
                 if (report.Active == false)
-                {
                     continue;
-                }
 
                 var columnDefiniton = new ColumnDefinition();
                 columnDefiniton.Width = new GridLength(1, GridUnitType.Star);
@@ -214,9 +226,7 @@ namespace Schifterschnitt
         public void Activate(params Report[] reports)
         {
             foreach (var report in reports)
-            {
                 report.Active = true;
-            }
 
             Update();
         }
@@ -228,9 +238,7 @@ namespace Schifterschnitt
         public void Deactivate(params Report[] reports)
         {
             foreach (var report in reports)
-            {
                 report.Active = false;
-            }
 
             Update();
         }

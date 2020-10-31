@@ -120,10 +120,13 @@ namespace Schifterschnitt
             pyramideLinieKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
             pyramideWinkelKameraWinkel = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
             
-            // Die Feedbackleisten initialisieren und den Grids im Fenster zuweisen.
             eckeFeedback = new FeedbackArea(gridEckeFeedback);
             pyramideLinieFeedback = new FeedbackArea(gridPyramideLinieFeedback);
             pyramideWinkelFeedback = new FeedbackArea(gridPyramideWinkelFeedback);
+
+            eckeFeedback.Activate(eckeFeedback.EnterValues);
+            pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
+            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
 
             // Die Arrays für die Eingabefelder füllen.
             eckeEingaben = new TextBox[] { textBoxEckeHoehe, textBoxEckeMaterialstaerkeEins, textBoxEckeMaterialstaerkeZwei, textBoxEckeWinkelAlphaEins,
@@ -135,11 +138,6 @@ namespace Schifterschnitt
 
             pyramideWinkelEingaben = new TextBox[] { textBoxPyramideWinkelHoehe, textBoxPyramideWinkelStaerke, textBoxPyramideWinkelAnzahlSeiten,
                 textBoxPyramideWinkelGrundlinie, textBoxPyramideWinkelNeigungswinkel, textBoxPyramideWinkelBreitenversatz };
-            
-            // Für alle Tabs die Meldung Eingabewerte eingeben aktivieren.
-            eckeFeedback.Activate(eckeFeedback.EnterValues);
-            pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
-            pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
         }
 
         #endregion
@@ -696,9 +694,9 @@ namespace Schifterschnitt
         #region Methoden Pyramide mit Grund- und Oberlinie
         
         /// <summary>
-        /// Steuert den Zoom durch verändern der Kameraposition und Blickrichtung beim Scrollen über der Grafik.
+        /// Controls the zoom by changing camera position and look direction.
         /// </summary>
-        /// <param name="sender">Das Grid in der die Grafik ist.</param>
+        /// <param name="sender">The grid with the viewport3D.</param>
         /// <param name="e"></param>
         private void GridPyramideLinieGrafik_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -706,19 +704,24 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Dreht das 3D-Modell bei Bewegung der Maus nach links oder rechts.
+        /// Rotates the 3D model when the mouse is moved and the left mouse button is hold.
         /// </summary>
-        /// <param name="sender">Das Grid in der die Grafik ist.</param>
+        /// <param name="sender">The grid with the viewport3D.</param>
         /// <param name="e"></param>
-        private void GridPyramideLinieGrafik_MouseMove(object sender, MouseEventArgs e)
+        private void GridPyramidLineGraphic_MouseMove(object sender, MouseEventArgs e)
         {
-            Grid_MouseMove(pyramideLinieRotation, ref pyramideLinieKameraWinkel, perspectiveCameraPyramideLinie, sender, e);
+            Grid_MouseMove(
+                pyramideLinieRotation, 
+                ref pyramideLinieKameraWinkel, 
+                perspectiveCameraPyramideLinie, 
+                sender, 
+                e);
         }
 
         /// <summary>
-        /// Rechnet den Winkel um und zeigt das Ergebnis im Ergebnisfeld an.
+        /// Converts the angle if the input is valid and shows the result.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld der Winkelumrechnung.</param>
+        /// <param name="sender">The textbox for angle conversion.</param>
         /// <param name="e"></param>
         private void TextBoxPyramideLinieWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -726,52 +729,66 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Setzt die Ergebnisfelder zurück und setzt die Variable pyramideLinieBerechnet auf false.
+        /// Resets the result textblocks.
         /// </summary>
-        private void PyramideLinieErgebnisReset()
+        private void PyramidLineResultReset()
         {
-            textBlockPyramideLinieWinkelQueranschlag.Text = "";
-            textBlockPyramideLinieWinkelSaegeblatt.Text = "";
-            textBlockPyramideLinieBreite.Text = "";
-            textBlockPyramideLinieBreiteMitSchraege.Text = "";
-            textBlockPyramideLinieFlächenwinkel.Text = "";
-            textBlockPyramideLinieBreitenversatz.Text = "";
-            textBlockPyramideLinieSchraegeS.Text = "";
-            textBlockPyramideLinieNeigungswinkel.Text = "";
-            textBlockPyramideLinieInkreisradiusOA.Text = "";
-            textBlockPyramideLinieInkreisradiusOI.Text = "";
-            textBlockPyramideLinieInkreisradiusUA.Text = "";
-            textBlockPyramideLinieInkreisradiusUI.Text = "";
-            textBlockPyramideLinieUmkreisradiusOA.Text = "";
-            textBlockPyramideLinieUmkreisradiusOI.Text = "";
-            textBlockPyramideLinieUmkreisradiusUA.Text = "";
-            textBlockPyramideLinieUmkreisradiusUI.Text = "";
+            var resultTextblocks = new TextBlock[]
+            {
+                textBlockPyramideLinieWinkelQueranschlag,
+                textBlockPyramideLinieWinkelSaegeblatt,
+                textBlockPyramideLinieBreite,
+                textBlockPyramideLinieBreiteMitSchraege,
+                textBlockPyramideLinieFlächenwinkel,
+                textBlockPyramideLinieBreitenversatz,
+                textBlockPyramideLinieSchraegeS,
+                textBlockPyramideLinieNeigungswinkel,
+                textBlockPyramideLinieInkreisradiusOA,
+                textBlockPyramideLinieInkreisradiusOI,
+                textBlockPyramideLinieInkreisradiusUA,
+                textBlockPyramideLinieInkreisradiusUI,
+                textBlockPyramideLinieUmkreisradiusOA,
+                textBlockPyramideLinieUmkreisradiusOI,
+                textBlockPyramideLinieUmkreisradiusUA,
+                textBlockPyramideLinieUmkreisradiusUI,
+            };
+
+            foreach (var textBlock in resultTextblocks)
+            {
+                textBlock.Text = "";
+            }
         }
 
         /// <summary>
-        /// Setzt alle Felder zurück, leert die Grafik und aktualisiert die Feedbackleiste.
+        /// Resets everything.
         /// </summary>
-        /// <param name="sender">Der Button Zurücksetzen.</param>
+        /// <param name="sender">The button to reset everything.</param>
         /// <param name="e"></param>
         private void ButtonPyramideLinieReset_Click(object sender, RoutedEventArgs e)
         {
-            // Die Ergebnisfelder zurücksetzen.
-            PyramideLinieErgebnisReset();
+            PyramidLineResultReset();
 
-            // Alle Eingabefelder zurücksetzen.
-            for (int i = 0; i < pyramideLinieEingaben.Length; i++)
+            var inputTextboxes = new TextBox[] { 
+                textBoxPyramideLinieHoehe, 
+                textBoxPyramideLinieStaerke, 
+                textBoxPyramideLinieAnzahlSeiten,
+                textBoxPyramideLinieGrundlinie, 
+                textBoxPyramideLinieOberlinie 
+            };
+
+            foreach (var textbox in inputTextboxes)
             {
-                pyramideLinieEingaben[i].Text = "";
-                pyramideLinieEingaben[i].Background = Brushes.White;
+                textbox.Text = "";
+                textbox.Background = Brushes.White;
             }
 
-            // Die Grafik leeren.
             modelVisual3dPyramideLinie.Content = new Model3DGroup();
             
-            // Deaktiviert die Meldungen [UngültigeWerte, EingabeGeändert, Berechnet].
-            pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InvalidValues, pyramideLinieFeedback.InputChanged, pyramideLinieFeedback.Calculated);
+            pyramideLinieFeedback.Deactivate(
+                pyramideLinieFeedback.InvalidValues, 
+                pyramideLinieFeedback.InputChanged, 
+                pyramideLinieFeedback.Calculated);
 
-            // Aktiviert die Meldung [EingabewerteEingeben].
             pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
         }
 
@@ -782,72 +799,56 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void ButtonPyramideLinieBerechnung_Click(object sender, RoutedEventArgs e)
         {
-            // Deaktiviert die Meldung [EingabeGeändert].
             pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InputChanged);
 
-            // Hilfsvariablen erstellen.
             double höhe = 0;
             double materialstärke = 0;
             short anzahlSeiten = 0;
             double grundlinie = 0;
             double oberlinie = 0;
 
-            // Überprüfen ob ein Eingabefeld leer ist.
             if (TextBoxIsEmpty(pyramideLinieEingaben, 0, 4))
             {
-                // Die Ergebnisfelder zurücksetzen.
-                PyramideLinieErgebnisReset();
-
-                // Die Grafik leeren.
+                PyramidLineResultReset();
                 modelVisual3dPyramideLinie.Content = new Model3DGroup();
-
-                // Deaktiviert die Meldung [Berechnet].
                 pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
-
-                // Aktiviert die Meldung [EingabewerteEingeben].
                 pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
 
                 return;
             }
 
-            // Prüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (!InputValid(textBoxPyramideLinieHoehe, ref höhe) || höhe <= 0)
+            if (!InputValid(textBoxPyramideLinieHoehe, ref höhe) 
+                || höhe <= 0)
                 textBoxPyramideLinieHoehe.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieStaerke, ref materialstärke) || materialstärke <= 0)
+            if (!InputValid(textBoxPyramideLinieStaerke, ref materialstärke) 
+                || materialstärke <= 0)
                 textBoxPyramideLinieStaerke.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(textBoxPyramideLinieAnzahlSeiten, ref anzahlSeiten) 
+                || anzahlSeiten < 3 
+                || anzahlSeiten > 100)
                 textBoxPyramideLinieAnzahlSeiten.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieGrundlinie, ref grundlinie) || grundlinie < 0)
+            if (!InputValid(textBoxPyramideLinieGrundlinie, ref grundlinie) 
+                || grundlinie < 0)
                 textBoxPyramideLinieGrundlinie.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieOberlinie, ref oberlinie) || oberlinie < 0)
+            if (!InputValid(textBoxPyramideLinieOberlinie, ref oberlinie) 
+                || oberlinie < 0)
                 textBoxPyramideLinieOberlinie.Background = Brushes.Red;
 
-            // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
             if (TextBoxIsRed(pyramideLinieEingaben, 0, 4))
             {
-                // Die Ergebnisfelder zurücksetzen.
-                PyramideLinieErgebnisReset();
-
-                // Die Grafik leeren.
+                PyramidLineResultReset();
                 modelVisual3dPyramideLinie.Content = new Model3DGroup();
-
-                // Deaktiviert die Meldung [Berechnet].
                 pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
-
-                // Aktiviert die Meldung [UngültigeWerte].
                 pyramideLinieFeedback.Activate(pyramideLinieFeedback.InvalidValues);
-
-                // Aktiviert die Meldung [EingabewerteEingeben].
                 pyramideLinieFeedback.Activate(pyramideLinieFeedback.EnterValues);
 
                 return;
             }
 
-            // Die Werte aus den Eingabefeldern den Eigenschaften der Pyramide zuweisen.
             pyramideLinie.Height = höhe;
             pyramideLinie.ThicknessFirstBoard = materialstärke;
             pyramideLinie.ThicknessSecondBoard = materialstärke;
@@ -855,7 +856,6 @@ namespace Schifterschnitt
             pyramideLinie.BottomSideLength = grundlinie;
             pyramideLinie.TopSideLength = oberlinie;
 
-            // Berechnung und setzen der Eigenschaften für die Hauptberechnung.
             pyramideLinie.AngleBeta = Math.Round(Convert.ToDouble((pyramideLinie.NumberOfSides - 2.0) * 180.0 / pyramideLinie.NumberOfSides), 4);
 
             double alpha = Calculate.RadianToDegree(Math.Atan(((pyramideLinie.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0) / pyramideLinie.NumberOfSides))) -
@@ -866,19 +866,15 @@ namespace Schifterschnitt
 
             pyramideLinie.MiterJoint = true;
 
-            // Den Schifterschnitt berechnen.
             pyramideLinie.Calculation();
 
-            // Die Länge der Schräge S berechnen.
             double schrägeS = pyramideLinie.ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(pyramideLinie.AngleAlphaFirstBoard));
 
-            // Die Ergebnisse den Ergebnisfeldern zuweisen.
             textBlockPyramideLinieWinkelQueranschlag.Text = Math.Round(pyramideLinie.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideLinieWinkelSaegeblatt.Text = Math.Round(pyramideLinie.AngleSawBladeTiltFirstBoard, 2) + "°";
             textBlockPyramideLinieBreite.Text = pyramideLinie.AngleAlphaFirstBoard == 90 || pyramideLinie.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramideLinie.WidthFirstBoard, 2).ToString() + " mm";
             textBlockPyramideLinieBreiteMitSchraege.Text = pyramideLinie.AngleAlphaFirstBoard == 90 || pyramideLinie.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramideLinie.WidthWithSlantFirstBoard, 2) + " mm";
 
-            // Berechnung der weiteren Ergebnisse und Zuweisung zu den Ergebnisfeldern.
             textBlockPyramideLinieFlächenwinkel.Text = Math.Round(pyramideLinie.AngleDihedral, 2) + "°";
             textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(pyramideLinie.AngleAlphaFirstBoard)) * pyramideLinie.WidthFirstBoard, 2)) + " mm";
             textBlockPyramideLinieSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
@@ -894,13 +890,9 @@ namespace Schifterschnitt
             textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideLinie.BottomSideLength, pyramideLinie.NumberOfSides) - schrägeS /
                 Math.Sin(Calculate.DegreeToRadian(pyramideLinie.AngleBeta / 2.0)), 2)) + " mm";
 
-            // Ein 3D-Modell der Pyramide erzeugen und der Grafik zuweisen.
             pyramideLinie.CreateModel(modelVisual3dPyramideLinie);
 
-            // Deaktiviert die Meldungen [EingabewerteEingeben].
             pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.EnterValues);
-
-            // Aktiviert die Meldung [Berechnet].
             pyramideLinieFeedback.Activate(pyramideLinieFeedback.Calculated);
         }
 
@@ -911,23 +903,14 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void PyramideLinieInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Den Hintergrund des Eingabefeldes, das die Methode ausgelöst hat, weiß setzen.
             ((TextBox)sender).Background = Brushes.White;
 
-            // Wenn bei keinem Eingabefeld der Hintergrund rot ist.
             if (!TextBoxIsRed(pyramideLinieEingaben, 0, 4))
-            {
-                // Deaktiviert die Meldung [UngültigeWerte].
                 pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.InvalidValues);
-            }
 
-            // Wenn die Pyramide erfolgreich brechnet wurde.
             if (pyramideLinieFeedback.Calculated.Active)
             {
-                // Aktiviert die Meldung [EingabeGeändert].
                 pyramideLinieFeedback.Activate(pyramideLinieFeedback.InputChanged);
-
-                // Deaktiviert die Meldung [Berechnet].
                 pyramideLinieFeedback.Deactivate(pyramideLinieFeedback.Calculated);
             }
         }
@@ -957,84 +940,108 @@ namespace Schifterschnitt
         #region Methoden Pyramide mit Neigungswinkel
 
         /// <summary>
-        /// Steuert den Zoom durch verändern der Kameraposition und Blickrichtung beim Scrollen über der Grafik.
+        /// Controls the zoom by changing the camera position and lookdirection.
         /// </summary>
-        /// <param name="sender">Das Grid in der die Grafik ist.</param>
+        /// <param name="sender">The grid with the viewport3D</param>
         /// <param name="e"></param>
-        private void GridPyramideWinkel_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void GridPyramidAngle_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             Viewport3D_MouseWheel(perspectiveCameraPyramideWinkel, pyramideWinkelKameraWinkel, e);
         }
 
         /// <summary>
-        /// Dreht das 3D-Modell bei Bewegung der Maus nach links oder rechts.
+        /// Rotates the 3D model on mouse movement if the left button is hold.
         /// </summary>
-        /// <param name="sender">Das Grid in der die Grafik ist.</param>
+        /// <param name="sender">The grid with the viewport3D.</param>
         /// <param name="e"></param>
-        private void GridPyramideWinkel_MouseMove(object sender, MouseEventArgs e)
+        private void GridPyramidAngle_MouseMove(object sender, MouseEventArgs e)
         {
-            Grid_MouseMove(pyramideWinkelRotation, ref pyramideWinkelKameraWinkel, perspectiveCameraPyramideWinkel, sender, e);
+            Grid_MouseMove(
+                pyramideWinkelRotation, 
+                ref pyramideWinkelKameraWinkel, 
+                perspectiveCameraPyramideWinkel, 
+                sender, 
+                e);
         }
 
         /// <summary>
-        /// Rechnet den Winkel um und zeigt das Ergebnis im Ergebnisfeld an.
+        /// Converts the angle if the input is valid and shows the result.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld der Winkelumrechnung.</param>
+        /// <param name="sender">The textbox for angle conversion.</param>
         /// <param name="e"></param>
-        private void TextBoxPyramideWinkelWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxPyramidAngleAngleConversion_TextChanged(object sender, TextChangedEventArgs e)
         {
             AngleConversion(textBoxPyramideWinkelWinkelumrechnung, textBlockPyramideWinkelWinkelumrechnung);
         }
 
         /// <summary>
-        /// Setzt die Ergebnisfelder zurück.
+        /// Resets the textboxes for the results.
         /// </summary>
-        private void PyramideWinkelErgebnisReset()
+        private void PyramidAngleResultReset()
         {
-            textBlockPyramideWinkelWinkelQueranschlag.Text = "";
-            textBlockPyramideWinkelWinkelSaegeblatt.Text = "";
-            textBlockPyramideWinkelBreite.Text = "";
-            textBlockPyramideWinkelBreiteMitSchraege.Text = "";
-            textBlockPyramideWinkelFlächenwinkel.Text = "";
-            textBlockPyramideWinkelBreitenversatzErgebnis.Text = "";
-            textBlockPyramideWinkelSchraegeS.Text = "";
-            textBlockPyramideWinkelOberlinie.Text = "";
-            textBlockPyramideWinkelInkreisradiusOA.Text = "";
-            textBlockPyramideWinkelInkreisradiusOI.Text = "";
-            textBlockPyramideWinkelInkreisradiusUA.Text = "";
-            textBlockPyramideWinkelInkreisradiusUI.Text = "";
-            textBlockPyramideWinkelUmkreisradiusOA.Text = "";
-            textBlockPyramideWinkelUmkreisradiusOI.Text = "";
-            textBlockPyramideWinkelUmkreisradiusUA.Text = "";
-            textBlockPyramideWinkelUmkreisradiusUI.Text = "";
+            var resultTextblocks = new TextBlock[]
+            {
+                textBlockPyramideWinkelWinkelQueranschlag,
+                textBlockPyramideWinkelWinkelSaegeblatt,
+                textBlockPyramideWinkelBreite,
+                textBlockPyramideWinkelBreiteMitSchraege,
+                textBlockPyramideWinkelFlächenwinkel,
+                textBlockPyramideWinkelBreitenversatzErgebnis,
+                textBlockPyramideWinkelSchraegeS,
+                textBlockPyramideWinkelOberlinie,
+                textBlockPyramideWinkelInkreisradiusOA,
+                textBlockPyramideWinkelInkreisradiusOI,
+                textBlockPyramideWinkelInkreisradiusUA,
+                textBlockPyramideWinkelInkreisradiusUI,
+                textBlockPyramideWinkelUmkreisradiusOA,
+                textBlockPyramideWinkelUmkreisradiusOI,
+                textBlockPyramideWinkelUmkreisradiusUA,
+                textBlockPyramideWinkelUmkreisradiusUI,
+            };
+
+            foreach (var textBlock in resultTextblocks)
+            {
+                textBlock.Text = "";
+            }
         }
 
         /// <summary>
-        /// Setzt alle Felder zurück, leert die Grafik und aktualisiert die Feedbackleiste.
+        /// Resets everything.
         /// </summary>
-        /// <param name="sender">Der Button Zurücksetzen.</param>
+        /// <param name="sender">The button to reset everything.</param>
         /// <param name="e"></param>
-        private void ButtonPyramideWinkelReset_Click(object sender, RoutedEventArgs e)
+        private void ButtonPyramidAngleReset_Click(object sender, RoutedEventArgs e)
         {
-            // Die Ergebnisfelder zurücksetzen.
-            PyramideWinkelErgebnisReset();
+            PyramidAngleResultReset();
 
-            // Alle Eingabefelder zurücksetzen.
-            for (int i = 0; i < pyramideWinkelEingaben.Length; i++)
+            var inputTextboxes = new TextBox[] 
             {
-                pyramideWinkelEingaben[i].Text = "";
-                pyramideWinkelEingaben[i].Background = Brushes.White;
+                textBoxPyramideWinkelHoehe, 
+                textBoxPyramideWinkelStaerke, 
+                textBoxPyramideWinkelAnzahlSeiten,
+                textBoxPyramideWinkelGrundlinie, 
+                textBoxPyramideWinkelNeigungswinkel, 
+                textBoxPyramideWinkelBreitenversatz 
+            };
+
+            foreach (var textbox in inputTextboxes)
+            {
+                textbox.Text = "";
+                textbox.Background = Brushes.White;
             }
 
-            // Die Grafik leeren.
             modelVisual3dPyramideWinkel.Content = new Model3DGroup();
 
-            // Deaktiviert die Meldungen [UngültigeWerte, EingabeGeändert, Berechnet, NeigungswinkelBerechnet, NeigungswinkelGeändert, HöheGrößerAlsErgebend, HöheErforderlich].
-            pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InvalidValues, pyramideWinkelFeedback.InputChanged, pyramideWinkelFeedback.Calculated, 
-                pyramideWinkelFeedback.TiltAngleCalculated, pyramideWinkelFeedback.TiltAngleChanged, pyramideWinkelFeedback.HeightLargerThanResulting, 
-                pyramideWinkelFeedback.HeightNeeded);
+            pyramideWinkelFeedback.Deactivate(
+                pyramideWinkelFeedback.InvalidValues, 
+                pyramideWinkelFeedback.InputChanged, 
+                pyramideWinkelFeedback.Calculated, 
+                pyramideWinkelFeedback.TiltAngleCalculated, 
+                pyramideWinkelFeedback.TiltAngleChanged, 
+                pyramideWinkelFeedback.HeightLargerThanResulting, 
+                pyramideWinkelFeedback.HeightNeeded
+            );
 
-            // Aktiviert die Meldung [EingabewerteEingeben].
             pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
         }
 
@@ -1045,10 +1052,8 @@ namespace Schifterschnitt
         /// <param name="e"></param>
         private void ButtonPyramideWinkelBerechnung_Click(object sender, RoutedEventArgs e)
         {
-            // Deaktiviert die Meldung [EingabeGeändert].
             pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.InputChanged);
 
-            // Hilfsvariablen erstellen.
             short anzahlSeiten = 0;
             double materialstärke = 0;
             double grundlinie = 0;
@@ -1056,62 +1061,47 @@ namespace Schifterschnitt
             double höhe = 0;
             double höheErgebend = 0;
 
-            // Überprüfen ob ein Eingabefeld leer ist.
             if (TextBoxIsEmpty(pyramideWinkelEingaben, 1, 4))
             {
-                // Die Ergebnisfelder zurücksetzen.
-                PyramideWinkelErgebnisReset();
-
-                // Die Grafik leeren.
+                PyramidAngleResultReset();
                 modelVisual3dPyramideWinkel.Content = new Model3DGroup();
-
-                // Deaktiviert die Meldung [Berechnet].
                 pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
-
-                // Aktiviert die Meldung [EingabewerteEingeben].
                 pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
 
                 return;
             }
 
-            // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (!InputValid(textBoxPyramideWinkelAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(textBoxPyramideWinkelAnzahlSeiten, ref anzahlSeiten) 
+                || anzahlSeiten < 3 || anzahlSeiten > 100)
                 textBoxPyramideWinkelAnzahlSeiten.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelStaerke, ref materialstärke) || materialstärke <= 0)
+            if (!InputValid(textBoxPyramideWinkelStaerke, ref materialstärke) 
+                || materialstärke <= 0)
                 textBoxPyramideWinkelStaerke.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelGrundlinie, ref grundlinie) || grundlinie < 0)
+            if (!InputValid(textBoxPyramideWinkelGrundlinie, ref grundlinie) 
+                || grundlinie < 0)
                 textBoxPyramideWinkelGrundlinie.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelNeigungswinkel, ref neigungswinkel) || neigungswinkel < -90 || neigungswinkel > 90)
+            if (!InputValid(textBoxPyramideWinkelNeigungswinkel, ref neigungswinkel) 
+                || neigungswinkel < -90 || neigungswinkel > 90)
                 textBoxPyramideWinkelNeigungswinkel.Background = Brushes.Red;
 
-            if ((textBoxPyramideWinkelHoehe.Text != "") && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
+            if ((textBoxPyramideWinkelHoehe.Text != "") && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) 
+                || höhe <= 0))
                 textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
-            // Überprüfen ob der Hintergrund eines Eingabefeldes rot ist.
             if (TextBoxIsRed(pyramideWinkelEingaben, 0, 4))
             {
-                // Die Ergebnisfelder zurücksetzen.
-                PyramideWinkelErgebnisReset();
-
-                // Die Grafik leeren.
+                PyramidAngleResultReset();
                 modelVisual3dPyramideWinkel.Content = new Model3DGroup();
-
-                // Deaktiviert die Meldung [Berechnet].
                 pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
-
-                // Aktiviert die Meldung [UngültigeWerte].
                 pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InvalidValues);
-
-                // Aktiviert die Meldung [EingabewerteEingeben].
                 pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 
                 return;
             }
 
-            // Die Werte aus den Eingabefeldern den Eigenschaften der Pyramide zuweisen.
             pyramideWinkel.NumberOfSides = anzahlSeiten;
             pyramideWinkel.ThicknessFirstBoard = materialstärke;
             pyramideWinkel.ThicknessSecondBoard = materialstärke;
@@ -1119,94 +1109,67 @@ namespace Schifterschnitt
             pyramideWinkel.AngleAlphaFirstBoard = neigungswinkel;
             pyramideWinkel.AngleAlphaSecondBoard = neigungswinkel;
 
-            // Die Höhe der Pyramide berechnen.
             höheErgebend = Math.Tan(Calculate.DegreeToRadian(90.0 - pyramideWinkel.AngleAlphaFirstBoard)) * (pyramideWinkel.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 /
                 pyramideWinkel.NumberOfSides))));
 
-            // Wenn der Neigungswinkel positiv ist.
             if (pyramideWinkel.AngleAlphaFirstBoard > 0)
             {
-                // Prüft ob eine Höhe eingegeben wurde und ob diese größer als die sich ergebende ist.
                 if ((textBoxPyramideWinkelHoehe.Text != "") && höhe > höheErgebend)
                 {
                     textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
-                    // Deaktiviert die Meldung [Berechnet].
                     pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
-
-                    // Aktiviert die Meldung [HöheGrößerAlsErgebend].
                     pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.HeightLargerThanResulting);
-
-                    // Aktiviert die Meldung [EingabewerteEingeben].
                     pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 }
                 else
                 {
-                    // Setzt die Höhe in die Eigenschaft der Pyramide ein.
                     pyramideWinkel.Height = höhe;
                 }
 
-                // Setzt die Höhe in das Eingabefeld ein wenn das Eingabefeld leer ist.
                 if (textBoxPyramideWinkelHoehe.Text == "")
                 {
                     textBoxPyramideWinkelHoehe.Text = Convert.ToString(Math.Round(höheErgebend - 0.01, 2));
                     pyramideWinkel.Height = double.Parse(textBoxPyramideWinkelHoehe.Text);
                 }
             }
-            // Wenn der Neigungswinkel negativ oder Null ist.
             else
             {
-                // Wenn das Eingabefeld Höhe leer ist den Hintergrund rot setzen und die Feedbackleiste aktualisieren.
                 if (textBoxPyramideWinkelHoehe.Text == "")
                 {
                     textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
-                    // Aktiviert die Meldung [HöheErforderlich].
                     pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.HeightNeeded);
-
-                    // Deaktiviert die Meldung [Berechnet].
                     pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.Calculated);
-
-                    // Aktiviert die Meldung [EingabewerteEingeben].
                     pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.EnterValues);
                 }
                 else
                 {
-                    // Setzt die Höhe in die Eigenschaft der Pyramide ein.
                     pyramideWinkel.Height = höhe;
                 }
             }
 
-            // Überprüfen ob der Hintergrund des Eingabefeldes Höhe rot ist.
             if (textBoxPyramideWinkelHoehe.Background == Brushes.Red)
             {
-                // Die Ergebnisfelder leer setzen.
-                PyramideWinkelErgebnisReset();
-
-                // Ein leeres 3D-Modell erzeugen und der Grafik zuweisen.
+                PyramidAngleResultReset();
                 modelVisual3dPyramideWinkel.Content = new Model3DGroup();
 
                 return;
             }
 
-            // Berechnung und setzen der Eigenschaften für die Hauptberechnung.
             pyramideWinkel.AngleBeta = Convert.ToDouble((Convert.ToDouble(pyramideWinkel.NumberOfSides) - 2) * 180.0 / Convert.ToDouble(pyramideWinkel.NumberOfSides));
 
             pyramideWinkel.MiterJoint = true;
 
-            // Den Schifterschnitt berechnen.
             pyramideWinkel.Calculation();
 
-            // Die Länge der Schräge S berechnen.
             double schrägeS = pyramideWinkel.ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(pyramideWinkel.AngleAlphaFirstBoard));
 
-            // Zuweisen der Ergebnisse zu den Ergebnisfeldern.
             textBlockPyramideWinkelWinkelQueranschlag.Text = Math.Round(pyramideWinkel.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideWinkelWinkelSaegeblatt.Text = Math.Round(pyramideWinkel.AngleSawBladeTiltFirstBoard, 2) + "°";
             textBlockPyramideWinkelBreite.Text = pyramideWinkel.AngleAlphaFirstBoard == 90 || pyramideWinkel.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramideWinkel.WidthFirstBoard, 2).ToString() + " mm";
             textBlockPyramideWinkelBreiteMitSchraege.Text = pyramideWinkel.AngleAlphaFirstBoard == 90 || pyramideWinkel.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramideWinkel.WidthWithSlantFirstBoard, 2) + " mm";
 
-            // Berechnung der weiteren Ergebnisse und Zuweisung zu den Ergebnisfeldern.
             pyramideWinkel.TopSideLength = ((pyramideWinkel.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramideWinkel.NumberOfSides)))) -
                 Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.AngleAlphaFirstBoard)) * pyramideWinkel.WidthFirstBoard) * (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramideWinkel.NumberOfSides)));
 
@@ -1239,54 +1202,43 @@ namespace Schifterschnitt
                 textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramideWinkel.BottomSideLength, pyramideWinkel.NumberOfSides) - schrägeS / Math.Sin(Calculate.DegreeToRadian(pyramideWinkel.AngleBeta / 2.0)), 2)) + " mm";
             }
 
-            // Ein neues 3D-Modell der Pyramide erzeugen und der Grafik zuweisen.
             pyramideWinkel.CreateModel(modelVisual3dPyramideWinkel);
 
-            // Deaktiviert die Meldungen [EingabewerteEingeben].
             pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.EnterValues);
-
-            // Aktiviert die Meldung [Berechnet].
             pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.Calculated);
         }
 
         /// <summary>
-        /// Berechnet den Neigungswinkel und setzt ihn ein.
+        /// Calculates the tilt angle if input is valid.
         /// </summary>
-        /// <param name="sender">Der Button Neigungswinkel Berechnen.</param>
+        /// <param name="sender">The button to calculate the tilt angle.</param>
         /// <param name="e"></param>
-        private void ButtonPyramideWinkelNeigungswinkel_Click(object sender, RoutedEventArgs e)
+        private void ButtonPyramidAngleTiltAngle_Click(object sender, RoutedEventArgs e)
         {
-            // Deaktiviert die Meldung [NeigungswinkelGeändert].
             pyramideWinkelFeedback.Deactivate(pyramideWinkelFeedback.TiltAngleChanged);
 
-            // Hilfsvariablen erstellen.
-            double höhe = 0;
-            double breitenversatz = 0;
+            double height = 0;
+            double offset = 0;
 
-            // Überprüfen ob ein Eingabefeld leer ist.
             if (textBoxPyramideWinkelHoehe.Text == "" || textBoxPyramideWinkelBreitenversatz.Text == "")
                 return;
 
-            // Überprüfen ob die Eingaben in den Eingabefeldern gültig sind und wenn nicht den Hintergrund rot setzen.
-            if (textBoxPyramideWinkelHoehe.Text != "" && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) || höhe <= 0))
+            if (!InputValid(textBoxPyramideWinkelHoehe, ref height) || height <= 0)
                 textBoxPyramideWinkelHoehe.Background = Brushes.Red;
 
-            if (textBoxPyramideWinkelBreitenversatz.Text != "" && (!InputValid(textBoxPyramideWinkelBreitenversatz, ref breitenversatz)))
+            if (!InputValid(textBoxPyramideWinkelBreitenversatz, ref offset))
                 textBoxPyramideWinkelBreitenversatz.Background = Brushes.Red;
 
-            // Überprüfen ob ein Eingabefeld rot ist.
-            if (textBoxPyramideWinkelHoehe.Background == Brushes.Red || textBoxPyramideWinkelBreitenversatz.Background == Brushes.Red)
+            if (textBoxPyramideWinkelHoehe.Background == Brushes.Red 
+                || textBoxPyramideWinkelBreitenversatz.Background == Brushes.Red)
             {
-                // Aktiviert die Meldung [UngültigeWerte].
                 pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.InvalidValues);
-
                 return;
             }
 
-            // Den Neigungswinkel berechnen und einsetzen.
-            textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatz / höhe)), 4));
+            double tiltAngle = Math.Round(Calculate.RadianToDegree(Math.Atan(offset / height)), 4);
+            textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(tiltAngle);
 
-            // Aktiviert die Meldung [NeigungswinkelBerechnet].
             pyramideWinkelFeedback.Activate(pyramideWinkelFeedback.TiltAngleCalculated);
         }
 
@@ -1295,7 +1247,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The textbox that called the method.</param>
         /// <param name="e"></param>
-        private void PyramideWinkelInput_TextChanged(object sender, TextChangedEventArgs e)
+        private void PyramidAngleInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             var senderTextBox = (TextBox)sender;
             var feedback = pyramideWinkelFeedback;

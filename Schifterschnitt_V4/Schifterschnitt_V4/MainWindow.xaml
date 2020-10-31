@@ -693,7 +693,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
                             <!-- 3D - Model -->
-                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="GridPyramideLinieGrafik_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramideLinieGrafik_MouseMove" Grid.Row="2" Background="White">
+                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="GridPyramideLinieGrafik_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramidLineGraphic_MouseMove" Grid.Row="2" Background="White">
                                 <Viewport3D SizeChanged="Viewport3D_SizeChanged">
                                     <Viewport3D.Camera>
                                         <PerspectiveCamera x:Name="perspectiveCameraPyramideLinie" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
@@ -778,23 +778,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="als die Pyramide ist oder der Neigungswinkel negativ ist" Margin="0 3 0 3"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Höhe h"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelHoehe" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelHoehe" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelStaerke" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelStaerke" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Anzahl Seiten (3 - 100)"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelAnzahlSeiten" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelAnzahlSeiten" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Grundlinie g von jedem Teil"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelGrundlinie" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelGrundlinie" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Neigungswinkel α (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelNeigungswinkel" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelNeigungswinkel" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -847,7 +847,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Winkelumrechnung - Die Eingabe wird sofort umgerechnet" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Margin="0 3 0 0" Orientation="Horizontal">
                                             <TextBlock Text="90°  -" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelWinkelumrechnung" TextChanged="TextBoxPyramideWinkelWinkelumrechnung_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelWinkelumrechnung" TextChanged="TextBoxPyramidAngleAngleConversion_TextChanged" Padding="2"/>
                                             <TextBlock Text="=" VerticalAlignment="Center" Margin="20 0 20 0"/>
                                             <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelWinkelumrechnung" Padding="2">
                                                 <TextBlock.Background>
@@ -878,12 +878,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Für die Berechnung muss eine Höhe h eingegeben sein" Margin="0 3 0 3"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelBreitenversatz" TextChanged="PyramideWinkelInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelBreitenversatz" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
                                 <!-- Berechnung Button -->
-                                <Button x:Name="PNBtnBerechnungB" Click="ButtonPyramideWinkelNeigungswinkel_Click" Height="24">
+                                <Button x:Name="PNBtnBerechnungB" Click="ButtonPyramidAngleTiltAngle_Click" Height="24">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="DarkGray" Offset="0"/>
@@ -1018,7 +1018,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
                             <!-- 3D - Model -->
-                            <Grid Name="gridPyramideWinkel" MouseWheel="GridPyramideWinkel_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramideWinkel_MouseMove" Grid.Row="2" Background="White">
+                            <Grid Name="gridPyramideWinkel" MouseWheel="GridPyramidAngle_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramidAngle_MouseMove" Grid.Row="2" Background="White">
                                 <Viewport3D SizeChanged="Viewport3D_SizeChanged">
                                     <Viewport3D.Camera>
                                         <PerspectiveCamera x:Name="perspectiveCameraPyramideWinkel" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
@@ -1043,7 +1043,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <TextBlock Text="Berechnen"/>
                         </Button>
                         <!-- Reset Button -->
-                        <Button x:Name="PNBtnResetAll" Click="ButtonPyramideWinkelReset_Click" Height="24">
+                        <Button x:Name="PNBtnResetAll" Click="ButtonPyramidAngleReset_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
