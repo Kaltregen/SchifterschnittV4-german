@@ -126,7 +126,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                             <TextBox Width="100" x:Name="textBoxEckeWinkelBeta" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
-                                            <CheckBox x:Name="checkBoxEcke" Click="EckeCheckbox_Click" VerticalAlignment="Center"/>
+                                            <CheckBox x:Name="checkBoxEcke" Click="CornerCheckbox_Click" VerticalAlignment="Center"/>
                                             <TextBlock Text="Gehrung" Margin="6 0"/>
                                         </StackPanel>
                                     </StackPanel>
@@ -301,19 +301,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="bei beidseitig gleichem Anschnitt" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie Y Teil 1"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeLinieYEins" TextChanged="EckeInputLiniexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineYFirst" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie X Teil 1"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeLinieXEins" TextChanged="EckeInputLiniexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineXFirst" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie Y Teil 2"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeLinieYZwei" TextChanged="EckeInputLiniexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineYSecond" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie X Teil 2"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeLinieXZwei" TextChanged="EckeInputLiniexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineXSecond" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -395,8 +395,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <!--Trennlinie-->
                             <Grid Grid.Row="1" Background="Black"/>
                             <!--3D - Model-->
-                            <Grid Name="gridEckeGrafik" MouseWheel="GridEckeGrafik_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridEckeGrafik_MouseMove" Grid.Row="2" Background="White">
-                                <Viewport3D SizeChanged="Viewport3D_SizeChanged">
+                            <Grid Name="gridEckeGrafik" MouseWheel="GridEckeGrafik_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridEckeGrafik_MouseMove" Grid.Row="2" Background="White">
+                                <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
                                         <PerspectiveCamera x:Name="perspectiveCameraEcke" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>
@@ -693,8 +693,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
                             <!-- 3D - Model -->
-                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="GridPyramideLinieGrafik_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramidLineGraphic_MouseMove" Grid.Row="2" Background="White">
-                                <Viewport3D SizeChanged="Viewport3D_SizeChanged">
+                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="GridPyramideLinieGrafik_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridPyramidLineGraphic_MouseMove" Grid.Row="2" Background="White">
+                                <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
                                         <PerspectiveCamera x:Name="perspectiveCameraPyramideLinie" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>
@@ -1018,8 +1018,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
                             <!-- 3D - Model -->
-                            <Grid Name="gridPyramideWinkel" MouseWheel="GridPyramidAngle_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseMove="GridPyramidAngle_MouseMove" Grid.Row="2" Background="White">
-                                <Viewport3D SizeChanged="Viewport3D_SizeChanged">
+                            <Grid Name="gridPyramideWinkel" MouseWheel="GridPyramidAngle_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridPyramidAngle_MouseMove" Grid.Row="2" Background="White">
+                                <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
                                         <PerspectiveCamera x:Name="perspectiveCameraPyramideWinkel" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>

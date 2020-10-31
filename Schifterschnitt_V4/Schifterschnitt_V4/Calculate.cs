@@ -21,8 +21,7 @@ using System;
 namespace Schifterschnitt
 {
     /// <summary>
-    /// Converts from degree to radian and vice versa.
-    /// Calculates the radius of a inscribed or circumscribed circle in a regular polygon.
+    /// Helps calculating repetitive tasks.
     /// </summary>
     public static class Calculate
     {
@@ -60,7 +59,7 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Berechnet den Inkreisradius eines Vielecks.
+        /// Calculates the radius of the inscribed circle of a regular polygon.
         /// </summary>
         /// <param name="lengthOfSide">The length of one side of the regular polygon.</param>
         /// <param name="numberOfSides">The number of sides of the regular polygon.</param>
@@ -68,6 +67,28 @@ namespace Schifterschnitt
         public static double InscribedCircleRadius(double lengthOfSide, short numberOfSides)
         {
             return lengthOfSide / (2 * Math.Tan(DegreeToRadian(180.0 / numberOfSides)));
+        }
+
+        /// <summary>
+        /// Calculates the length of the slant s.
+        /// </summary>
+        /// <param name="thickness">The thickness of the board.</param>
+        /// <param name="angleAlpha">The tilt angle of the board.</param>
+        /// <returns>The length of the slant s.</returns>
+        public static double LengthSlantS(double thickness, double angleAlpha)
+        {
+            return thickness / Math.Cos(angleAlpha);
+        }
+
+        /// <summary>
+        /// Calculates the horizontal offset caused by the tilt angle of the board.
+        /// </summary>
+        /// <param name="width">The width of the board.</param>
+        /// <param name="angleAlpha">The tilt angle of the board.</param>
+        /// <returns>The horizontal offset of the board.</returns>
+        public static double Offset(double width, double angleAlpha)
+        {
+            return Math.Sin(angleAlpha) * width;
         }
 
         #endregion
