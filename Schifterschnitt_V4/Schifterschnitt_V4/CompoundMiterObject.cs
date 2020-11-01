@@ -147,62 +147,67 @@ namespace Schifterschnitt
         /// </summary>
         public void Calculation()
         {
-            var vectorOne = new Vector3D()
+            double offsetVectorFirst = Calc.Tan(AngleAlphaFirstBoard);
+            double offsetVectorSecond = Calc.Tan(AngleAlphaSecondBoard);
+
+            var vectorFirstBoard = new Vector3D()
             {
-                X = Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard),
-                Y = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard)
+                X = Calc.Sin(AngleBeta - 90) * offsetVectorFirst,
+                Y = Calc.Cos(AngleBeta - 90) * offsetVectorFirst,
+                Z = 1.0
             };
 
-            var vectorTwo = new Vector3D()
+            var vectorSecondBoard = new Vector3D()
             {
-                X = Calc.Tan(AngleAlphaSecondBoard)
+                X = offsetVectorSecond,
+                Y = 0.0,
+                Z = 1.0
             };
 
-            var vectorThree = new Vector3D()
+            var vectorCutLine = new Vector3D()
             {
-                X = Calc.Tan(AngleAlphaSecondBoard),
-                Y = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) - (Calc.Tan(AngleBeta - 90) * (Calc.Tan(AngleAlphaSecondBoard) - Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard)))
+                X = offsetVectorSecond,
+                Y = Calc.Cos(AngleBeta - 90) * offsetVectorFirst
+                    - (Calc.Tan(AngleBeta - 90) * (offsetVectorSecond - Calc.Sin(AngleBeta - 90) * offsetVectorFirst)),
+                Z = 1.0
             };
+
+            AngleCrossCutFirstBoard = Vector3D.AngleBetween(vectorFirstBoard, vectorCutLine);
+            AngleCrossCutSecondBoard = Vector3D.AngleBetween(vectorSecondBoard, vectorCutLine);
             
-            // Calculation of the cross cut angles.
-            AngleCrossCutFirstBoard = Calc.Acos((vectorOne.X * vectorThree.X + vectorOne.Y * vectorThree.Y + 1) /
-                (Math.Sqrt(Math.Pow(vectorOne.X, 2) + Math.Pow(vectorOne.Y, 2) + 1) * Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
-            AngleCrossCutSecondBoard = Calc.Acos((vectorTwo.X * vectorThree.X + 1) / (Math.Sqrt(Math.Pow(vectorTwo.X, 2) + 1) *
-                Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
-            
-            if (vectorThree.Y < 0)
+            if (vectorCutLine.Y < 0)
                 AngleCrossCutSecondBoard *= -1;
 
             if (360 - AngleBeta - 180 <= 90)
             {
                 // Vector 3 top left always positive.
-                if (vectorThree.X < 0 && vectorThree.Y >= 0)
+                if (vectorCutLine.X < 0 && vectorCutLine.Y >= 0)
                     AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 top right.
-                if (vectorThree.X >= 0 && vectorThree.Y >= 0 && (vectorThree.Y / vectorThree.X) > (vectorOne.Y / vectorOne.X))
+                if (vectorCutLine.X >= 0 && vectorCutLine.Y >= 0 && (vectorCutLine.Y / vectorCutLine.X) > (vectorFirstBoard.Y / vectorFirstBoard.X))
                     AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 bottom right always positive.
 
                 // Vector 3 bottom left.
-                if (vectorThree.X < 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (vectorOne.Y / vectorOne.X))
+                if (vectorCutLine.X < 0 && vectorCutLine.Y < 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) < (vectorFirstBoard.Y / vectorFirstBoard.X))
                     AngleCrossCutFirstBoard *= -1;
             }
             else
             {
                 // Vector 3 top left.
-                if (vectorThree.X < 0 && vectorThree.Y >= 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
+                if (vectorCutLine.X < 0 && vectorCutLine.Y >= 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) < (Math.Abs(vectorFirstBoard.Y) / Math.Abs(vectorFirstBoard.X)))
                     AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 top right always positive.
 
                 // Vector 3 bottom right.
-                if (vectorThree.X >= 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) > (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
+                if (vectorCutLine.X >= 0 && vectorCutLine.Y < 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) > (Math.Abs(vectorFirstBoard.Y) / Math.Abs(vectorFirstBoard.X)))
                     AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 bottom left always positive.
-                if (vectorThree.X < 0 && vectorThree.Y < 0)
+                if (vectorCutLine.X < 0 && vectorCutLine.Y < 0)
                     AngleCrossCutFirstBoard *= -1;
             }
 

@@ -47,31 +47,61 @@ namespace Schifterschnitt
             return angle * 180.0 / Math.PI;
         }
 
+        /// <summary>
+        /// Calculates the tangens of an angle.
+        /// </summary>
+        /// <param name="angle">The angle in degree.</param>
+        /// <returns>The tangens of the angle.</returns>
         public static double Tan(double angle)
         {
             return Math.Tan(DegreeToRadian(angle));
         }
 
+        /// <summary>
+        /// Calculates the sinus of an angle.
+        /// </summary>
+        /// <param name="angle">The angle in degree.</param>
+        /// <returns>The sinus of the angle.</returns>
         public static double Sin(double angle)
         {
             return Math.Sin(DegreeToRadian(angle));
         }
 
+        /// <summary>
+        /// Calculates the cosinus of an angle.
+        /// </summary>
+        /// <param name="angle">The angle in degree.</param>
+        /// <returns>The cosinus of the angle.</returns>
         public static double Cos(double angle)
         {
             return Math.Cos(DegreeToRadian(angle));
         }
 
+        /// <summary>
+        /// Calculates the arc-tangens of a value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The angle in degree.</returns>
         public static double Atan(double value)
         {
             return RadianToDegree(Math.Atan(value));
         }
 
+        /// <summary>
+        /// Calculates the arc-sinus of a value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The angle in degree.</returns>
         public static double Asin(double value)
         {
             return RadianToDegree(Math.Asin(value));
         }
 
+        /// <summary>
+        /// Calculates the arc-cosinus of a value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The angle in degree.</returns>
         public static double Acos(double value)
         {
             return RadianToDegree(Math.Acos(value));
