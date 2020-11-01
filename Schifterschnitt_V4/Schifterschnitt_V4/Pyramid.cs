@@ -55,13 +55,13 @@ namespace Schifterschnitt
         /// <param name="model">The model in which the pyramid will be build.</param>
         public override void CreateModel(ModelVisual3D model)
         {
-            double schrägeS = ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(AngleAlphaFirstBoard));
+            double schrägeS = ThicknessFirstBoard / Calc.Cos(AngleAlphaFirstBoard);
 
             // Berechnet die Radien der Umkreise und fügt sie einem Array hinzu.
-            double umkreisradiusUnten = Calculate.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
-            double umkreisradiusOben = Calculate.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
-            double umkreisradiusInnenUnten = Calculate.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2)));
-            double umkreisradiusInnenOben = Calculate.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (schrägeS / Math.Sin(Calculate.DegreeToRadian((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2)));
+            double umkreisradiusUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
+            double umkreisradiusOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
+            double umkreisradiusInnenUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (schrägeS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
+            double umkreisradiusInnenOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (schrägeS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
             double[] umkreise = { umkreisradiusUnten, umkreisradiusOben, umkreisradiusInnenUnten, umkreisradiusInnenOben };
 
             // We need a reference length to make all pyramids the same size.
@@ -96,23 +96,23 @@ namespace Schifterschnitt
                 {
                     if (w < 90)
                     {
-                        x = -1 * Math.Sin(Calculate.DegreeToRadian(w)) * (item / referenz) * 2;
-                        y = -1 * Math.Cos(Calculate.DegreeToRadian(w)) * (item / referenz) * 2;
+                        x = -1 * Calc.Sin(w) * (item / referenz) * 2;
+                        y = -1 * Calc.Cos(w) * (item / referenz) * 2;
                     }
                     else if (w >= 90 && w < 180)
                     {
-                        x = -1 * Math.Cos(Calculate.DegreeToRadian(w - 90)) * (item / referenz) * 2;
-                        y = Math.Sin(Calculate.DegreeToRadian(w - 90)) * (item / referenz) * 2;
+                        x = -1 * Calc.Cos(w - 90) * (item / referenz) * 2;
+                        y = Calc.Sin(w - 90) * (item / referenz) * 2;
                     }
                     else if (w >= 180 && w < 270)
                     {
-                        x = Math.Sin(Calculate.DegreeToRadian(w - 180)) * (item / referenz) * 2;
-                        y = Math.Cos(Calculate.DegreeToRadian(w - 180)) * (item / referenz) * 2;
+                        x = Calc.Sin(w - 180) * (item / referenz) * 2;
+                        y = Calc.Cos(w - 180) * (item / referenz) * 2;
                     }
                     else
                     {
-                        x = Math.Cos(Calculate.DegreeToRadian(w - 270)) * (item / referenz) * 2;
-                        y = -1 * Math.Sin(Calculate.DegreeToRadian(w - 270)) * (item / referenz) * 2;
+                        x = Calc.Cos(w - 270) * (item / referenz) * 2;
+                        y = -1 * Calc.Sin(w - 270) * (item / referenz) * 2;
                     }
 
                     punkteListen[i].Add(new Point3D(x, y, schleifenWerte[i]));
@@ -123,8 +123,8 @@ namespace Schifterschnitt
             }
 
             // When the top or bottem side lengths are to small we need a point for the inner planes.
-            Point3D innenMitteUnten = new Point3D(0, 0, Height / referenz * -1 + (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
-            Point3D innenMitteOben = new Point3D(0, 0, Height / referenz - (Math.Tan(Calculate.DegreeToRadian(90 - Math.Abs(AngleAlphaFirstBoard))) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
+            Point3D innenMitteUnten = new Point3D(0, 0, Height / referenz * -1 + (Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
+            Point3D innenMitteOben = new Point3D(0, 0, Height / referenz - (Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
 
             var group = new Model3DGroup();
 

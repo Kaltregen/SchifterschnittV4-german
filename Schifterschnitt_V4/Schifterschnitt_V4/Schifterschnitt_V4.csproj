@@ -85,7 +85,7 @@
     </ApplicationDefinition>
     <Compile Include="GridColumnResize.cs" />
     <Compile Include="Corner.cs" />
-    <Compile Include="Calculate.cs" />
+    <Compile Include="Calc.cs" />
     <Compile Include="CompoundMiterObject.cs" />
     <Compile Include="Pyramid.cs" />
     <Page Include="MainWindow.xaml">

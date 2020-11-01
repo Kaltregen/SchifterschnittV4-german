@@ -23,7 +23,7 @@ namespace Schifterschnitt
     /// <summary>
     /// Helps calculating repetitive tasks.
     /// </summary>
-    public static class Calculate
+    public static class Calc
     {
         #region Methods
 
@@ -47,6 +47,36 @@ namespace Schifterschnitt
             return angle * 180.0 / Math.PI;
         }
 
+        public static double Tan(double angle)
+        {
+            return Math.Tan(DegreeToRadian(angle));
+        }
+
+        public static double Sin(double angle)
+        {
+            return Math.Sin(DegreeToRadian(angle));
+        }
+
+        public static double Cos(double angle)
+        {
+            return Math.Cos(DegreeToRadian(angle));
+        }
+
+        public static double Atan(double value)
+        {
+            return RadianToDegree(Math.Atan(value));
+        }
+
+        public static double Asin(double value)
+        {
+            return RadianToDegree(Math.Asin(value));
+        }
+
+        public static double Acos(double value)
+        {
+            return RadianToDegree(Math.Acos(value));
+        }
+
         /// <summary>
         /// Calculates the radius of the circumscribed circle of a regular polygon.
         /// </summary>
@@ -55,7 +85,7 @@ namespace Schifterschnitt
         /// <returns>The radius of the circumscribed circle of the regular polygon.</returns>
         public static double CircumscribedCircleRadius(double lengthOfSide, short numberOfSides)
         {
-            return lengthOfSide / (2 * Math.Sin(DegreeToRadian(180.0 / numberOfSides)));
+            return lengthOfSide / (2 * Sin(180.0 / numberOfSides));
         }
 
         /// <summary>
@@ -66,7 +96,7 @@ namespace Schifterschnitt
         /// <returns>The radius of the inscribed circle of the regular polygon.</returns>
         public static double InscribedCircleRadius(double lengthOfSide, short numberOfSides)
         {
-            return lengthOfSide / (2 * Math.Tan(DegreeToRadian(180.0 / numberOfSides)));
+            return lengthOfSide / (2 * Tan(180.0 / numberOfSides));
         }
 
         /// <summary>

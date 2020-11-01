@@ -108,9 +108,9 @@ namespace Schifterschnitt
             RotateTransform3D pyramideWinkelTransformation = new RotateTransform3D(pyramidAngleRotation);
             modelVisual3dPyramideWinkel.Transform = pyramideWinkelTransformation;
             
-            cornerCameraAngle = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
-            pyramidLineCameraAngle = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
-            pyramidAngleCameraAngle = Calculate.RadianToDegree(Math.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2))));
+            cornerCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
+            pyramidLineCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
+            pyramidAngleCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
             
             cornerFeedback = new FeedbackArea(gridEckeFeedback);
             pyramidLineFeedback = new FeedbackArea(gridPyramideLinieFeedback);
@@ -350,10 +350,10 @@ namespace Schifterschnitt
             }
             else
             {
-                textBlockEckeBreitenversatzEinsErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(corner.AngleAlphaFirstBoard)) * corner.WidthFirstBoard, 2)) + " mm";
-                textBlockEckeBreitenversatzZweiErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(corner.AngleAlphaSecondBoard)) * corner.WidthSecondBoard, 2)) + " mm";
-                textBlockEckeSchraegeSEins.Text = Convert.ToString(Math.Round(corner.ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(corner.AngleAlphaFirstBoard)), 2)) + " mm";
-                textBlockEckeSchraegeSZwei.Text = Convert.ToString(Math.Round(corner.ThicknessSecondBoard / Math.Cos(Calculate.DegreeToRadian(corner.AngleAlphaSecondBoard)), 2)) + " mm";
+                textBlockEckeBreitenversatzEinsErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(corner.AngleAlphaFirstBoard) * corner.WidthFirstBoard, 2)) + " mm";
+                textBlockEckeBreitenversatzZweiErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(corner.AngleAlphaSecondBoard) * corner.WidthSecondBoard, 2)) + " mm";
+                textBlockEckeSchraegeSEins.Text = Convert.ToString(Math.Round(corner.ThicknessFirstBoard / Calc.Cos(corner.AngleAlphaFirstBoard), 2)) + " mm";
+                textBlockEckeSchraegeSZwei.Text = Convert.ToString(Math.Round(corner.ThicknessSecondBoard / Calc.Cos(corner.AngleAlphaSecondBoard), 2)) + " mm";
             }
 
             corner.CreateModel(modelVisual3dEcke);
@@ -410,8 +410,8 @@ namespace Schifterschnitt
             
             if (cornerFeedback.Calculated.Active && !ATextBoxIsRed(eckeEingaben, 9, 12))
             {
-                double zusatzEins = Math.Tan(Calculate.DegreeToRadian(corner.AngleCrossCutFirstBoard)) * corner.WidthFirstBoard;
-                double zusatzZwei = Math.Tan(Calculate.DegreeToRadian(corner.AngleCrossCutSecondBoard)) * corner.WidthSecondBoard;
+                double zusatzEins = Calc.Tan(corner.AngleCrossCutFirstBoard) * corner.WidthFirstBoard;
+                double zusatzZwei = Calc.Tan(corner.AngleCrossCutSecondBoard) * corner.WidthSecondBoard;
 
                 if (CornerLineYFirst.Text != "" && linexyFirstCalculated == false)
                 {
@@ -466,14 +466,14 @@ namespace Schifterschnitt
 
             if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzEins.Background == Brushes.White && textBoxEckeBreitenversatzEins.Text != "")
             {
-                textBoxEckeWinkelAlphaEins.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatzEins / höhe)), 4));
+                textBoxEckeWinkelAlphaEins.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzEins / höhe), 4));
 
                 x = true;
             }
 
             if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzZwei.Background == Brushes.White && textBoxEckeBreitenversatzZwei.Text != "")
             {
-                textBoxEckeWinkelAlphaZwei.Text = Convert.ToString(Math.Round(Calculate.RadianToDegree(Math.Atan(breitenversatzZwei / höhe)), 4));
+                textBoxEckeWinkelAlphaZwei.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzZwei / höhe), 4));
 
                 x = true;
             }
@@ -812,8 +812,8 @@ namespace Schifterschnitt
 
             pyramidLine.AngleBeta = Math.Round(Convert.ToDouble((pyramidLine.NumberOfSides - 2.0) * 180.0 / pyramidLine.NumberOfSides), 4);
 
-            double alpha = Calculate.RadianToDegree(Math.Atan(((pyramidLine.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0) / pyramidLine.NumberOfSides))) -
-                (pyramidLine.TopSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0) / pyramidLine.NumberOfSides)))) / pyramidLine.Height));
+            double alpha = Calc.Atan(((pyramidLine.BottomSideLength / (2 * Calc.Tan(180.0 / pyramidLine.NumberOfSides))) -
+                (pyramidLine.TopSideLength / (2 * Calc.Tan(180.0 / pyramidLine.NumberOfSides)))) / pyramidLine.Height);
 
             pyramidLine.AngleAlphaFirstBoard = alpha;
             pyramidLine.AngleAlphaSecondBoard = alpha;
@@ -822,7 +822,7 @@ namespace Schifterschnitt
 
             pyramidLine.Calculation();
 
-            double schrägeS = pyramidLine.ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(pyramidLine.AngleAlphaFirstBoard));
+            double schrägeS = pyramidLine.ThicknessFirstBoard / Calc.Cos(pyramidLine.AngleAlphaFirstBoard);
 
             textBlockPyramideLinieWinkelQueranschlag.Text = Math.Round(pyramidLine.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideLinieWinkelSaegeblatt.Text = Math.Round(pyramidLine.AngleSawBladeTiltFirstBoard, 2) + "°";
@@ -830,19 +830,19 @@ namespace Schifterschnitt
             textBlockPyramideLinieBreiteMitSchraege.Text = pyramidLine.AngleAlphaFirstBoard == 90 || pyramidLine.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidLine.WidthWithSlantFirstBoard, 2) + " mm";
 
             textBlockPyramideLinieFlächenwinkel.Text = Math.Round(pyramidLine.AngleDihedral, 2) + "°";
-            textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(pyramidLine.AngleAlphaFirstBoard)) * pyramidLine.WidthFirstBoard, 2)) + " mm";
+            textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Calc.Sin(pyramidLine.AngleAlphaFirstBoard) * pyramidLine.WidthFirstBoard, 2)) + " mm";
             textBlockPyramideLinieSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
             textBlockPyramideLinieNeigungswinkel.Text = Convert.ToString(Math.Round(pyramidLine.AngleAlphaFirstBoard, 2)) + " °";
-            textBlockPyramideLinieInkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS /
-                Math.Sin(Calculate.DegreeToRadian(pyramidLine.AngleBeta / 2.0)), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS /
-                Math.Sin(Calculate.DegreeToRadian(pyramidLine.AngleBeta / 2.0)), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
+            textBlockPyramideLinieInkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS /
+                Calc.Sin(pyramidLine.AngleBeta / 2.0), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
+            textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS /
+                Calc.Sin(pyramidLine.AngleBeta / 2.0), 2)) + " mm";
 
             pyramidLine.CreateModel(modelVisual3dPyramideLinie);
 
@@ -1061,8 +1061,8 @@ namespace Schifterschnitt
             pyramidAngle.AngleAlphaFirstBoard = neigungswinkel;
             pyramidAngle.AngleAlphaSecondBoard = neigungswinkel;
 
-            höheErgebend = Math.Tan(Calculate.DegreeToRadian(90.0 - pyramidAngle.AngleAlphaFirstBoard)) * (pyramidAngle.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 /
-                pyramidAngle.NumberOfSides))));
+            höheErgebend = Calc.Tan(90.0 - pyramidAngle.AngleAlphaFirstBoard) * (pyramidAngle.BottomSideLength / (2 * Calc.Tan(180.0 /
+                pyramidAngle.NumberOfSides)));
 
             if (pyramidAngle.AngleAlphaFirstBoard > 0)
             {
@@ -1115,19 +1115,19 @@ namespace Schifterschnitt
 
             pyramidAngle.Calculation();
 
-            double schrägeS = pyramidAngle.ThicknessFirstBoard / Math.Cos(Calculate.DegreeToRadian(pyramidAngle.AngleAlphaFirstBoard));
+            double schrägeS = pyramidAngle.ThicknessFirstBoard / Calc.Cos(pyramidAngle.AngleAlphaFirstBoard);
 
             textBlockPyramideWinkelWinkelQueranschlag.Text = Math.Round(pyramidAngle.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideWinkelWinkelSaegeblatt.Text = Math.Round(pyramidAngle.AngleSawBladeTiltFirstBoard, 2) + "°";
             textBlockPyramideWinkelBreite.Text = pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidAngle.WidthFirstBoard, 2).ToString() + " mm";
             textBlockPyramideWinkelBreiteMitSchraege.Text = pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidAngle.WidthWithSlantFirstBoard, 2) + " mm";
 
-            pyramidAngle.TopSideLength = ((pyramidAngle.BottomSideLength / (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramidAngle.NumberOfSides)))) -
-                Math.Sin(Calculate.DegreeToRadian(pyramidAngle.AngleAlphaFirstBoard)) * pyramidAngle.WidthFirstBoard) * (2 * Math.Tan(Calculate.DegreeToRadian(180.0 / pyramidAngle.NumberOfSides)));
+            pyramidAngle.TopSideLength = ((pyramidAngle.BottomSideLength / (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides))) -
+                Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard) * (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides));
 
             textBlockPyramideWinkelFlächenwinkel.Text = Math.Round(pyramidAngle.AngleDihedral, 2) + "°";
-            textBlockPyramideWinkelInkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-            textBlockPyramideWinkelUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
+            textBlockPyramideWinkelInkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
+            textBlockPyramideWinkelUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
 
             if (pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90)
             {
@@ -1144,14 +1144,14 @@ namespace Schifterschnitt
             else
             {
                 textBlockPyramideWinkelSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelBreitenversatzErgebnis.Text = Convert.ToString(Math.Round(Math.Sin(Calculate.DegreeToRadian(pyramidAngle.AngleAlphaFirstBoard)) * pyramidAngle.WidthFirstBoard, 2)) + " mm";
+                textBlockPyramideWinkelBreitenversatzErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard, 2)) + " mm";
                 textBlockPyramideWinkelOberlinie.Text = Convert.ToString(Math.Round(pyramidAngle.TopSideLength, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOA.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS / Math.Sin(Calculate.DegreeToRadian(pyramidAngle.AngleBeta / 2.0)), 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calculate.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS / Math.Sin(Calculate.DegreeToRadian(pyramidAngle.AngleBeta / 2.0)), 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
+                textBlockPyramideWinkelInkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS / Calc.Sin(pyramidAngle.AngleBeta / 2.0), 2)) + " mm";
+                textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS / Calc.Sin(pyramidAngle.AngleBeta / 2.0), 2)) + " mm";
             }
 
             pyramidAngle.CreateModel(modelVisual3dPyramideWinkel);
@@ -1188,7 +1188,7 @@ namespace Schifterschnitt
                 return;
             }
 
-            double tiltAngle = Math.Round(Calculate.RadianToDegree(Math.Atan(offset / height)), 4);
+            double tiltAngle = Math.Round(Calc.Atan(offset / height), 4);
             textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(tiltAngle);
 
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.TiltAngleCalculated);
@@ -1485,25 +1485,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
             var newPosition = camera.Position;
             double distanceFlat = Math.Abs(camera.Position.X) * Math.Sqrt(2);
             double distanceToZero = Math.Sqrt(Math.Pow(Math.Abs(camera.Position.Z), 2) + Math.Pow(distanceFlat, 2));
-            double cameraAngleRadian = Calculate.DegreeToRadian(cameraAngle);
             var zoomSpeed = 0.7;
 
             if (e.Delta > 0 && distanceToZero > 2.5)
             {
                 double newDistance = distanceToZero - zoomSpeed;
-                double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * newDistance / Math.Sqrt(2)) * -1;
+                double newXYPosition = Math.Abs(Calc.Cos(cameraAngle) * newDistance / Math.Sqrt(2)) * -1;
                 newPosition.X = newXYPosition;
                 newPosition.Y = newXYPosition;
-                newPosition.Z = Math.Sin(cameraAngleRadian) * newDistance;
+                newPosition.Z = Calc.Sin(cameraAngle) * newDistance;
             }
 
             if (e.Delta < 0 && distanceToZero < 20)
             {
                 double newDistance = distanceToZero + zoomSpeed;
-                double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * newDistance / Math.Sqrt(2)) * -1;
+                double newXYPosition = Math.Abs(Calc.Cos(cameraAngle) * newDistance / Math.Sqrt(2)) * -1;
                 newPosition.X = newXYPosition;
                 newPosition.Y = newXYPosition;
-                newPosition.Z = Math.Sin(cameraAngleRadian) * newDistance;
+                newPosition.Z = Calc.Sin(cameraAngle) * newDistance;
             }
 
             camera.SetValue(PerspectiveCamera.PositionProperty, newPosition);
@@ -1566,12 +1565,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
 
             double distanceFlat = Math.Abs(camera.Position.X) * Math.Sqrt(2);
             double distance = Math.Sqrt(Math.Pow(Math.Abs(camera.Position.Z), 2) + Math.Pow(distanceFlat, 2));
-            double cameraAngleRadian = Calculate.DegreeToRadian(cameraAngle);
-            double newXYPosition = Math.Abs(Math.Cos(cameraAngleRadian) * distance / Math.Sqrt(2)) * -1;
+            double newXYPosition = Math.Abs(Calc.Cos(cameraAngle) * distance / Math.Sqrt(2)) * -1;
 
             var newPosition = new Point3D
             {
-                Z = Math.Sin(cameraAngleRadian) * distance,
+                Z = Calc.Sin(cameraAngle) * distance,
                 X = newXYPosition,
                 Y = newXYPosition
             };

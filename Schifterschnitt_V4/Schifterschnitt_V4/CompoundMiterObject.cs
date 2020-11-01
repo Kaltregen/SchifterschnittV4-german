@@ -147,95 +147,86 @@ namespace Schifterschnitt
         /// </summary>
         public void Calculation()
         {
-            double alphaFirstRadian = Calculate.DegreeToRadian(AngleAlphaFirstBoard);
-            double alphaSecondRadian = Calculate.DegreeToRadian(AngleAlphaSecondBoard);
-            double betaRadian = Calculate.DegreeToRadian(AngleBeta);
-
             var vectorOne = new Vector3D()
             {
-                X = Math.Sin(betaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(alphaFirstRadian),
-                Y = Math.Cos(betaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(alphaFirstRadian)
+                X = Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard),
+                Y = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard)
             };
 
             var vectorTwo = new Vector3D()
             {
-                X = Math.Tan(alphaSecondRadian)
+                X = Calc.Tan(AngleAlphaSecondBoard)
             };
 
             var vectorThree = new Vector3D()
             {
-                X = Math.Tan(alphaSecondRadian),
-                Y = Math.Cos(betaRadian - Calculate.DegreeToRadian(90)) * Math.Tan(alphaFirstRadian) -
-                (Math.Tan(betaRadian - Calculate.DegreeToRadian(90)) * (Math.Tan(alphaSecondRadian) - Math.Sin(betaRadian -
-                Calculate.DegreeToRadian(90)) * Math.Tan(alphaFirstRadian)))
+                X = Calc.Tan(AngleAlphaSecondBoard),
+                Y = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) - (Calc.Tan(AngleBeta - 90) * (Calc.Tan(AngleAlphaSecondBoard) - Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard)))
             };
             
             // Calculation of the cross cut angles.
-            double angleCrossCutFirstRadian = Math.Acos((vectorOne.X * vectorThree.X + vectorOne.Y * vectorThree.Y + 1) /
+            AngleCrossCutFirstBoard = Calc.Acos((vectorOne.X * vectorThree.X + vectorOne.Y * vectorThree.Y + 1) /
                 (Math.Sqrt(Math.Pow(vectorOne.X, 2) + Math.Pow(vectorOne.Y, 2) + 1) * Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
-            double angleCrossCutSecondRadian = Math.Acos((vectorTwo.X * vectorThree.X + 1) / (Math.Sqrt(Math.Pow(vectorTwo.X, 2) + 1) *
+            AngleCrossCutSecondBoard = Calc.Acos((vectorTwo.X * vectorThree.X + 1) / (Math.Sqrt(Math.Pow(vectorTwo.X, 2) + 1) *
                 Math.Sqrt(Math.Pow(vectorThree.X, 2) + Math.Pow(vectorThree.Y, 2) + 1)));
             
             if (vectorThree.Y < 0)
-                angleCrossCutSecondRadian *= -1;
+                AngleCrossCutSecondBoard *= -1;
 
             if (360 - AngleBeta - 180 <= 90)
             {
                 // Vector 3 top left always positive.
                 if (vectorThree.X < 0 && vectorThree.Y >= 0)
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 top right.
                 if (vectorThree.X >= 0 && vectorThree.Y >= 0 && (vectorThree.Y / vectorThree.X) > (vectorOne.Y / vectorOne.X))
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 bottom right always positive.
 
                 // Vector 3 bottom left.
                 if (vectorThree.X < 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (vectorOne.Y / vectorOne.X))
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
             }
             else
             {
                 // Vector 3 top left.
                 if (vectorThree.X < 0 && vectorThree.Y >= 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) < (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 top right always positive.
 
                 // Vector 3 bottom right.
                 if (vectorThree.X >= 0 && vectorThree.Y < 0 && (Math.Abs(vectorThree.Y) / Math.Abs(vectorThree.X)) > (Math.Abs(vectorOne.Y) / Math.Abs(vectorOne.X)))
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
 
                 // Vector 3 bottom left always positive.
                 if (vectorThree.X < 0 && vectorThree.Y < 0)
-                    angleCrossCutFirstRadian *= -1;
+                    AngleCrossCutFirstBoard *= -1;
             }
 
             if (double.IsNaN(AngleCrossCutFirstBoard))
-                angleCrossCutFirstRadian = 0;
+                AngleCrossCutFirstBoard = 0;
 
             if (double.IsNaN(AngleCrossCutSecondBoard))
-                angleCrossCutSecondRadian = 0;
-
-            AngleCrossCutFirstBoard = Calculate.RadianToDegree(angleCrossCutFirstRadian);
-            AngleCrossCutSecondBoard = Calculate.RadianToDegree(angleCrossCutSecondRadian);
+                AngleCrossCutSecondBoard = 0;
 
             // Calculation of the dihedral angle.
             var vectorFour = new Vector3D();
             var vectorFive = new Vector3D();
 
-            vectorFour.Z = Math.Cos(alphaFirstRadian) * Math.Sin(angleCrossCutFirstRadian);
+            vectorFour.Z = Calc.Cos(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard);
 
-            double angleGroundLineRadian = Math.Atan(Math.Sin(alphaFirstRadian) * Math.Sin(angleCrossCutFirstRadian) / Math.Cos(angleCrossCutFirstRadian));
-            double groundLine = Math.Cos(angleCrossCutFirstRadian) / Math.Cos(angleGroundLineRadian);
+            double angleGroundLine = Calc.Atan(Calc.Sin(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard) / Calc.Cos(AngleCrossCutFirstBoard));
+            double groundLine = Calc.Cos(AngleCrossCutFirstBoard) / Calc.Cos(angleGroundLine);
 
-            vectorFour.X = -1 * Math.Cos(Calculate.DegreeToRadian(AngleBeta - 90 + Calculate.RadianToDegree(angleGroundLineRadian))) * groundLine;
-            vectorFour.Y = Math.Sin(Calculate.DegreeToRadian(AngleBeta - 90 + Calculate.RadianToDegree(angleGroundLineRadian))) * groundLine;
+            vectorFour.X = -1 * Calc.Cos(AngleBeta - 90 + angleGroundLine) * groundLine;
+            vectorFour.Y = Calc.Sin(AngleBeta - 90 + angleGroundLine) * groundLine;
 
-            vectorFive.Z = Math.Cos(alphaSecondRadian) * Math.Sin(angleCrossCutSecondRadian);
-            vectorFive.X = Math.Sin(alphaSecondRadian) * Math.Sin(angleCrossCutSecondRadian);
-            vectorFive.Y = -1 * Math.Cos(angleCrossCutSecondRadian);
+            vectorFive.Z = Calc.Cos(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard);
+            vectorFive.X = Calc.Sin(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard);
+            vectorFive.Y = -1 * Calc.Cos(AngleCrossCutSecondBoard);
 
             AngleDihedral = Vector3D.AngleBetween(vectorFour, vectorFive);
 
@@ -244,11 +235,11 @@ namespace Schifterschnitt
 
             // Calculation of the tilt angles for the saw blade.
             double line = Math.Sqrt(Math.Pow(ThicknessFirstBoard, 2) + Math.Pow(ThicknessSecondBoard, 2) - 2 * ThicknessFirstBoard * ThicknessSecondBoard *
-                Math.Cos(Calculate.DegreeToRadian(360 - AngleDihedral - 180)));
-            double angleGreenOne = Calculate.RadianToDegree(Math.Acos((Math.Pow(line, 2) + Math.Pow(ThicknessFirstBoard, 2) - Math.Pow(ThicknessSecondBoard, 2)) /
-                (2 * line * ThicknessFirstBoard)));
-            double angleGreenTwo = Calculate.RadianToDegree(Math.Acos((Math.Pow(line, 2) + Math.Pow(ThicknessSecondBoard, 2) - Math.Pow(ThicknessFirstBoard, 2)) /
-                (2 * line * ThicknessSecondBoard)));
+                Calc.Cos(360 - AngleDihedral - 180));
+            double angleGreenOne = Calc.Acos((Math.Pow(line, 2) + Math.Pow(ThicknessFirstBoard, 2) - Math.Pow(ThicknessSecondBoard, 2)) /
+                (2 * line * ThicknessFirstBoard));
+            double angleGreenTwo = Calc.Acos((Math.Pow(line, 2) + Math.Pow(ThicknessSecondBoard, 2) - Math.Pow(ThicknessFirstBoard, 2)) /
+                (2 * line * ThicknessSecondBoard));
             double angleYellowOne;
             double angleYellowTwo;
 
@@ -265,10 +256,8 @@ namespace Schifterschnitt
             angleYellowOne = Math.Abs(angleYellowOne);
             angleYellowTwo = Math.Abs(angleYellowTwo);
 
-            AngleSawBladeTiltFirstBoard = Calculate.RadianToDegree(Math.Atan(line / Math.Sin(Calculate.DegreeToRadian(180 - angleYellowOne - angleYellowTwo)) *
-                Math.Sin(Calculate.DegreeToRadian(angleYellowTwo)) / ThicknessFirstBoard));
-            AngleSawBladeTiltSecondBoard = Calculate.RadianToDegree(Math.Atan(line / Math.Sin(Calculate.DegreeToRadian(180 - angleYellowOne - angleYellowTwo)) *
-                Math.Sin(Calculate.DegreeToRadian(angleYellowOne)) / ThicknessSecondBoard));
+            AngleSawBladeTiltFirstBoard = Calc.Atan(line / Calc.Sin(180 - angleYellowOne - angleYellowTwo) * Calc.Sin(angleYellowTwo) / ThicknessFirstBoard);
+            AngleSawBladeTiltSecondBoard = Calc.Atan(line / Calc.Sin(180 - angleYellowOne - angleYellowTwo) * Calc.Sin(angleYellowOne) / ThicknessSecondBoard);
 
             if (System.Double.IsNaN(AngleSawBladeTiltFirstBoard))
                 AngleSawBladeTiltFirstBoard = 0;
@@ -289,11 +278,11 @@ namespace Schifterschnitt
             }
 
             // Calculation of the widths of the boards.
-            WidthFirstBoard = Height / Math.Cos(alphaFirstRadian);
-            WidthSecondBoard = Height / Math.Cos(alphaSecondRadian);
+            WidthFirstBoard = Height / Calc.Cos(AngleAlphaFirstBoard);
+            WidthSecondBoard = Height / Calc.Cos(AngleAlphaSecondBoard);
 
-            WidthWithSlantFirstBoard = WidthFirstBoard + Math.Abs(Math.Tan(alphaFirstRadian)) * ThicknessFirstBoard;
-            WidhtWithSlantSecondBoard = WidthSecondBoard + Math.Abs(Math.Tan(alphaSecondRadian)) * ThicknessSecondBoard;
+            WidthWithSlantFirstBoard = WidthFirstBoard + Math.Abs(Calc.Tan(AngleAlphaFirstBoard)) * ThicknessFirstBoard;
+            WidhtWithSlantSecondBoard = WidthSecondBoard + Math.Abs(Calc.Tan(AngleAlphaSecondBoard)) * ThicknessSecondBoard;
         }
 
         /// <summary>
