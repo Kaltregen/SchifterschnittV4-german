@@ -175,38 +175,33 @@ namespace Schifterschnitt
             AngleCrossCutFirstBoard = Vector3D.AngleBetween(vectorFirstBoard, vectorCutLine);
             AngleCrossCutSecondBoard = Vector3D.AngleBetween(vectorSecondBoard, vectorCutLine);
             
+            // Because there can be different thicknesses and negative tilt angles we need to set the cross cut angles to 
+            // negative if neccessary with the vector describing the cut line as a point in a 2D coordinate system.
             if (vectorCutLine.Y < 0)
                 AngleCrossCutSecondBoard *= -1;
 
+            double angleTanPointCutLine = Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X);
+            double angleTanHelpLine = Math.Abs(vectorFirstBoard.Y) / Math.Abs(vectorFirstBoard.X);
+
             if (360 - AngleBeta - 180 <= 90)
             {
-                // Vector 3 top left always positive.
                 if (vectorCutLine.X < 0 && vectorCutLine.Y >= 0)
                     AngleCrossCutFirstBoard *= -1;
 
-                // Vector 3 top right.
-                if (vectorCutLine.X >= 0 && vectorCutLine.Y >= 0 && (vectorCutLine.Y / vectorCutLine.X) > (vectorFirstBoard.Y / vectorFirstBoard.X))
+                if (vectorCutLine.X >= 0 && vectorCutLine.Y >= 0 && angleTanPointCutLine > angleTanHelpLine)
                     AngleCrossCutFirstBoard *= -1;
 
-                // Vector 3 bottom right always positive.
-
-                // Vector 3 bottom left.
-                if (vectorCutLine.X < 0 && vectorCutLine.Y < 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) < (vectorFirstBoard.Y / vectorFirstBoard.X))
+                if (vectorCutLine.X < 0 && vectorCutLine.Y < 0 && angleTanPointCutLine < angleTanHelpLine)
                     AngleCrossCutFirstBoard *= -1;
             }
             else
             {
-                // Vector 3 top left.
-                if (vectorCutLine.X < 0 && vectorCutLine.Y >= 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) < (Math.Abs(vectorFirstBoard.Y) / Math.Abs(vectorFirstBoard.X)))
+                if (vectorCutLine.X < 0 && vectorCutLine.Y >= 0 && angleTanPointCutLine < angleTanHelpLine)
                     AngleCrossCutFirstBoard *= -1;
 
-                // Vector 3 top right always positive.
-
-                // Vector 3 bottom right.
-                if (vectorCutLine.X >= 0 && vectorCutLine.Y < 0 && (Math.Abs(vectorCutLine.Y) / Math.Abs(vectorCutLine.X)) > (Math.Abs(vectorFirstBoard.Y) / Math.Abs(vectorFirstBoard.X)))
+                if (vectorCutLine.X >= 0 && vectorCutLine.Y < 0 && angleTanPointCutLine > angleTanHelpLine)
                     AngleCrossCutFirstBoard *= -1;
 
-                // Vector 3 bottom left always positive.
                 if (vectorCutLine.X < 0 && vectorCutLine.Y < 0)
                     AngleCrossCutFirstBoard *= -1;
             }
@@ -217,28 +212,28 @@ namespace Schifterschnitt
             if (double.IsNaN(AngleCrossCutSecondBoard))
                 AngleCrossCutSecondBoard = 0;
 
-            // Calculation of the dihedral angle.
-            var vectorFour = new Vector3D();
-            var vectorFive = new Vector3D();
-
-            vectorFour.Z = Calc.Cos(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard);
-
             double angleGroundLine = Calc.Atan(Calc.Sin(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard) / Calc.Cos(AngleCrossCutFirstBoard));
             double groundLine = Calc.Cos(AngleCrossCutFirstBoard) / Calc.Cos(angleGroundLine);
 
-            vectorFour.X = -1 * Calc.Cos(AngleBeta - 90 + angleGroundLine) * groundLine;
-            vectorFour.Y = Calc.Sin(AngleBeta - 90 + angleGroundLine) * groundLine;
+            var vectorFour = new Vector3D()
+            {
+                X = -1 * Calc.Cos(AngleBeta - 90 + angleGroundLine) * groundLine,
+                Y = Calc.Sin(AngleBeta - 90 + angleGroundLine) * groundLine,
+                Z = Calc.Cos(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard)
+            };
 
-            vectorFive.Z = Calc.Cos(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard);
-            vectorFive.X = Calc.Sin(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard);
-            vectorFive.Y = -1 * Calc.Cos(AngleCrossCutSecondBoard);
+            var vectorFive = new Vector3D()
+            {
+                Z = Calc.Cos(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard),
+                X = Calc.Sin(AngleAlphaSecondBoard) * Calc.Sin(AngleCrossCutSecondBoard),
+                Y = -1 * Calc.Cos(AngleCrossCutSecondBoard)
+            };
 
             AngleDihedral = Vector3D.AngleBetween(vectorFour, vectorFive);
 
             if (System.Double.IsNaN(AngleDihedral))
                 AngleDihedral = 90;
 
-            // Calculation of the tilt angles for the saw blade.
             double line = Math.Sqrt(Math.Pow(ThicknessFirstBoard, 2) + Math.Pow(ThicknessSecondBoard, 2) - 2 * ThicknessFirstBoard * ThicknessSecondBoard *
                 Calc.Cos(360 - AngleDihedral - 180));
             double angleGreenOne = Calc.Acos((Math.Pow(line, 2) + Math.Pow(ThicknessFirstBoard, 2) - Math.Pow(ThicknessSecondBoard, 2)) /
@@ -282,7 +277,6 @@ namespace Schifterschnitt
                 AngleSawBladeTiltSecondBoard = (90 - (360 - AngleDihedral - 180)) * -1;
             }
 
-            // Calculation of the widths of the boards.
             WidthFirstBoard = Height / Calc.Cos(AngleAlphaFirstBoard);
             WidthSecondBoard = Height / Calc.Cos(AngleAlphaSecondBoard);
 
