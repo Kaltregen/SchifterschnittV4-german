@@ -120,22 +120,6 @@ namespace Schifterschnitt
             pyramidLineFeedback.Activate(pyramidLineFeedback.EnterValues);
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.EnterValues);
 
-            eckeEingaben = new TextBox[] { 
-                textBoxEckeHoehe, 
-                textBoxEckeMaterialstaerkeEins, 
-                textBoxEckeMaterialstaerkeZwei, 
-                textBoxEckeWinkelAlphaEins,
-                textBoxEckeWinkelAlphaZwei, 
-                textBoxEckeWinkelBeta, 
-                textBoxEckeBreitenversatzEins, 
-                textBoxEckeBreitenversatzZwei, 
-                textBoxEckeAnzahlSeiten,
-                CornerLineYFirst, 
-                CornerLineYSecond, 
-                CornerLineXFirst, 
-                CornerLineXSecond 
-            };
-
             pyramideLinieEingaben = new TextBox[] { 
                 textBoxPyramideLinieHoehe, 
                 textBoxPyramideLinieStaerke, 
@@ -181,7 +165,7 @@ namespace Schifterschnitt
         /// <summary>
         /// Converts the angle if the input is valid and shows the result.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld der Winkelumrechnung.</param>
+        /// <param name="sender">The textbox for angle conversion.</param>
         /// <param name="e">The TextChangedEventArgs.</param>
         private void TextBoxEckeWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -225,10 +209,26 @@ namespace Schifterschnitt
 
             checkBoxEcke.IsChecked = false;
 
-            for (int i = 0; i < eckeEingaben.Length; i++)
+            var inputTextBoxes = new TextBox[] {
+                CornerHeight,
+                CornerThicknessFirst,
+                CornerThicknessSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerAngleBeta,
+                CornerOffsetFirst,
+                CornerOffsetSecond,
+                CornerNumberOfSides,
+                CornerLineYFirst,
+                CornerLineYSecond,
+                CornerLineXFirst,
+                CornerLineXSecond
+            };
+
+            foreach (var textbox in inputTextBoxes)
             {
-                eckeEingaben[i].Text = "";
-                eckeEingaben[i].Background = Brushes.White;
+                textbox.Text = "";
+                textbox.Background = Brushes.White;
             }
 
             modelVisual3dEcke.Content = new Model3DGroup();
@@ -266,16 +266,26 @@ namespace Schifterschnitt
             foreach (var textBox in linexyTextBoxes)
                 textBox.Text = "";
 
+            var inputTextBoxes = new TextBox[]
+            {
+                CornerHeight,
+                CornerThicknessFirst,
+                CornerThicknessSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerAngleBeta
+            };
+
             cornerFeedback.Deactivate(cornerFeedback.InputChanged);
 
-            double höhe = 0;
-            double materialstärkeEins = 0;
-            double materialstärkeZwei = 0;
-            double winkelAlphaEins = 0;
-            double winkelAlphaZwei = 0;
-            double winkelBeta = 0;
+            double height = 0;
+            double thicknessFirst = 0;
+            double thicknessSecond = 0;
+            double angleAlphaFirst = 0;
+            double angleAlphaSecond = 0;
+            double angleBeta = 0;
 
-            if (ATextBoxIsEmpty(eckeEingaben, 0, 5))
+            if (ATextBoxIsEmpty(inputTextBoxes))
             {
                 CornerResultReset();
                 modelVisual3dEcke.Content = new Model3DGroup();
@@ -285,31 +295,25 @@ namespace Schifterschnitt
                 return;
             }
 
-            if (!InputValid(textBoxEckeHoehe, ref höhe) 
-                || höhe <= 0)
-                textBoxEckeHoehe.Background = Brushes.Red;
+            if (!InputValid(CornerHeight, ref height) || height <= 0)
+                CornerHeight.Background = Brushes.Red;
 
-            if (!InputValid(textBoxEckeMaterialstaerkeEins, ref materialstärkeEins) 
-                || materialstärkeEins <= 0)
-                textBoxEckeMaterialstaerkeEins.Background = Brushes.Red;
+            if (!InputValid(CornerThicknessFirst, ref thicknessFirst) || thicknessFirst <= 0)
+                CornerThicknessFirst.Background = Brushes.Red;
 
-            if (!InputValid(textBoxEckeMaterialstaerkeZwei, ref materialstärkeZwei) 
-                || materialstärkeZwei <= 0)
-                textBoxEckeMaterialstaerkeZwei.Background = Brushes.Red;
+            if (!InputValid(CornerThicknessSecond, ref thicknessSecond) || thicknessSecond <= 0)
+                CornerThicknessSecond.Background = Brushes.Red;
 
-            if (!InputValid(textBoxEckeWinkelAlphaEins, ref winkelAlphaEins) 
-                || winkelAlphaEins < -90 || winkelAlphaEins > 90)
-                textBoxEckeWinkelAlphaEins.Background = Brushes.Red;
+            if (!InputValid(CornerAngleAlphaFirst, ref angleAlphaFirst) || angleAlphaFirst < -90 || angleAlphaFirst > 90)
+                CornerAngleAlphaFirst.Background = Brushes.Red;
 
-            if (!InputValid(textBoxEckeWinkelAlphaZwei, ref winkelAlphaZwei) 
-                || winkelAlphaZwei < -90 || winkelAlphaZwei > 90)
-                textBoxEckeWinkelAlphaZwei.Background = Brushes.Red;
+            if (!InputValid(CornerAngleAlphaSecond, ref angleAlphaSecond) || angleAlphaSecond < -90 || angleAlphaSecond > 90)
+                CornerAngleAlphaSecond.Background = Brushes.Red;
 
-            if (!InputValid(textBoxEckeWinkelBeta, ref winkelBeta) 
-                || winkelBeta <= 0 || winkelBeta >= 180)
-                textBoxEckeWinkelBeta.Background = Brushes.Red;
+            if (!InputValid(CornerAngleBeta, ref angleBeta) || angleBeta <= 0 || angleBeta >= 180)
+                CornerAngleBeta.Background = Brushes.Red;
             
-            if (ATextBoxIsRed(eckeEingaben, 0, 5))
+            if (ATextBoxIsRed(inputTextBoxes))
             {
                 CornerResultReset();
                 modelVisual3dEcke.Content = new Model3DGroup();
@@ -320,12 +324,12 @@ namespace Schifterschnitt
                 return;
             }
 
-            corner.Height = höhe;
-            corner.ThicknessFirstBoard = materialstärkeEins;
-            corner.ThicknessSecondBoard = materialstärkeZwei;
-            corner.AngleAlphaFirstBoard = winkelAlphaEins;
-            corner.AngleAlphaSecondBoard = winkelAlphaZwei;
-            corner.AngleBeta = winkelBeta;
+            corner.Height = height;
+            corner.ThicknessFirstBoard = thicknessFirst;
+            corner.ThicknessSecondBoard = thicknessSecond;
+            corner.AngleAlphaFirstBoard = angleAlphaFirst;
+            corner.AngleAlphaSecondBoard = angleAlphaSecond;
+            corner.AngleBeta = angleBeta;
             
             corner.MiterJoint = checkBoxEcke.IsChecked.Value;
 
@@ -359,33 +363,41 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Berechnet die Linien XY.
+        /// Calculates the lines x and y.
         /// </summary>
-        /// <param name="sender">Der Button Linie XY Berechnen.</param>
-        /// <param name="e"></param>
+        /// <param name="sender">The button to calculate the lines.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void ButtonEckeLiniexy_Click(object sender, RoutedEventArgs e)
         {
-            double LinieYEins = 0;
-            double LinieYZwei = 0;
-            double LinieXEins = 0;
-            double LinieXZwei = 0;
+            double LineYFirst = 0;
+            double LineYSecond = 0;
+            double LineXFirst = 0;
+            double LineXSecond = 0;
 
-            for (int i = 9; i < 13; i++)
-                eckeEingaben[i].Background = Brushes.White;
+            var inputTextBoxes = new TextBox[]
+            {
+                CornerLineYFirst,
+                CornerLineXFirst,
+                CornerLineYSecond,
+                CornerLineXSecond
+            };
 
-            if (CornerLineYFirst.Text != "" && !InputValid(CornerLineYFirst, ref LinieYEins))
+            foreach (var textbox in inputTextBoxes)
+                textbox.Background = Brushes.White;
+
+            if (CornerLineYFirst.Text != "" && !InputValid(CornerLineYFirst, ref LineYFirst))
                 CornerLineYFirst.Background = Brushes.Red;
 
-            if (CornerLineYSecond.Text != "" && !InputValid(CornerLineYSecond, ref LinieYZwei))
+            if (CornerLineYSecond.Text != "" && !InputValid(CornerLineYSecond, ref LineYSecond))
                 CornerLineYSecond.Background = Brushes.Red;
 
-            if (CornerLineXFirst.Text != "" && !InputValid(CornerLineXFirst, ref LinieXEins))
+            if (CornerLineXFirst.Text != "" && !InputValid(CornerLineXFirst, ref LineXFirst))
                 CornerLineXFirst.Background = Brushes.Red;
 
-            if (CornerLineXSecond.Text != "" && !InputValid(CornerLineXSecond, ref LinieXZwei))
+            if (CornerLineXSecond.Text != "" && !InputValid(CornerLineXSecond, ref LineXSecond))
                 CornerLineXSecond.Background = Brushes.Red;
 
-            if (ATextBoxIsRed(eckeEingaben, 9, 12))
+            if (ATextBoxIsRed(inputTextBoxes))
                 cornerFeedback.Activate(cornerFeedback.LineXYInvalidValues);
 
             if (CornerLineYFirst.Text != "" && CornerLineXFirst.Text != "" && linexyFirstCalculated == false)
@@ -403,41 +415,41 @@ namespace Schifterschnitt
 
                 cornerFeedback.Activate(cornerFeedback.LineXYToManyValues);
             }
-            
-            if (cornerFeedback.Calculated.Active && !ATextBoxIsRed(eckeEingaben, 9, 12))
+
+            if (!cornerFeedback.Calculated.Active || ATextBoxIsRed(inputTextBoxes))
+                return;
+
+            double additionFirst = Calc.Tan(corner.AngleCrossCutFirstBoard) * corner.WidthFirstBoard;
+            double additionSecond = Calc.Tan(corner.AngleCrossCutSecondBoard) * corner.WidthSecondBoard;
+
+            if (CornerLineYFirst.Text != "" && linexyFirstCalculated == false)
             {
-                double zusatzEins = Calc.Tan(corner.AngleCrossCutFirstBoard) * corner.WidthFirstBoard;
-                double zusatzZwei = Calc.Tan(corner.AngleCrossCutSecondBoard) * corner.WidthSecondBoard;
+                CornerLineXFirst.Text = Convert.ToString(Math.Round(LineYFirst + (2 * additionFirst), 2));
+                linexyFirstCalculated = true;
+            }
+            else if (CornerLineXFirst.Text != "" && linexyFirstCalculated == false)
+            {
+                CornerLineYFirst.Text = Convert.ToString(Math.Round(LineXFirst - (2 * additionFirst), 2));
+                linexyFirstCalculated = true;
+            }
 
-                if (CornerLineYFirst.Text != "" && linexyFirstCalculated == false)
-                {
-                    CornerLineXFirst.Text = Convert.ToString(Math.Round(LinieYEins + (2 * zusatzEins), 2));
-                    linexyFirstCalculated = true;
-                }
-                else if (CornerLineXFirst.Text != "" && linexyFirstCalculated == false)
-                {
-                    CornerLineYFirst.Text = Convert.ToString(Math.Round(LinieXEins - (2 * zusatzEins), 2));
-                    linexyFirstCalculated = true;
-                }
-
-                if (CornerLineYSecond.Text != "" && linexySecondCalculated == false)
-                {
-                    CornerLineXSecond.Text = Convert.ToString(Math.Round(LinieYZwei + (2 * zusatzZwei), 2));
-                    linexySecondCalculated = true;
-                }
-                else if (CornerLineXSecond.Text != "" && linexySecondCalculated == false)
-                {
-                    CornerLineYSecond.Text = Convert.ToString(Math.Round(LinieXZwei - (2 * zusatzZwei), 2));
-                    linexySecondCalculated = true;
-                }
+            if (CornerLineYSecond.Text != "" && linexySecondCalculated == false)
+            {
+                CornerLineXSecond.Text = Convert.ToString(Math.Round(LineYSecond + (2 * additionSecond), 2));
+                linexySecondCalculated = true;
+            }
+            else if (CornerLineXSecond.Text != "" && linexySecondCalculated == false)
+            {
+                CornerLineYSecond.Text = Convert.ToString(Math.Round(LineXSecond - (2 * additionSecond), 2));
+                linexySecondCalculated = true;
             }
         }
 
         /// <summary>
-        /// Berechnet den Winkel Alpha.
+        /// Calculates the angle alpha.
         /// </summary>
-        /// <param name="sender">Der Button Winkel Alpha Berechnen.</param>
-        /// <param name="e"></param>
+        /// <param name="sender">The button to calculate angle alpha.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void ButtonEckeWinkelAlpha_Click(object sender, RoutedEventArgs e)
         {
             cornerFeedback.Deactivate(cornerFeedback.AlphaChanged);
@@ -446,30 +458,38 @@ namespace Schifterschnitt
             double breitenversatzEins = 0;
             double breitenversatzZwei = 0;
 
-            if (textBoxEckeHoehe.Text != "" && (!InputValid(textBoxEckeHoehe, ref höhe) || höhe <= 0))
-                textBoxEckeHoehe.Background = Brushes.Red;
+            var inputTextBoxes = new TextBox[]
+            {
+                CornerOffsetFirst,
+                CornerOffsetSecond
+            };
 
-            if (textBoxEckeBreitenversatzEins.Text != "" && (!InputValid(textBoxEckeBreitenversatzEins, ref breitenversatzEins)))
-                textBoxEckeBreitenversatzEins.Background = Brushes.Red;
+            if (CornerHeight.Text != "" && (!InputValid(CornerHeight, ref höhe) || höhe <= 0))
+                CornerHeight.Background = Brushes.Red;
 
-            if (textBoxEckeBreitenversatzZwei.Text != "" && (!InputValid(textBoxEckeBreitenversatzZwei, ref breitenversatzZwei)))
-                textBoxEckeBreitenversatzZwei.Background = Brushes.Red;
+            if (CornerOffsetFirst.Text != "" && (!InputValid(CornerOffsetFirst, ref breitenversatzEins)))
+                CornerOffsetFirst.Background = Brushes.Red;
 
-            if (textBoxEckeHoehe.Background == Brushes.Red || ATextBoxIsRed(eckeEingaben, 6, 7))
+            if (CornerOffsetSecond.Text != "" && (!InputValid(CornerOffsetSecond, ref breitenversatzZwei)))
+                CornerOffsetSecond.Background = Brushes.Red;
+
+            if (CornerHeight.Background == Brushes.Red || ATextBoxIsRed(inputTextBoxes))
                 cornerFeedback.Activate(cornerFeedback.InvalidValues);
 
             var x = false;
 
-            if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzEins.Background == Brushes.White && textBoxEckeBreitenversatzEins.Text != "")
+            if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
+                && CornerOffsetFirst.Background == Brushes.White && CornerOffsetFirst.Text != "")
             {
-                textBoxEckeWinkelAlphaEins.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzEins / höhe), 4));
+                CornerAngleAlphaFirst.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzEins / höhe), 4));
 
                 x = true;
             }
 
-            if (textBoxEckeHoehe.Background == Brushes.White && textBoxEckeHoehe.Text != "" && textBoxEckeBreitenversatzZwei.Background == Brushes.White && textBoxEckeBreitenversatzZwei.Text != "")
+            if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
+                && CornerOffsetSecond.Background == Brushes.White && CornerOffsetSecond.Text != "")
             {
-                textBoxEckeWinkelAlphaZwei.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzZwei / höhe), 4));
+                CornerAngleAlphaSecond.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzZwei / höhe), 4));
 
                 x = true;
             }
@@ -479,69 +499,113 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Berechnet den Winkel Beta.
+        /// Calculates the angle beta.
         /// </summary>
-        /// <param name="sender">Der Button Winkel Beta Berechnen.</param>
-        /// <param name="e"></param>
+        /// <param name="sender">The button to calculate angle beta.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void ButtonEckeWinkelBeta_Click(object sender, RoutedEventArgs e)
         {
             cornerFeedback.Deactivate(cornerFeedback.BetaChanged);
 
-            short anzahlSeiten = 0;
+            short numberOfSides = 0;
 
-            if (textBoxEckeAnzahlSeiten.Text == "")
+            if (CornerNumberOfSides.Text == "")
                 return;
 
-            if (!InputValid(textBoxEckeAnzahlSeiten, ref anzahlSeiten) || anzahlSeiten < 3 || anzahlSeiten > 100)
+            if (!InputValid(CornerNumberOfSides, ref numberOfSides) || numberOfSides < 3 || numberOfSides > 100)
             {
-                textBoxEckeAnzahlSeiten.Background = Brushes.Red;
+                CornerNumberOfSides.Background = Brushes.Red;
                 cornerFeedback.Activate(cornerFeedback.InvalidValues);
 
                 return;
             }
 
-            textBoxEckeWinkelBeta.Text = Convert.ToString(Math.Round(Convert.ToDouble((anzahlSeiten - 2.0) * 180.0 / anzahlSeiten), 4));
+            double angleBeta = (numberOfSides - 2.0) * 180.0 / numberOfSides;
+
+            CornerAngleBeta.Text = Convert.ToString(Math.Round(angleBeta, 4));
 
             cornerFeedback.Activate(cornerFeedback.BetaCalculated);
         }
 
         /// <summary>
-        /// Stellt den Hintergrund eines veränderten Eingabefeldes weiß und aktualisiert die Feedbackleiste.
+        /// Changes the background of the textbox to white and updates the feedback area.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld das die Methode ausgelöst hat.</param>
-        /// <param name="e"></param>
+        /// <param name="sender">The textbox that called the method.</param>
+        /// <param name="e">The TextChangedEventArgs.</param>
         private void EckeInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ((TextBox)sender).Background = Brushes.White;
+            var senderTextBox = (TextBox)sender;
 
-            if (!ATextBoxIsRed(eckeEingaben, 0, 8))
+            senderTextBox.Background = Brushes.White;
+
+            var helper = new TextBox[]
+            {
+                CornerHeight,
+                CornerThicknessFirst,
+                CornerThicknessSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerAngleBeta,
+                CornerOffsetFirst,
+                CornerOffsetSecond,
+                CornerNumberOfSides
+            };
+
+            if (!ATextBoxIsRed(helper))
             {
                 cornerFeedback.Deactivate(cornerFeedback.InvalidValues);
             }
 
-            for (int i = 0; i <= 5; i++)
+            helper = new TextBox[]
             {
-                if (cornerFeedback.Calculated.Active && (TextBox)sender == eckeEingaben[i])
+                CornerHeight,
+                CornerThicknessFirst,
+                CornerThicknessSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerAngleBeta
+            };
+
+            foreach (var textbox in helper)
+            {
+                if (cornerFeedback.Calculated.Active && senderTextBox == textbox)
                 {
                     cornerFeedback.Activate(cornerFeedback.InputChanged);
                     cornerFeedback.Deactivate(cornerFeedback.Calculated);
                 }
             }
 
-            for (int i = 6; i <= 7; i++)
+            helper = new TextBox[]
             {
-                if (cornerFeedback.AlphaCalculated.Active && ((TextBox)sender == eckeEingaben[i] || (TextBox)sender == textBoxEckeWinkelAlphaEins || 
-                    (TextBox)sender == textBoxEckeWinkelAlphaZwei || (TextBox)sender == textBoxEckeHoehe))
+                CornerOffsetFirst,
+                CornerOffsetSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerHeight
+            };
+
+            foreach (var textbox in helper)
+            {
+                if (cornerFeedback.AlphaCalculated.Active && senderTextBox == textbox)
                 {
                     cornerFeedback.Activate(cornerFeedback.AlphaChanged);
                     cornerFeedback.Deactivate(cornerFeedback.AlphaCalculated);
                 }
             }
 
-            if (cornerFeedback.BetaCalculated.Active && ((TextBox)sender == textBoxEckeAnzahlSeiten || (TextBox)sender == textBoxEckeWinkelBeta))
+            helper = new TextBox[]
             {
-                cornerFeedback.Activate(cornerFeedback.BetaChanged);
-                cornerFeedback.Deactivate(cornerFeedback.BetaCalculated);
+                CornerNumberOfSides,
+                CornerAngleBeta
+            };
+
+            foreach (var textbox in helper)
+            {
+                if (cornerFeedback.BetaCalculated.Active && senderTextBox == textbox)
+                {
+                    cornerFeedback.Activate(cornerFeedback.BetaChanged);
+                    cornerFeedback.Deactivate(cornerFeedback.BetaCalculated);
+                }
             }
         }
 
@@ -565,9 +629,9 @@ namespace Schifterschnitt
         /// <param name="textBox">The textbox.</param>
         private void WhiteIfValidAndGreaterZero(TextBox textBox)
         {
-            double x = 0;
+            double value = 0;
 
-            if (InputValid(textBox, ref x) && x >= 0)
+            if (InputValid(textBox, ref value) && value >= 0)
                 textBox.Background = Brushes.White;
         }
 

@@ -103,27 +103,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Eingabewerte" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Höhe h"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeHoehe" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerHeight" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke Teil 1"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeMaterialstaerkeEins" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerThicknessFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke Teil 2"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeMaterialstaerkeZwei" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerThicknessSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel α Teil 1 (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeWinkelAlphaEins" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleAlphaFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel α Teil 2 (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeWinkelAlphaZwei" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleAlphaSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel β (zwischen 0 und 180)"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeWinkelBeta" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleBeta" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <CheckBox x:Name="checkBoxEcke" Click="CornerCheckbox_Click" VerticalAlignment="Center"/>
@@ -250,11 +250,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Winkel α Berechnung mit Breitenversatz b und Höhe h" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 1"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeBreitenversatzEins" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerOffsetFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 2"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeBreitenversatzZwei" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerOffsetSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -277,7 +277,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Winkel β Berechnung bei einer Pyramide" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Anzahl Seiten (3 - 100)"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeAnzahlSeiten" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerNumberOfSides" TextChanged="EckeInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
