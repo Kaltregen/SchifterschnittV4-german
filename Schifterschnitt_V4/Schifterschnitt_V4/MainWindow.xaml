@@ -142,7 +142,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Ergebnis Teil 1" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Queranschlag"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeWinkelQueranschlagEins" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleCrossCutFirstBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -150,7 +150,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Sägeblatt"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeWinkelSaegeblattEins" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleSawBladeTiltFirstBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -158,13 +158,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="50" VerticalAlignment="Center" Text="Breite"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreiteEins" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerWidthFirstBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
                                             </TextBlock>
                                             <TextBlock Margin="10 0 0 0" Width="90" VerticalAlignment="Center" Text="mit Schräge"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreiteMitSchraegeEins" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerWidthWithSlantFirstBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -183,7 +183,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Ergebnis Teil 2" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Queranschlag"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeWinkelQueranschlagZwei" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleCrossCutSecondBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -191,7 +191,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Sägeblatt"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeWinkelSaegeblattZwei" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleSawBladeTiltSecondBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -199,13 +199,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="50" VerticalAlignment="Center" Text="Breite"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreiteZwei" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerWidthSecondBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
                                             </TextBlock>
                                             <TextBlock Margin="10 0 0 0" Width="90" VerticalAlignment="Center" Text="mit Schräge"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreiteMitSchraegeZwei" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerWidthWithSlantSecondBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -336,7 +336,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Weitere Ergebnisse" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Flächenwinkel"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeFlächenwinkel" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleDihedral" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -344,7 +344,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 1"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreitenversatzEinsErgebnis" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerOffsetFirstBoardResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -352,7 +352,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 2"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeBreitenversatzZweiErgebnis" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerOffsetSecondBoardResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -360,7 +360,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Länge Schräge s Teil 1"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeSchraegeSEins" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerSlantSFirstBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -368,7 +368,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Länge Schräge s Teil 2"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeSchraegeSZwei" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerSlantSSecondBoard" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>

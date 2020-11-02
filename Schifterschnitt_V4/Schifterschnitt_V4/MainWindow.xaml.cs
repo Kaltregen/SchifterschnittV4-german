@@ -194,19 +194,19 @@ namespace Schifterschnitt
         private void CornerResultReset()
         {
             var resultTextBlocks = new TextBlock[] {
-                textBlockEckeWinkelQueranschlagEins,
-                textBlockEckeWinkelQueranschlagZwei,
-                textBlockEckeWinkelSaegeblattEins,
-                textBlockEckeWinkelSaegeblattZwei,
-                textBlockEckeBreiteEins,
-                textBlockEckeBreiteZwei,
-                textBlockEckeBreiteMitSchraegeEins,
-                textBlockEckeBreiteMitSchraegeZwei,
-                textBlockEckeFlächenwinkel,
-                textBlockEckeBreitenversatzEinsErgebnis,
-                textBlockEckeBreitenversatzZweiErgebnis,
-                textBlockEckeSchraegeSEins,
-                textBlockEckeSchraegeSZwei,
+                CornerAngleCrossCutFirstBoard,
+                CornerAngleCrossCutSecondBoard,
+                CornerAngleSawBladeTiltFirstBoard,
+                CornerAngleSawBladeTiltSecondBoard,
+                CornerWidthFirstBoard,
+                CornerWidthSecondBoard,
+                CornerWidthWithSlantFirstBoard,
+                CornerWidthWithSlantSecondBoard,
+                CornerAngleDihedral,
+                CornerOffsetFirstBoardResult,
+                CornerOffsetSecondBoardResult,
+                CornerSlantSFirstBoard,
+                CornerSlantSSecondBoard,
             };
 
             foreach (var textblock in resultTextBlocks)
@@ -331,30 +331,26 @@ namespace Schifterschnitt
 
             corner.Calculation();
 
-            textBlockEckeWinkelQueranschlagEins.Text = Math.Round(corner.AngleCrossCutFirstBoard, 2) + "°";
-            textBlockEckeWinkelQueranschlagZwei.Text = Math.Round(corner.AngleCrossCutSecondBoard, 2) + "°";
-            textBlockEckeWinkelSaegeblattEins.Text = Math.Round(corner.AngleSawBladeTiltFirstBoard, 2) + "°";
-            textBlockEckeWinkelSaegeblattZwei.Text = Math.Round(corner.AngleSawBladeTiltSecondBoard, 2) + "°";
-            textBlockEckeBreiteEins.Text = corner.AngleAlphaFirstBoard == 90 || corner.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(corner.WidthFirstBoard, 2).ToString() + " mm";
-            textBlockEckeBreiteZwei.Text = corner.AngleAlphaSecondBoard == 90 || corner.AngleAlphaSecondBoard == -90 ? "Error" : Math.Round(corner.WidthSecondBoard, 2).ToString() + " mm";
-            textBlockEckeBreiteMitSchraegeEins.Text = corner.AngleAlphaFirstBoard == 90 || corner.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(corner.WidthWithSlantFirstBoard, 2) + " mm";
-            textBlockEckeBreiteMitSchraegeZwei.Text = corner.AngleAlphaSecondBoard == 90 || corner.AngleAlphaSecondBoard == -90 ? "Error" : Math.Round(corner.WidhtWithSlantSecondBoard, 2) + " mm";
-            textBlockEckeFlächenwinkel.Text = Math.Round(corner.AngleDihedral, 2) + "°";
+            CornerAngleCrossCutFirstBoard.Text = Math.Round(corner.AngleCrossCutFirstBoard, 2) + "°";
+            CornerAngleCrossCutSecondBoard.Text = Math.Round(corner.AngleCrossCutSecondBoard, 2) + "°";
+            CornerAngleSawBladeTiltFirstBoard.Text = Math.Round(corner.AngleSawBladeTiltFirstBoard, 2) + "°";
+            CornerAngleSawBladeTiltSecondBoard.Text = Math.Round(corner.AngleSawBladeTiltSecondBoard, 2) + "°";
+            CornerWidthFirstBoard.Text = ErrorIfTooLarge(corner.WidthFirstBoard);
+            CornerWidthSecondBoard.Text = ErrorIfTooLarge(corner.WidthSecondBoard);
+            CornerWidthWithSlantFirstBoard.Text = ErrorIfTooLarge(corner.WidthWithSlantFirstBoard);
+            CornerWidthWithSlantSecondBoard.Text = ErrorIfTooLarge(corner.WidhtWithSlantSecondBoard);
 
-            if (corner.AngleAlphaFirstBoard == 90 || corner.AngleAlphaSecondBoard == 90 || corner.AngleAlphaFirstBoard == -90 || corner.AngleAlphaSecondBoard == -90)
-            {
-                textBlockEckeBreitenversatzEinsErgebnis.Text = "Error";
-                textBlockEckeBreitenversatzZweiErgebnis.Text = "Error";
-                textBlockEckeSchraegeSEins.Text = "Error";
-                textBlockEckeSchraegeSZwei.Text = "Error";
-            }
-            else
-            {
-                textBlockEckeBreitenversatzEinsErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(corner.AngleAlphaFirstBoard) * corner.WidthFirstBoard, 2)) + " mm";
-                textBlockEckeBreitenversatzZweiErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(corner.AngleAlphaSecondBoard) * corner.WidthSecondBoard, 2)) + " mm";
-                textBlockEckeSchraegeSEins.Text = Convert.ToString(Math.Round(corner.ThicknessFirstBoard / Calc.Cos(corner.AngleAlphaFirstBoard), 2)) + " mm";
-                textBlockEckeSchraegeSZwei.Text = Convert.ToString(Math.Round(corner.ThicknessSecondBoard / Calc.Cos(corner.AngleAlphaSecondBoard), 2)) + " mm";
-            }
+            CornerAngleDihedral.Text = Math.Round(corner.AngleDihedral, 2) + "°";
+
+            double offsetFirst = Calc.Sin(corner.AngleAlphaFirstBoard) * corner.WidthFirstBoard;
+            double offsetSecond = Calc.Sin(corner.AngleAlphaSecondBoard) * corner.WidthSecondBoard;
+            double slantSFirst = corner.ThicknessFirstBoard / Calc.Cos(corner.AngleAlphaFirstBoard);
+            double slantSSecond = corner.ThicknessSecondBoard / Calc.Cos(corner.AngleAlphaSecondBoard);
+
+            CornerOffsetFirstBoardResult.Text = ErrorIfTooLarge(offsetFirst);
+            CornerOffsetSecondBoardResult.Text = ErrorIfTooLarge(offsetSecond);
+            CornerSlantSFirstBoard.Text = ErrorIfTooLarge(slantSFirst);
+            CornerSlantSSecondBoard.Text = ErrorIfTooLarge(slantSSecond);
 
             corner.CreateModel(modelVisual3dEcke);
 
@@ -822,27 +818,41 @@ namespace Schifterschnitt
 
             pyramidLine.Calculation();
 
-            double schrägeS = pyramidLine.ThicknessFirstBoard / Calc.Cos(pyramidLine.AngleAlphaFirstBoard);
-
             textBlockPyramideLinieWinkelQueranschlag.Text = Math.Round(pyramidLine.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideLinieWinkelSaegeblatt.Text = Math.Round(pyramidLine.AngleSawBladeTiltFirstBoard, 2) + "°";
-            textBlockPyramideLinieBreite.Text = pyramidLine.AngleAlphaFirstBoard == 90 || pyramidLine.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidLine.WidthFirstBoard, 2).ToString() + " mm";
-            textBlockPyramideLinieBreiteMitSchraege.Text = pyramidLine.AngleAlphaFirstBoard == 90 || pyramidLine.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidLine.WidthWithSlantFirstBoard, 2) + " mm";
+            textBlockPyramideLinieBreite.Text = ErrorIfTooLarge(pyramidLine.WidthFirstBoard);
+            textBlockPyramideLinieBreiteMitSchraege.Text = ErrorIfTooLarge(pyramidLine.WidthWithSlantFirstBoard);
 
             textBlockPyramideLinieFlächenwinkel.Text = Math.Round(pyramidLine.AngleDihedral, 2) + "°";
-            textBlockPyramideLinieBreitenversatz.Text = Convert.ToString(Math.Round(Calc.Sin(pyramidLine.AngleAlphaFirstBoard) * pyramidLine.WidthFirstBoard, 2)) + " mm";
-            textBlockPyramideLinieSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
-            textBlockPyramideLinieNeigungswinkel.Text = Convert.ToString(Math.Round(pyramidLine.AngleAlphaFirstBoard, 2)) + " °";
-            textBlockPyramideLinieInkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieInkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS, 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - schrägeS /
-                Calc.Sin(pyramidLine.AngleBeta / 2.0), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides), 2)) + " mm";
-            textBlockPyramideLinieUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - schrägeS /
-                Calc.Sin(pyramidLine.AngleBeta / 2.0), 2)) + " mm";
+
+            double offset = Calc.Sin(pyramidLine.AngleAlphaFirstBoard) * pyramidLine.WidthFirstBoard;
+            double slantS = pyramidLine.ThicknessFirstBoard / Calc.Cos(pyramidLine.AngleAlphaFirstBoard);
+
+            textBlockPyramideLinieBreitenversatz.Text = ErrorIfTooLarge(offset);
+            textBlockPyramideLinieSchraegeS.Text = ErrorIfTooLarge(slantS);
+
+            textBlockPyramideLinieNeigungswinkel.Text = Math.Round(pyramidLine.AngleAlphaFirstBoard, 2) + " °";
+
+            double inscribedTopOuter = Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides);
+            double circumscribedTopOuter = Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides);
+            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides);
+            double circumscribedBottomOuter = Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides);
+
+            double inscribedTopInner = Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - slantS;
+            double circumscribedTopInner = Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - slantS / Calc.Sin(pyramidLine.AngleBeta / 2.0);
+            double inscribedBottomInner = Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - slantS;
+            double circumscribedBottomInner = Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - slantS / Calc.Sin(pyramidLine.AngleBeta / 2.0);
+
+
+            textBlockPyramideLinieInkreisradiusOA.Text = ErrorIfTooLarge(inscribedTopOuter);
+            textBlockPyramideLinieUmkreisradiusOA.Text = ErrorIfTooLarge(circumscribedTopOuter);
+            textBlockPyramideLinieInkreisradiusUA.Text = ErrorIfTooLarge(inscribedBottomOuter);
+            textBlockPyramideLinieUmkreisradiusUA.Text = ErrorIfTooLarge(circumscribedBottomOuter);
+
+            textBlockPyramideLinieInkreisradiusOI.Text = ErrorIfTooLarge(inscribedTopInner);
+            textBlockPyramideLinieUmkreisradiusOI.Text = ErrorIfTooLarge(circumscribedTopInner);
+            textBlockPyramideLinieInkreisradiusUI.Text = ErrorIfTooLarge(inscribedBottomInner);
+            textBlockPyramideLinieUmkreisradiusUI.Text = ErrorIfTooLarge(circumscribedBottomInner);
 
             pyramidLine.CreateModel(modelVisual3dPyramideLinie);
 
@@ -1115,44 +1125,43 @@ namespace Schifterschnitt
 
             pyramidAngle.Calculation();
 
-            double schrägeS = pyramidAngle.ThicknessFirstBoard / Calc.Cos(pyramidAngle.AngleAlphaFirstBoard);
-
             textBlockPyramideWinkelWinkelQueranschlag.Text = Math.Round(pyramidAngle.AngleCrossCutFirstBoard, 2) + "°";
             textBlockPyramideWinkelWinkelSaegeblatt.Text = Math.Round(pyramidAngle.AngleSawBladeTiltFirstBoard, 2) + "°";
-            textBlockPyramideWinkelBreite.Text = pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidAngle.WidthFirstBoard, 2).ToString() + " mm";
-            textBlockPyramideWinkelBreiteMitSchraege.Text = pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90 ? "Error" : Math.Round(pyramidAngle.WidthWithSlantFirstBoard, 2) + " mm";
+            textBlockPyramideWinkelBreite.Text = ErrorIfTooLarge(pyramidAngle.WidthFirstBoard);
+            textBlockPyramideWinkelBreiteMitSchraege.Text = ErrorIfTooLarge(pyramidAngle.WidthWithSlantFirstBoard);
 
             pyramidAngle.TopSideLength = ((pyramidAngle.BottomSideLength / (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides))) -
                 Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard) * (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides));
 
             textBlockPyramideWinkelFlächenwinkel.Text = Math.Round(pyramidAngle.AngleDihedral, 2) + "°";
-            textBlockPyramideWinkelInkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-            textBlockPyramideWinkelUmkreisradiusUA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
 
-            if (pyramidAngle.AngleAlphaFirstBoard == 90 || pyramidAngle.AngleAlphaFirstBoard == -90)
-            {
-                textBlockPyramideWinkelBreitenversatzErgebnis.Text = "Error";
-                textBlockPyramideWinkelSchraegeS.Text = "Error";
-                textBlockPyramideWinkelOberlinie.Text = "Error";
-                textBlockPyramideWinkelUmkreisradiusOA.Text = "Error";
-                textBlockPyramideWinkelInkreisradiusOA.Text = "Error";
-                textBlockPyramideWinkelInkreisradiusOI.Text = "Error";
-                textBlockPyramideWinkelInkreisradiusUI.Text = "Error";
-                textBlockPyramideWinkelUmkreisradiusOI.Text = "Error";
-                textBlockPyramideWinkelUmkreisradiusUI.Text = "Error";
-            }
-            else
-            {
-                textBlockPyramideWinkelSchraegeS.Text = Convert.ToString(Math.Round(schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelBreitenversatzErgebnis.Text = Convert.ToString(Math.Round(Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard, 2)) + " mm";
-                textBlockPyramideWinkelOberlinie.Text = Convert.ToString(Math.Round(pyramidAngle.TopSideLength, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOA.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides), 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelInkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS, 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusOI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - schrägeS / Calc.Sin(pyramidAngle.AngleBeta / 2.0), 2)) + " mm";
-                textBlockPyramideWinkelUmkreisradiusUI.Text = Convert.ToString(Math.Round(Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - schrägeS / Calc.Sin(pyramidAngle.AngleBeta / 2.0), 2)) + " mm";
-            }
+            double slantS = pyramidAngle.ThicknessFirstBoard / Calc.Cos(pyramidAngle.AngleAlphaFirstBoard);
+            double offset = Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard;
+
+            textBlockPyramideWinkelSchraegeS.Text = ErrorIfTooLarge(slantS);
+            textBlockPyramideWinkelBreitenversatzErgebnis.Text = ErrorIfTooLarge(offset);
+            textBlockPyramideWinkelOberlinie.Text = ErrorIfTooLarge(pyramidAngle.TopSideLength);
+
+            double inscribedTopOuter = Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides);
+            double circumscribedTopOuter = Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides);
+            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
+            double circumscribedBottomOuter = Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
+            
+            double inscribedTopInner = Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - slantS;
+            double circumscribedTopInner = Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - slantS / Calc.Sin(pyramidAngle.AngleBeta / 2.0);
+            double inscribedBottomInner = Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - slantS;
+            double circumscribedBottomInner = Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - slantS / Calc.Sin(pyramidAngle.AngleBeta / 2.0);
+
+            textBlockPyramideWinkelInkreisradiusOA.Text = ErrorIfTooLarge(inscribedTopOuter);
+            textBlockPyramideWinkelUmkreisradiusOA.Text = ErrorIfTooLarge(circumscribedTopOuter);
+            textBlockPyramideWinkelInkreisradiusUA.Text = ErrorIfTooLarge(inscribedBottomOuter);
+            textBlockPyramideWinkelUmkreisradiusUA.Text = ErrorIfTooLarge(circumscribedBottomOuter);
+
+            textBlockPyramideWinkelInkreisradiusOI.Text = ErrorIfTooLarge(inscribedTopInner);
+            textBlockPyramideWinkelUmkreisradiusOI.Text = ErrorIfTooLarge(circumscribedTopInner);
+            textBlockPyramideWinkelInkreisradiusUI.Text = ErrorIfTooLarge(inscribedBottomInner);
+            textBlockPyramideWinkelUmkreisradiusUI.Text = ErrorIfTooLarge(circumscribedBottomInner);
+
 
             pyramidAngle.CreateModel(modelVisual3dPyramideWinkel);
 
@@ -1438,6 +1447,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if a result is too large to display and replaces it with an error message if so.
+        /// </summary>
+        /// <param name="number">The value to check.</param>
+        /// <returns>The value rounded to 2 decimals if the value is small enough.</returns>
+        /// <returns>A string saying "Error" if the value is too large to display.</returns>
+        public static string ErrorIfTooLarge(double number)
+        {
+            if (number < 10000 && number > -10000)
+                return Math.Round(number, 2) + " mm";
+            else
+                return "Error";
         }
 
         #region Graphic

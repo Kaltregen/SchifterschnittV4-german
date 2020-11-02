@@ -129,28 +129,6 @@ namespace Schifterschnitt
             return lengthOfSide / (2 * Tan(180.0 / numberOfSides));
         }
 
-        /// <summary>
-        /// Calculates the length of the slant s.
-        /// </summary>
-        /// <param name="thickness">The thickness of the board.</param>
-        /// <param name="angleAlpha">The tilt angle of the board.</param>
-        /// <returns>The length of the slant s.</returns>
-        public static double LengthSlantS(double thickness, double angleAlpha)
-        {
-            return thickness / Math.Cos(angleAlpha);
-        }
-
-        /// <summary>
-        /// Calculates the horizontal offset caused by the tilt angle of the board.
-        /// </summary>
-        /// <param name="width">The width of the board.</param>
-        /// <param name="angleAlpha">The tilt angle of the board.</param>
-        /// <returns>The horizontal offset of the board.</returns>
-        public static double Offset(double width, double angleAlpha)
-        {
-            return Math.Sin(angleAlpha) * width;
-        }
-
         #endregion
     }
 }
