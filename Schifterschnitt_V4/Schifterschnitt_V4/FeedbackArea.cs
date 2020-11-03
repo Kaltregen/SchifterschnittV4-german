@@ -27,7 +27,7 @@ namespace Schifterschnitt
     /// </summary>
     public class FeedbackArea
     {
-        #region Reports
+        #region Properties
 
         /// <summary>
         /// Shows that the user needs to enter values.
@@ -85,9 +85,9 @@ namespace Schifterschnitt
         public Report LineXYInvalidValues { get; set; } = new Report();
 
         /// <summary>
-        /// Shows that there are to many values in function line xy.
+        /// Shows that there are too many values in function line xy.
         /// </summary>
-        public Report LineXYToManyValues { get; set; } = new Report();
+        public Report LineXYTooManyValues { get; set; } = new Report();
 
         /// <summary>
         /// Shows that in tab pyramid with tilt angle there is a negative tilt angle but no height.
@@ -101,7 +101,7 @@ namespace Schifterschnitt
 
         #endregion
 
-        #region Feedback area
+        #region Fields
 
         /// <summary>
         /// The Feedback area.
@@ -152,8 +152,8 @@ namespace Schifterschnitt
             LineXYInvalidValues.Text = "Linie X / Y \n Ungültige Werte";
             LineXYInvalidValues.BackgroundColor = Brushes.Red;
 
-            LineXYToManyValues.Text = "Linie X / Y \n Zu viele Eingaben";
-            LineXYToManyValues.BackgroundColor = Brushes.Red;
+            LineXYTooManyValues.Text = "Linie X / Y \n Zu viele Eingaben";
+            LineXYTooManyValues.BackgroundColor = Brushes.Red;
 
             HeightNeeded.Text = "Negativer Neigungswinkel \n Höhe erforderlich";
             HeightNeeded.BackgroundColor = Brushes.Red;
@@ -187,7 +187,7 @@ namespace Schifterschnitt
                 BetaChanged, 
                 InvalidValues, 
                 LineXYInvalidValues, 
-                LineXYToManyValues, 
+                LineXYTooManyValues, 
                 HeightNeeded, 
                 HeightLargerThanResulting 
             };

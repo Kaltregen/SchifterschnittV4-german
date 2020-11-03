@@ -55,13 +55,13 @@ namespace Schifterschnitt
         /// <param name="model">The model in which the pyramid will be build.</param>
         public override void CreateModel(ModelVisual3D model)
         {
-            double schrägeS = ThicknessFirstBoard / Calc.Cos(AngleAlphaFirstBoard);
+            double slantS = ThicknessFirstBoard / Calc.Cos(AngleAlphaFirstBoard);
 
             // Berechnet die Radien der Umkreise und fügt sie einem Array hinzu.
             double umkreisradiusUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
             double umkreisradiusOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
-            double umkreisradiusInnenUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (schrägeS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
-            double umkreisradiusInnenOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (schrägeS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
+            double umkreisradiusInnenUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
+            double umkreisradiusInnenOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
             double[] umkreise = { umkreisradiusUnten, umkreisradiusOben, umkreisradiusInnenUnten, umkreisradiusInnenOben };
 
             // We need a reference length to make all pyramids the same size.
@@ -148,19 +148,19 @@ namespace Schifterschnitt
             // Füllt die inneren Flächen wenn nur oben ein Loch entsteht.
             if (umkreisradiusInnenOben > 0 && umkreisradiusInnenUnten <= 0)
             {
-                group.Children.Add(Dreieck(punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1], innenMitteUnten));
+                group.Children.Add(Triangle(punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1], innenMitteUnten));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Dreieck(punkteInnenOben[i + 1], punkteInnenOben[i], innenMitteUnten));
+                    group.Children.Add(Triangle(punkteInnenOben[i + 1], punkteInnenOben[i], innenMitteUnten));
             }
 
             // Füllt die inneren Flächen wenn nur unten ein Loch entsteht.
             if (umkreisradiusInnenUnten > 0 && umkreisradiusInnenOben <= 0)
             {
-                group.Children.Add(Dreieck(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], innenMitteOben));
+                group.Children.Add(Triangle(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], innenMitteOben));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Dreieck(punkteInnenUnten[i], punkteInnenUnten[i + 1], innenMitteOben));
+                    group.Children.Add(Triangle(punkteInnenUnten[i], punkteInnenUnten[i + 1], innenMitteOben));
             }
 
             // Wenn oben kein Loch entsteht.
@@ -169,10 +169,10 @@ namespace Schifterschnitt
                 // Füllt die obere Fläche mit Dreiecken.
                 Point3D middle = new Point3D(0, 0, Height / referenz);
 
-                group.Children.Add(Dreieck(punkteOben[0], punkteOben[NumberOfSides - 1], middle));
+                group.Children.Add(Triangle(punkteOben[0], punkteOben[NumberOfSides - 1], middle));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Dreieck(punkteOben[i + 1], punkteOben[i], middle));
+                    group.Children.Add(Triangle(punkteOben[i + 1], punkteOben[i], middle));
             }
             else
             {
@@ -189,10 +189,10 @@ namespace Schifterschnitt
                 // Füllt die untere Fläche mit Dreiecken.
                 Point3D middle = new Point3D(0, 0, Height / referenz * -1);
 
-                group.Children.Add(Dreieck(punkteUnten[NumberOfSides - 1], punkteUnten[0], middle));
+                group.Children.Add(Triangle(punkteUnten[NumberOfSides - 1], punkteUnten[0], middle));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Dreieck(punkteUnten[i], punkteUnten[i + 1], middle));
+                    group.Children.Add(Triangle(punkteUnten[i], punkteUnten[i + 1], middle));
             }
             else
             {

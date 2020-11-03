@@ -113,7 +113,7 @@ namespace Schifterschnitt
 
         #endregion
 
-        #region Variables
+        #region Fields
 
         /// <summary>
         /// The material shown in the graphic.
@@ -212,7 +212,8 @@ namespace Schifterschnitt
             if (double.IsNaN(AngleCrossCutSecondBoard))
                 AngleCrossCutSecondBoard = 0;
 
-            double angleGroundLine = Calc.Atan(Calc.Sin(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard) / Calc.Cos(AngleCrossCutFirstBoard));
+            double smallLine = Calc.Sin(AngleAlphaFirstBoard) * Calc.Sin(AngleCrossCutFirstBoard);
+            double angleGroundLine = Calc.Atan(smallLine / Calc.Cos(AngleCrossCutFirstBoard));
             double groundLine = Calc.Cos(AngleCrossCutFirstBoard) / Calc.Cos(angleGroundLine);
 
             var vectorFour = new Vector3D()
@@ -287,7 +288,7 @@ namespace Schifterschnitt
         /// <summary>
         /// Creates a 3D model of the object.
         /// </summary>
-        public abstract void CreateModel(ModelVisual3D modell);
+        public abstract void CreateModel(ModelVisual3D model);
 
         /// <summary>
         /// Creates a square with wood material.
@@ -332,7 +333,7 @@ namespace Schifterschnitt
         /// <param name="pointTwo">The second point of the triangle.</param>
         /// <param name="pointThree">The third point of the triangle.</param>
         /// <returns>A triangle.</returns>
-        public GeometryModel3D Dreieck(Point3D pointOne, Point3D pointTwo, Point3D pointThree)
+        public GeometryModel3D Triangle(Point3D pointOne, Point3D pointTwo, Point3D pointThree)
         {
             var geometry = new MeshGeometry3D();
 

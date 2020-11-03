@@ -40,7 +40,7 @@ namespace Schifterschnitt
         /// <summary>
         /// Sets a report as active or inactive.
         /// </summary>
-        public bool Active { get; set; } = false;
+        public bool Active { get; set; }
 
         #endregion
 

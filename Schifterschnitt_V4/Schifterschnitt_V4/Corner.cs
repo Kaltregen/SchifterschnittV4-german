@@ -37,17 +37,17 @@ namespace Schifterschnitt
         {
             // We need a reference length to make all models equal size.
             // This makes sure a model of any size fits in the view area.
-            double referenz = WidthFirstBoard < WidthSecondBoard ? WidthSecondBoard : WidthFirstBoard;
+            double reference = WidthFirstBoard < WidthSecondBoard ? WidthSecondBoard : WidthFirstBoard;
 
-            double movx = Calc.Tan(AngleAlphaSecondBoard) * (Height / referenz);
-            double movy = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / referenz) -
-                (Calc.Tan(AngleBeta - 90) * (Calc.Tan(AngleAlphaSecondBoard) * (Height / referenz) -
-                Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / referenz)));
-            double mohxAdd = (ThicknessSecondBoard / referenz) / Calc.Cos(AngleAlphaSecondBoard);
+            double movx = Calc.Tan(AngleAlphaSecondBoard) * (Height / reference);
+            double movy = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference) -
+                (Calc.Tan(AngleBeta - 90) * (Calc.Tan(AngleAlphaSecondBoard) * (Height / reference) -
+                Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference)));
+            double mohxAdd = (ThicknessSecondBoard / reference) / Calc.Cos(AngleAlphaSecondBoard);
 
             // Berechnung des Y-Versatzes von Mitte-Oben-Hinten zu Mitte-Oben-Vorne.
-            double schraegeEins = (ThicknessFirstBoard / referenz) / Calc.Cos(AngleAlphaFirstBoard);
-            double schraegeZwei = (ThicknessSecondBoard / referenz) / Calc.Cos(AngleAlphaSecondBoard);
+            double schraegeEins = (ThicknessFirstBoard / reference) / Calc.Cos(AngleAlphaFirstBoard);
+            double schraegeZwei = (ThicknessSecondBoard / reference) / Calc.Cos(AngleAlphaSecondBoard);
 
             double linie = Math.Sqrt(Math.Pow(schraegeEins, 2) + Math.Pow(schraegeZwei, 2) - 2 * schraegeEins * schraegeZwei * Calc.Cos(360 - AngleBeta - 180));
 
@@ -72,37 +72,34 @@ namespace Schifterschnitt
 
             double yVersatz = linie / Calc.Sin(180 - winkelgelbEins - winkelgelbZwei) * Calc.Sin(winkelgelbEins);
 
-            // Setzt den Y-Versatz negativ wenn nötig.
             if (winkelgruenEins > 90)
                 yVersatz *= -1;
 
-            // Sorgt für eine Größenanpassung bei sehr stark negativen Queranschlagswinkeln.
             double laenge = 2.5;
             double zusatzEins = Calc.Tan(AngleCrossCutFirstBoard) * WidthFirstBoard;
             double zusatzZwei = Calc.Tan(AngleCrossCutSecondBoard) * WidthSecondBoard;
 
-            if (2.5 * referenz < zusatzZwei)
-                laenge = zusatzZwei / referenz;
-            if (2.5 * referenz < zusatzEins)
-                laenge = zusatzEins / referenz;
+            if (2.5 * reference < zusatzZwei)
+                laenge = zusatzZwei / reference;
+            if (2.5 * reference < zusatzEins)
+                laenge = zusatzEins / reference;
 
             double mohyAdd = yVersatz;
 
             if (System.Double.IsNaN(mohyAdd))
                 mohyAdd = 0;
 
-            // Berechnet und erstellt die Punkte im Raum.
             double luvx = -1 * Calc.Cos(Math.Abs(AngleBeta - 90)) * laenge;
             double luvy = Calc.Sin(AngleBeta - 90) * laenge;
-            double lovx = luvx + Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / referenz);
-            double lovy = luvy + Calc.Cos(Math.Abs(AngleBeta - 90)) * Calc.Tan(AngleAlphaFirstBoard) * (Height / referenz);
+            double lovx = luvx + Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference);
+            double lovy = luvy + Calc.Cos(Math.Abs(AngleBeta - 90)) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference);
 
-            double halbeHöheModell = Height / referenz / 2;
+            double halbeHöheModell = Height / reference / 2;
 
             Point3D ruv = new Point3D(0, -laenge, halbeHöheModell * -1);
             Point3D ruh = new Point3D(schraegeZwei, -laenge, halbeHöheModell * -1);
-            Point3D rov = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / referenz), -laenge, halbeHöheModell);
-            Point3D roh = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / referenz) + schraegeZwei, -laenge, halbeHöheModell);
+            Point3D rov = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / reference), -laenge, halbeHöheModell);
+            Point3D roh = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / reference) + schraegeZwei, -laenge, halbeHöheModell);
             Point3D muv = new Point3D(0, 0, halbeHöheModell * -1);
             Point3D muh = new Point3D(mohxAdd, mohyAdd, halbeHöheModell * -1);
             Point3D mov = new Point3D(movx, movy, halbeHöheModell);

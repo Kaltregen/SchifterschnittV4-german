@@ -64,7 +64,7 @@ namespace Schifterschnitt
         /// For use with a GridSizeChanged event.
         /// </summary>
         /// <param name="sender">The grid that contains the columns to change.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The SizeChangedEventArgs.</param>
         public void ExpandMostRightIfBigger(object sender, SizeChangedEventArgs e)
         {
             var senderGrid = (Grid)sender;
@@ -101,7 +101,7 @@ namespace Schifterschnitt
         /// For use with a MouseMove event.
         /// </summary>
         /// <param name="sender">The grid that contains the columns to change.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The MouseEventArgs.</param>
         public void ShowFullyIfSmaller(object sender, MouseEventArgs e)
         {
             var senderGrid = (Grid)sender;

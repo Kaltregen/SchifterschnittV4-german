@@ -75,7 +75,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     <Setter Property="BorderThickness" Value="1"/>
                 </Style>
             </TabControl.Resources>
-            <!-- Tab Ecke -->
             <TabItem Header="Ecke" Height="22" Width="{Binding ElementName=c1, Path=ActualWidth}" IsSelected="True">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -94,46 +93,42 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="1"/>
                         </Grid.RowDefinitions>
-                        <!--Spalte 1-->
                         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Background="LightSkyBlue">
                             <StackPanel>
-                                <!--Eingaben-->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Eingabewerte" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Höhe h"/>
-                                            <TextBox Width="100" x:Name="CornerHeight" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerHeight" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke Teil 1"/>
-                                            <TextBox Width="100" x:Name="CornerThicknessFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerThicknessFirst" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke Teil 2"/>
-                                            <TextBox Width="100" x:Name="CornerThicknessSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerThicknessSecond" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel α Teil 1 (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="CornerAngleAlphaFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleAlphaFirst" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel α Teil 2 (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="CornerAngleAlphaSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleAlphaSecond" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel β (zwischen 0 und 180)"/>
-                                            <TextBox Width="100" x:Name="CornerAngleBeta" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleBeta" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
-                                            <CheckBox x:Name="checkBoxEcke" Click="CornerCheckbox_Click" VerticalAlignment="Center"/>
+                                            <CheckBox x:Name="CornerCheckBox" Click="CornerCheckbox_Click" VerticalAlignment="Center"/>
                                             <TextBlock Text="Gehrung" Margin="6 0"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Trennlinie-->
                                 <Grid Height="1" Background="Black"/>
-                                <!--Ergebnis Teil 1-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -172,9 +167,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Trennlinie-->
                                 <Grid Height="1" Background="Gray"/>
-                                <!--Ergebnis Teil 2-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -213,17 +206,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Trennlinie-->
                                 <Grid Height="1" Background="Black"/>
-                                <!--Gegenwinkel-->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Winkelumrechnung - Die Eingabe wird sofort umgerechnet" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Margin="0 3 0 0" Orientation="Horizontal">
                                             <TextBlock Text="90°  -" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBox Width="100" x:Name="textBoxEckeWinkelumrechnung" TextChanged="TextBoxEckeWinkelumrechnung_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerAngleConversion" TextChanged="CornerAngleConversion_TextChanged" Padding="2"/>
                                             <TextBlock Text="=" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockEckeWinkelumrechnung" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="CornerAngleConversionResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionColorKey}}"/>
                                                 </TextBlock.Background>
@@ -233,15 +224,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!--Trennlinie-->
                         <Grid Grid.Column="1" Background="Black"/>
-                        <!--Spalte 2-->
                         <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.Background>
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
                             </ScrollViewer.Background>
                             <StackPanel>
-                                <!--Winkel alpha Berechnung mit Breitenversatz-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}"/>
@@ -250,16 +238,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Winkel α Berechnung mit Breitenversatz b und Höhe h" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 1"/>
-                                            <TextBox Width="100" x:Name="CornerOffsetFirst" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerOffsetFirst" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b Teil 2"/>
-                                            <TextBox Width="100" x:Name="CornerOffsetSecond" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerOffsetSecond" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Berechnung Button-->
-                                <Button x:Name="EBtnBerechnungB" Click="ButtonEckeWinkelAlpha_Click" Height="24">
+                                <Button x:Name="EBtnBerechnungB" Click="CornerAngleAlpha_Click" Height="24">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="DarkGray" Offset="0"/>
@@ -268,7 +255,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                     </Button.Background>
                                     <TextBlock Text="Winkel α Berechnen"/>
                                 </Button>
-                                <!--Berechnung Winkel Beta-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}"/>
@@ -277,12 +263,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Winkel β Berechnung bei einer Pyramide" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Anzahl Seiten (3 - 100)"/>
-                                            <TextBox Width="100" x:Name="CornerNumberOfSides" TextChanged="EckeInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerNumberOfSides" TextChanged="CornerInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Berechnung Button-->
-                                <Button x:Name="EBtnBerechnungBeta" Click="ButtonEckeWinkelBeta_Click" Height="24">
+                                <Button x:Name="EBtnBerechnungBeta" Click="CornerAngleBeta_Click" Height="24">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="DarkGray" Offset="0"/>
@@ -291,7 +276,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                     </Button.Background>
                                     <TextBlock Text="Winkel β Berechnen"/>
                                 </Button>
-                                <!--Berechnung Grund- und Oberlinie-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}"/>
@@ -301,24 +285,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="bei beidseitig gleichem Anschnitt" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie Y Teil 1"/>
-                                            <TextBox Width="100" x:Name="CornerLineYFirst" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineYFirst" TextChanged="CornerInputLineXY_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie X Teil 1"/>
-                                            <TextBox Width="100" x:Name="CornerLineXFirst" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineXFirst" TextChanged="CornerInputLineXY_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie Y Teil 2"/>
-                                            <TextBox Width="100" x:Name="CornerLineYSecond" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineYSecond" TextChanged="CornerInputLineXY_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Linie X Teil 2"/>
-                                            <TextBox Width="100" x:Name="CornerLineXSecond" TextChanged="CornerInputLinexy_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="CornerLineXSecond" TextChanged="CornerInputLineXY_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!--Berechnung Button-->
-                                <Button x:Name="EBtnBerechnungGOL" Click="ButtonEckeLiniexy_Click" Height="24">
+                                <Button x:Name="EBtnBerechnungGOL" Click="CornerLineXY_Click" Height="24">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="DarkGray" Offset="0"/>
@@ -327,7 +310,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                     </Button.Background>
                                     <TextBlock Text="Linie X / Y Berechnen"/>
                                 </Button>
-                                <!--Ergebnis Breitenversatz-->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -378,9 +360,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!--Trennlinie-->
                         <Grid Grid.Column="3" Background="Black"/>
-                        <!--Spalte 3-->
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -388,19 +368,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
-                            <!--Image-->
                             <Grid Grid.Row="0" Background="White">
                                 <Image Source="Images/Ecke.png"/>
                             </Grid>
-                            <!--Trennlinie-->
                             <Grid Grid.Row="1" Background="Black"/>
-                            <!--3D - Model-->
-                            <Grid Name="gridEckeGrafik" MouseWheel="GridEckeGrafik_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridEckeGrafik_MouseMove" Grid.Row="2" Background="White">
+                            <Grid Name="gridEckeGrafik" MouseWheel="CornerGraphic_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="CornerGraphic_MouseMove" Grid.Row="2" Background="White">
                                 <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
-                                        <PerspectiveCamera x:Name="perspectiveCameraEcke" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
+                                        <PerspectiveCamera x:Name="cornerPerspectiveCamera" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>
-                                    <ModelVisual3D x:Name="modelVisual3dEcke"/>
+                                    <ModelVisual3D x:Name="cornerModelVisual3D"/>
                                 </Viewport3D>
                             </Grid>
                             <TextBlock Grid.Row="3" Text="Drehen und Zoomen mit der Maus" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 3 0 3"/>
@@ -409,8 +386,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     </Grid>
                     <StackPanel Grid.Row="1">
                         <Grid x:Name="gridEckeFeedback" Height="45" Background="White"/>
-                        <!--Berechnung Button-->
-                        <Button Click="ButtonEckeBerechnung_Click" Height="24">
+                        <Button Click="CornerCalculation_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -419,8 +395,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Berechnen"/>
                         </Button>
-                        <!--Reset Button-->
-                        <Button Click="ButtonEckeReset_Click" Height="24">
+                        <Button Click="CornerReset_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -429,7 +404,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Zurücksetzen"/>
                         </Button>
-                        <!--Beschreibung-->
                         <Border Background="LightSkyBlue" Padding="10">
                             <Grid>
                                 <StackPanel>
@@ -450,7 +424,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <!-- Tab Pyramide mit Grund- und Oberlinie -->
             <TabItem Header="Pyramide mit Grund- und Oberlinie" Height="22" Width="{Binding ElementName=c1, Path=ActualWidth}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -469,38 +442,34 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="1"/>
                         </Grid.RowDefinitions>
-                        <!-- Spalte 1 -->
                         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Background="LightSkyBlue">
                             <StackPanel>
-                                <!-- Eingaben -->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Eingabewerte" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Höhe h"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieHoehe" TextChanged="PyramideLinieInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineHeight" TextChanged="PyramidLineInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieStaerke" TextChanged="PyramideLinieInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineThickness" TextChanged="PyramidLineInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Anzahl Seiten (3 - 100)"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieAnzahlSeiten" TextChanged="PyramideLinieInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineNumberOfSides" TextChanged="PyramidLineInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Grundlinie g von jedem Teil"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieGrundlinie" TextChanged="PyramideLinieInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineBottomLineLength" TextChanged="PyramidLineInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Oberlinie o von jedem Teil"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieOberlinie" TextChanged="PyramideLinieInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineTopLineLength" TextChanged="PyramidLineInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!-- Trennlinie -->
                                 <Grid Height="1" Background="Black"/>
-                                <!-- Ergebnis -->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -509,7 +478,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Ergebnis" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Queranschlag"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieWinkelQueranschlag" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineAngleCrossCut" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -517,7 +486,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Sägeblatt"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieWinkelSaegeblatt" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineTiltAngleSawBlade" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -525,13 +494,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="50" VerticalAlignment="Center" Text="Breite"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieBreite" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineWidth" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
                                             </TextBlock>
                                             <TextBlock Margin="10 0 0 0" Width="90" VerticalAlignment="Center" Text="mit Schräge"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieBreiteMitSchraege" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineWidthWithSlant" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -539,17 +508,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!-- Trennlinie -->
                                 <Grid Height="1" Background="Black"/>
-                                <!-- Gegenwinkel -->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Winkelumrechnung - Die Eingabe wird sofort umgerechnet" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Margin="0 3 0 0" Orientation="Horizontal">
                                             <TextBlock Text="90°  -" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideLinieWinkelumrechnung" TextChanged="TextBoxPyramideLinieWinkelumrechnung_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidLineAngleConversion" TextChanged="PyramidLineAngleConversion_TextChanged" Padding="2"/>
                                             <TextBlock Text="=" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieWinkelumrechnung" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="pyramidLineAngleConversionResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionColorKey}}"/>
                                                 </TextBlock.Background>
@@ -559,15 +526,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!-- Trennlinie -->
                         <Grid Grid.Column="1" Background="Black"/>
-                        <!-- Spalte 2 -->
                         <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.Background>
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
                             </ScrollViewer.Background>
                             <StackPanel>
-                                <!-- Weitere Ergebnisse -->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -576,7 +540,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Weitere Ergebnisse" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Flächenwinkel"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieFlächenwinkel" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineAngleDihedral" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -584,7 +548,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieBreitenversatz" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineOffset" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -592,7 +556,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Länge Schräge s"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieSchraegeS" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineSlantS" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -600,7 +564,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Neigungswinkel α"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieNeigungswinkel" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineTiltAngle" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -609,7 +573,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Radien außen" Margin="0 3 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieInkreisradiusOA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineInscribedTopOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -617,7 +581,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieUmkreisradiusOA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineCircumscribedTopOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -625,7 +589,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieInkreisradiusUA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineInscribedBottomOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -633,7 +597,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieUmkreisradiusUA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineCircumscribedBottomOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -642,7 +606,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Radien innen" Margin="0 3 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieInkreisradiusOI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineInscribedTopInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -650,7 +614,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieUmkreisradiusOI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineCircumscribedTopInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -658,7 +622,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieInkreisradiusUI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineInscribedBottomInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -666,7 +630,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideLinieUmkreisradiusUI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidLineCircumscribedBottomInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -676,9 +640,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!-- Trennlinie -->
                         <Grid Grid.Column="3" Background="Black"/>
-                        <!-- Spalte 3 -->
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -686,19 +648,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
-                            <!-- Image -->
                             <Grid Grid.Row="0" Background="White">
                                 <Image Source="Images/PyramideGON.png"/>
                             </Grid>
-                            <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
-                            <!-- 3D - Model -->
-                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="GridPyramideLinieGrafik_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridPyramidLineGraphic_MouseMove" Grid.Row="2" Background="White">
+                            <Grid Name="gridPyramideLinieGrafik" MouseWheel="PyramidLineGraphic_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="PyramidLineGraphic_MouseMove" Grid.Row="2" Background="White">
                                 <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
-                                        <PerspectiveCamera x:Name="perspectiveCameraPyramideLinie" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
+                                        <PerspectiveCamera x:Name="pyramidLinePerspectiveCamera" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>
-                                    <ModelVisual3D x:Name="modelVisual3dPyramideLinie"/>
+                                    <ModelVisual3D x:Name="pyramidLineModelVisual3D"/>
                                 </Viewport3D>
                             </Grid>
                             <TextBlock Grid.Row="3" Text="Drehen und Zoomen mit der Maus" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 3 0 3"/>
@@ -707,8 +666,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     </Grid>
                     <StackPanel Grid.Row="1">
                         <Grid x:Name="gridPyramideLinieFeedback" Height="45" Background="White"/>
-                        <!-- Berechnung Button -->
-                        <Button x:Name="PGOBtnBerechnung" Click="ButtonPyramideLinieBerechnung_Click" Height="24">
+                        <Button x:Name="PGOBtnBerechnung" Click="PyramidLineCalculation_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -717,8 +675,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Berechnen"/>
                         </Button>
-                        <!-- Reset Button -->
-                        <Button x:Name="PGOBtnResetAll" Click="ButtonPyramideLinieReset_Click" Height="24">
+                        <Button x:Name="PGOBtnResetAll" Click="PyramidLineReset_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -727,7 +684,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Zurücksetzen"/>
                         </Button>
-                        <!--Beschreibung-->
                         <Border Background="LightSkyBlue" Padding="10">
                             <Grid>
                                 <StackPanel>
@@ -748,7 +704,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <!-- Tab Pyramide mit Neigungswinkel -->
             <TabItem Header="Pyramide mit Neigungswinkel" Height="22" Width="{Binding ElementName=c1, Path=ActualWidth}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -767,10 +722,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="1"/>
                         </Grid.RowDefinitions>
-                        <!-- Spalte 1 -->
                         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Background="LightSkyBlue">
                             <StackPanel>
-                                <!-- Eingaben -->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Eingabewerte" Margin="0 0 0 3" FontWeight="Bold"/>
@@ -778,29 +731,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="als die Pyramide ist oder der Neigungswinkel negativ ist" Margin="0 3 0 3"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Höhe h"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelHoehe" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleHeight" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Materialstärke"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelStaerke" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleThickness" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Anzahl Seiten (3 - 100)"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelAnzahlSeiten" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleNumberOfSides" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Grundlinie g von jedem Teil"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelGrundlinie" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleBottomLine" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Neigungswinkel α (-90 - 90)"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelNeigungswinkel" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleTiltAngle" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!-- Trennlinie -->
                                 <Grid Height="1" Background="Black"/>
-                                <!-- Ergebnis -->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -809,7 +760,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Ergebnis" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Queranschlag"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelWinkelQueranschlag" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleAngleCrossCut" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -817,7 +768,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="250" VerticalAlignment="Center" Text="Winkel Sägeblatt"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelWinkelSaegeblatt" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleTiltAngleSawBlade" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -825,13 +776,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="50" VerticalAlignment="Center" Text="Breite"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelBreite" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleWidth" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
                                             </TextBlock>
                                             <TextBlock Margin="10 0 0 0" Width="90" VerticalAlignment="Center" Text="mit Schräge"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelBreiteMitSchraege" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleWidthWithSlant" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -839,17 +790,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!-- Trennlinie -->
                                 <Grid Height="1" Background="Black"/>
-                                <!-- Gegenwinkel -->
                                 <Border Padding="6" Background="LightSkyBlue">
                                     <StackPanel>
                                         <TextBlock Text="Winkelumrechnung - Die Eingabe wird sofort umgerechnet" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Margin="0 3 0 0" Orientation="Horizontal">
                                             <TextBlock Text="90°  -" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelWinkelumrechnung" TextChanged="TextBoxPyramidAngleAngleConversion_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleAngleConversion" TextChanged="PyramidAngleAngleConversion_TextChanged" Padding="2"/>
                                             <TextBlock Text="=" VerticalAlignment="Center" Margin="20 0 20 0"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelWinkelumrechnung" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleAngleConversionResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionColorKey}}"/>
                                                 </TextBlock.Background>
@@ -859,15 +808,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!-- Trennlinie -->
                         <Grid Grid.Column="1" Background="Black"/>
-                        <!-- Spalte 2 -->
                         <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.Background>
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
                             </ScrollViewer.Background>
                             <StackPanel>
-                                <!-- Neigungswinkel Berechnung mit Breitenversatz -->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InactiveCaptionColorKey}}"/>
@@ -878,12 +824,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Für die Berechnung muss eine Höhe h eingegeben sein" Margin="0 3 0 3"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b"/>
-                                            <TextBox Width="100" x:Name="textBoxPyramideWinkelBreitenversatz" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
+                                            <TextBox Width="100" x:Name="PyramidAngleOffset" TextChanged="PyramidAngleInput_TextChanged" Padding="2"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <!-- Berechnung Button -->
-                                <Button x:Name="PNBtnBerechnungB" Click="ButtonPyramidAngleTiltAngle_Click" Height="24">
+                                <Button x:Name="PNBtnBerechnungB" Click="PyramidAngleTiltAngle_Click" Height="24">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="DarkGray" Offset="0"/>
@@ -892,7 +837,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                     </Button.Background>
                                     <TextBlock Text="Neigungswinkel Berechnen"/>
                                 </Button>
-                                <!-- Weitere Ergebnisse -->
                                 <Border Padding="6">
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -901,7 +845,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Weitere Ergebnisse" Margin="0 0 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Flächenwinkel"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelFlächenwinkel" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleAngleDihedral" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -909,7 +853,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Breitenversatz b"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelBreitenversatzErgebnis" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleOffsetResult" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -917,7 +861,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Länge Schräge s"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelSchraegeS" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleSlantS" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -925,7 +869,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Oberlinie o"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelOberlinie" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleTopLine" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -934,7 +878,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Radien außen" Margin="0 3 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelInkreisradiusOA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleInscribedTopOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -942,7 +886,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelUmkreisradiusOA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleCircumscribedTopOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -950,7 +894,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelInkreisradiusUA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleInscribedBottomOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -958,7 +902,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelUmkreisradiusUA" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleCircumscribedBottomOuter" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -967,7 +911,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         <TextBlock Text="Radien innen" Margin="0 3 0 3" FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelInkreisradiusOI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleInscribedTopInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -975,7 +919,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius oben"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelUmkreisradiusOI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleCircumscribedTopInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -983,7 +927,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Inkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelInkreisradiusUI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleInscribedBottomInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -991,7 +935,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
                                             <TextBlock Width="240" VerticalAlignment="Center" Text="Umkreisradius unten"/>
-                                            <TextBlock Width="100" TextAlignment="Center" x:Name="textBlockPyramideWinkelUmkreisradiusUI" Padding="2">
+                                            <TextBlock Width="100" TextAlignment="Center" x:Name="PyramidAngleCircumscribedBottomInner" Padding="2">
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                                                 </TextBlock.Background>
@@ -1001,9 +945,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
-                        <!-- Trennlinie -->
                         <Grid Grid.Column="3" Background="Black"/>
-                        <!-- Spalte 3 -->
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -1011,19 +953,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
-                            <!-- Image -->
                             <Grid Grid.Row="0" Background="White">
                                 <Image Source="Images/PyramideGON.png"/>
                             </Grid>
-                            <!-- Trennlinie -->
                             <Grid Grid.Row="1" Height="1" Background="Black"/>
-                            <!-- 3D - Model -->
-                            <Grid Name="gridPyramideWinkel" MouseWheel="GridPyramidAngle_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="GridPyramidAngle_MouseMove" Grid.Row="2" Background="White">
+                            <Grid Name="gridPyramideWinkel" MouseWheel="PyramidAngleGraphic_MouseWheel" MouseLeftButtonDown="SaveMousePosition" MouseMove="PyramidAngleGraphic_MouseMove" Grid.Row="2" Background="White">
                                 <Viewport3D SizeChanged="AdjustGraphicSize">
                                     <Viewport3D.Camera>
-                                        <PerspectiveCamera x:Name="perspectiveCameraPyramideWinkel" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
+                                        <PerspectiveCamera x:Name="pyramidAnglePerspectiveCamera" Position="-5,-5,5" LookDirection="5,5,-5" UpDirection="0,0,1" FieldOfView="45"/>
                                     </Viewport3D.Camera>
-                                    <ModelVisual3D x:Name="modelVisual3dPyramideWinkel"/>
+                                    <ModelVisual3D x:Name="pyramidAngleModelVisual3D"/>
                                 </Viewport3D>
                             </Grid>
                             <TextBlock Grid.Row="3" Text="Drehen und Zoomen mit der Maus" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 3 0 3"/>
@@ -1032,8 +971,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     </Grid>
                     <StackPanel Grid.Row="1">
                         <Grid x:Name="gridPyramideWinkelFeedback" Height="45" Background="White"/>
-                        <!-- Berechnung Button -->
-                        <Button x:Name="PNBtnBerechnung" Click="ButtonPyramideWinkelBerechnung_Click" Height="24">
+                        <Button x:Name="PNBtnBerechnung" Click="PyramidAngleCalculation_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -1042,8 +980,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Berechnen"/>
                         </Button>
-                        <!-- Reset Button -->
-                        <Button x:Name="PNBtnResetAll" Click="ButtonPyramidAngleReset_Click" Height="24">
+                        <Button x:Name="PNBtnResetAll" Click="PyramidAngleReset_Click" Height="24">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="DarkGray" Offset="0"/>
@@ -1052,7 +989,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </Button.Background>
                             <TextBlock Text="Zurücksetzen"/>
                         </Button>
-                        <!-- Beschreibung -->
                         <Border Background="LightSkyBlue" Padding="10">
                             <Grid>
                                 <StackPanel>

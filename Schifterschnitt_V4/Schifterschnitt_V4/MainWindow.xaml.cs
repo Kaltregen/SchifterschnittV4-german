@@ -55,10 +55,6 @@ namespace Schifterschnitt
         FeedbackArea pyramidLineFeedback;
         FeedbackArea pyramidAngleFeedback;
 
-        TextBox[] eckeEingaben;
-        TextBox[] pyramideLinieEingaben;
-        TextBox[] pyramideWinkelEingaben;
-
         GridColumnResize cornerColumnResize;
         GridColumnResize pyramidLineColumnResize;
         GridColumnResize pyramidAngleColumnResize;
@@ -98,19 +94,21 @@ namespace Schifterschnitt
 
             cornerRotation = new AxisAngleRotation3D(new Vector3D(0, 0, 1), 1);
             RotateTransform3D eckeTransformation = new RotateTransform3D(cornerRotation);
-            modelVisual3dEcke.Transform = eckeTransformation;
+            cornerModelVisual3D.Transform = eckeTransformation;
 
             pyramidLineRotation = new AxisAngleRotation3D(new Vector3D(0, 0, 1), 1);
             RotateTransform3D pyramideLinieTransformation = new RotateTransform3D(pyramidLineRotation);
-            modelVisual3dPyramideLinie.Transform = pyramideLinieTransformation;
+            pyramidLineModelVisual3D.Transform = pyramideLinieTransformation;
 
             pyramidAngleRotation = new AxisAngleRotation3D(new Vector3D(0, 0, 1), 1);
             RotateTransform3D pyramideWinkelTransformation = new RotateTransform3D(pyramidAngleRotation);
-            modelVisual3dPyramideWinkel.Transform = pyramideWinkelTransformation;
+            pyramidAngleModelVisual3D.Transform = pyramideWinkelTransformation;
             
-            cornerCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
-            pyramidLineCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
-            pyramidAngleCameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
+            var cameraAngle = Calc.Atan(5 / Math.Sqrt(Math.Pow(5, 2) + Math.Pow(5, 2)));
+
+            cornerCameraAngle = cameraAngle;
+            pyramidLineCameraAngle = cameraAngle;
+            pyramidAngleCameraAngle = cameraAngle;
             
             cornerFeedback = new FeedbackArea(gridEckeFeedback);
             pyramidLineFeedback = new FeedbackArea(gridPyramideLinieFeedback);
@@ -119,23 +117,6 @@ namespace Schifterschnitt
             cornerFeedback.Activate(cornerFeedback.EnterValues);
             pyramidLineFeedback.Activate(pyramidLineFeedback.EnterValues);
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.EnterValues);
-
-            pyramideLinieEingaben = new TextBox[] { 
-                textBoxPyramideLinieHoehe, 
-                textBoxPyramideLinieStaerke, 
-                textBoxPyramideLinieAnzahlSeiten,
-                textBoxPyramideLinieGrundlinie, 
-                textBoxPyramideLinieOberlinie 
-            };
-
-            pyramideWinkelEingaben = new TextBox[] { 
-                textBoxPyramideWinkelHoehe, 
-                textBoxPyramideWinkelStaerke, 
-                textBoxPyramideWinkelAnzahlSeiten,
-                textBoxPyramideWinkelGrundlinie, 
-                textBoxPyramideWinkelNeigungswinkel, 
-                textBoxPyramideWinkelBreitenversatz 
-            };
         }
 
         #endregion
@@ -147,9 +128,9 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The grid with the viewport3D.</param>
         /// <param name="e">The MouseWheelEventArgs.</param>
-        private void GridEckeGrafik_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void CornerGraphic_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Zoom(perspectiveCameraEcke, cornerCameraAngle, e);
+            Zoom(cornerPerspectiveCamera, cornerCameraAngle, e);
         }
 
         /// <summary>
@@ -157,9 +138,9 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The grid with the viewport3D.</param>
         /// <param name="e">The MouseEventArgs.</param>
-        private void GridEckeGrafik_MouseMove(object sender, MouseEventArgs e)
+        private void CornerGraphic_MouseMove(object sender, MouseEventArgs e)
         {
-            Rotate3DModel(cornerRotation, ref cornerCameraAngle, perspectiveCameraEcke, sender, e);
+            Rotate3DModel(cornerRotation, ref cornerCameraAngle, cornerPerspectiveCamera, sender, e);
         }
 
         /// <summary>
@@ -167,9 +148,9 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The textbox for angle conversion.</param>
         /// <param name="e">The TextChangedEventArgs.</param>
-        private void TextBoxEckeWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
+        private void CornerAngleConversion_TextChanged(object sender, TextChangedEventArgs e)
         {
-            AngleConversion(textBoxEckeWinkelumrechnung, textBlockEckeWinkelumrechnung);
+            AngleConversion(CornerAngleConversion, CornerAngleConversionResult);
         }
 
         /// <summary>
@@ -203,11 +184,11 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The button to reset everything.</param>
         /// <param name="e">The RoutedEventArgs.</param>
-        private void ButtonEckeReset_Click(object sender, RoutedEventArgs e)
+        private void CornerReset_Click(object sender, RoutedEventArgs e)
         {
             CornerResultReset();
 
-            checkBoxEcke.IsChecked = false;
+            CornerCheckBox.IsChecked = false;
 
             var inputTextBoxes = new TextBox[] {
                 CornerHeight,
@@ -231,7 +212,7 @@ namespace Schifterschnitt
                 textbox.Background = Brushes.White;
             }
 
-            modelVisual3dEcke.Content = new Model3DGroup();
+            cornerModelVisual3D.Content = new Model3DGroup();
             
             cornerFeedback.Deactivate(
                 cornerFeedback.Calculated, 
@@ -242,7 +223,7 @@ namespace Schifterschnitt
                 cornerFeedback.BetaChanged, 
                 cornerFeedback.InvalidValues, 
                 cornerFeedback.LineXYInvalidValues, 
-                cornerFeedback.LineXYToManyValues);
+                cornerFeedback.LineXYTooManyValues);
 
             cornerFeedback.Activate(cornerFeedback.EnterValues);
         }
@@ -252,7 +233,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The button for the calculation.</param>
         /// <param name="e">The RoutedEventArgs.</param>
-        private void ButtonEckeBerechnung_Click(object sender, RoutedEventArgs e)
+        private void CornerCalculation_Click(object sender, RoutedEventArgs e)
         {
             // Make sure that there are no old results of linexy next to a new calculation.
             var linexyTextBoxes = new TextBox[]
@@ -288,7 +269,7 @@ namespace Schifterschnitt
             if (ATextBoxIsEmpty(inputTextBoxes))
             {
                 CornerResultReset();
-                modelVisual3dEcke.Content = new Model3DGroup();
+                cornerModelVisual3D.Content = new Model3DGroup();
                 cornerFeedback.Deactivate(cornerFeedback.Calculated);
                 cornerFeedback.Activate(cornerFeedback.EnterValues);
 
@@ -316,7 +297,7 @@ namespace Schifterschnitt
             if (ATextBoxIsRed(inputTextBoxes))
             {
                 CornerResultReset();
-                modelVisual3dEcke.Content = new Model3DGroup();
+                cornerModelVisual3D.Content = new Model3DGroup();
                 cornerFeedback.Deactivate(cornerFeedback.Calculated);
                 cornerFeedback.Activate(cornerFeedback.InvalidValues);
                 cornerFeedback.Activate(cornerFeedback.EnterValues);
@@ -331,7 +312,7 @@ namespace Schifterschnitt
             corner.AngleAlphaSecondBoard = angleAlphaSecond;
             corner.AngleBeta = angleBeta;
             
-            corner.MiterJoint = checkBoxEcke.IsChecked.Value;
+            corner.MiterJoint = CornerCheckBox.IsChecked.Value;
 
             corner.Calculation();
 
@@ -356,7 +337,7 @@ namespace Schifterschnitt
             CornerSlantSFirstBoard.Text = ErrorIfTooLarge(slantSFirst);
             CornerSlantSSecondBoard.Text = ErrorIfTooLarge(slantSSecond);
 
-            corner.CreateModel(modelVisual3dEcke);
+            corner.CreateModel(cornerModelVisual3D);
 
             cornerFeedback.Deactivate(cornerFeedback.EnterValues);
             cornerFeedback.Activate(cornerFeedback.Calculated);
@@ -367,7 +348,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The button to calculate the lines.</param>
         /// <param name="e">The RoutedEventArgs.</param>
-        private void ButtonEckeLiniexy_Click(object sender, RoutedEventArgs e)
+        private void CornerLineXY_Click(object sender, RoutedEventArgs e)
         {
             double LineYFirst = 0;
             double LineYSecond = 0;
@@ -405,7 +386,7 @@ namespace Schifterschnitt
                 CornerLineYFirst.Background = Brushes.Red;
                 CornerLineXFirst.Background = Brushes.Red;
 
-                cornerFeedback.Activate(cornerFeedback.LineXYToManyValues);
+                cornerFeedback.Activate(cornerFeedback.LineXYTooManyValues);
             }
 
             if (CornerLineYSecond.Text != "" && CornerLineXSecond.Text != "" && linexySecondCalculated == false)
@@ -413,7 +394,7 @@ namespace Schifterschnitt
                 CornerLineYSecond.Background = Brushes.Red;
                 CornerLineXSecond.Background = Brushes.Red;
 
-                cornerFeedback.Activate(cornerFeedback.LineXYToManyValues);
+                cornerFeedback.Activate(cornerFeedback.LineXYTooManyValues);
             }
 
             if (!cornerFeedback.Calculated.Active || ATextBoxIsRed(inputTextBoxes))
@@ -450,13 +431,13 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The button to calculate angle alpha.</param>
         /// <param name="e">The RoutedEventArgs.</param>
-        private void ButtonEckeWinkelAlpha_Click(object sender, RoutedEventArgs e)
+        private void CornerAngleAlpha_Click(object sender, RoutedEventArgs e)
         {
             cornerFeedback.Deactivate(cornerFeedback.AlphaChanged);
 
-            double höhe = 0;
-            double breitenversatzEins = 0;
-            double breitenversatzZwei = 0;
+            double height = 0;
+            double offsetFirst = 0;
+            double offsetSecond = 0;
 
             var inputTextBoxes = new TextBox[]
             {
@@ -464,37 +445,37 @@ namespace Schifterschnitt
                 CornerOffsetSecond
             };
 
-            if (CornerHeight.Text != "" && (!InputValid(CornerHeight, ref höhe) || höhe <= 0))
+            if (CornerHeight.Text != "" && (!InputValid(CornerHeight, ref height) || height <= 0))
                 CornerHeight.Background = Brushes.Red;
 
-            if (CornerOffsetFirst.Text != "" && (!InputValid(CornerOffsetFirst, ref breitenversatzEins)))
+            if (CornerOffsetFirst.Text != "" && (!InputValid(CornerOffsetFirst, ref offsetFirst)))
                 CornerOffsetFirst.Background = Brushes.Red;
 
-            if (CornerOffsetSecond.Text != "" && (!InputValid(CornerOffsetSecond, ref breitenversatzZwei)))
+            if (CornerOffsetSecond.Text != "" && (!InputValid(CornerOffsetSecond, ref offsetSecond)))
                 CornerOffsetSecond.Background = Brushes.Red;
 
             if (CornerHeight.Background == Brushes.Red || ATextBoxIsRed(inputTextBoxes))
                 cornerFeedback.Activate(cornerFeedback.InvalidValues);
 
-            var x = false;
+            var calculated = false;
 
             if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
                 && CornerOffsetFirst.Background == Brushes.White && CornerOffsetFirst.Text != "")
             {
-                CornerAngleAlphaFirst.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzEins / höhe), 4));
+                CornerAngleAlphaFirst.Text = Convert.ToString(Math.Round(Calc.Atan(offsetFirst / height), 4));
 
-                x = true;
+                calculated = true;
             }
 
             if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
                 && CornerOffsetSecond.Background == Brushes.White && CornerOffsetSecond.Text != "")
             {
-                CornerAngleAlphaSecond.Text = Convert.ToString(Math.Round(Calc.Atan(breitenversatzZwei / höhe), 4));
+                CornerAngleAlphaSecond.Text = Convert.ToString(Math.Round(Calc.Atan(offsetSecond / height), 4));
 
-                x = true;
+                calculated = true;
             }
 
-            if (x)
+            if (calculated)
                 cornerFeedback.Activate(cornerFeedback.AlphaCalculated);
         }
 
@@ -503,7 +484,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The button to calculate angle beta.</param>
         /// <param name="e">The RoutedEventArgs.</param>
-        private void ButtonEckeWinkelBeta_Click(object sender, RoutedEventArgs e)
+        private void CornerAngleBeta_Click(object sender, RoutedEventArgs e)
         {
             cornerFeedback.Deactivate(cornerFeedback.BetaChanged);
 
@@ -532,7 +513,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The textbox that called the method.</param>
         /// <param name="e">The TextChangedEventArgs.</param>
-        private void EckeInput_TextChanged(object sender, TextChangedEventArgs e)
+        private void CornerInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             var senderTextBox = (TextBox)sender;
 
@@ -546,33 +527,15 @@ namespace Schifterschnitt
                 CornerAngleAlphaFirst,
                 CornerAngleAlphaSecond,
                 CornerAngleBeta,
-                CornerOffsetFirst,
-                CornerOffsetSecond,
-                CornerNumberOfSides
             };
 
             if (!ATextBoxIsRed(helper))
-            {
                 cornerFeedback.Deactivate(cornerFeedback.InvalidValues);
-            }
 
-            helper = new TextBox[]
+            if (cornerFeedback.Calculated.Active && helper.Contains(senderTextBox))
             {
-                CornerHeight,
-                CornerThicknessFirst,
-                CornerThicknessSecond,
-                CornerAngleAlphaFirst,
-                CornerAngleAlphaSecond,
-                CornerAngleBeta
-            };
-
-            foreach (var textbox in helper)
-            {
-                if (cornerFeedback.Calculated.Active && senderTextBox == textbox)
-                {
-                    cornerFeedback.Activate(cornerFeedback.InputChanged);
-                    cornerFeedback.Deactivate(cornerFeedback.Calculated);
-                }
+                cornerFeedback.Activate(cornerFeedback.InputChanged);
+                cornerFeedback.Deactivate(cornerFeedback.Calculated);
             }
 
             helper = new TextBox[]
@@ -584,13 +547,10 @@ namespace Schifterschnitt
                 CornerHeight
             };
 
-            foreach (var textbox in helper)
+            if (cornerFeedback.AlphaCalculated.Active && helper.Contains(senderTextBox))
             {
-                if (cornerFeedback.AlphaCalculated.Active && senderTextBox == textbox)
-                {
-                    cornerFeedback.Activate(cornerFeedback.AlphaChanged);
-                    cornerFeedback.Deactivate(cornerFeedback.AlphaCalculated);
-                }
+                cornerFeedback.Activate(cornerFeedback.AlphaChanged);
+                cornerFeedback.Deactivate(cornerFeedback.AlphaCalculated);
             }
 
             helper = new TextBox[]
@@ -599,13 +559,10 @@ namespace Schifterschnitt
                 CornerAngleBeta
             };
 
-            foreach (var textbox in helper)
+            if (cornerFeedback.BetaCalculated.Active && helper.Contains(senderTextBox))
             {
-                if (cornerFeedback.BetaCalculated.Active && senderTextBox == textbox)
-                {
-                    cornerFeedback.Activate(cornerFeedback.BetaChanged);
-                    cornerFeedback.Deactivate(cornerFeedback.BetaCalculated);
-                }
+                cornerFeedback.Activate(cornerFeedback.BetaChanged);
+                cornerFeedback.Deactivate(cornerFeedback.BetaCalculated);
             }
         }
 
@@ -640,7 +597,7 @@ namespace Schifterschnitt
         /// </summary>
         /// <param name="sender">The textbox that called the method.</param>
         /// <param name="e">The TextChangedEventArgs.</param>
-        private void CornerInputLinexy_TextChanged(object sender, TextChangedEventArgs e)
+        private void CornerInputLineXY_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textboxSender = (TextBox)sender;
             textboxSender.Background = Brushes.White;
@@ -666,7 +623,7 @@ namespace Schifterschnitt
             if ((CornerLineYFirst.Background == Brushes.White || CornerLineXFirst.Background == Brushes.White)
                 && (CornerLineYSecond.Background == Brushes.White || CornerLineXSecond.Background == Brushes.White))
             {
-                cornerFeedback.Deactivate(cornerFeedback.LineXYToManyValues);
+                cornerFeedback.Deactivate(cornerFeedback.LineXYTooManyValues);
             }
 
             var inputTextBoxes = new TextBox[]
@@ -705,29 +662,29 @@ namespace Schifterschnitt
 
         #endregion
 
-        #region Methoden Pyramide mit Grund- und Oberlinie
+        #region Methods pyramid with top and bottom line
         
         /// <summary>
         /// Controls the zoom by changing camera position and look direction.
         /// </summary>
         /// <param name="sender">The grid with the viewport3D.</param>
-        /// <param name="e"></param>
-        private void GridPyramideLinieGrafik_MouseWheel(object sender, MouseWheelEventArgs e)
+        /// <param name="e">The MouseWheelEventArgs.</param>
+        private void PyramidLineGraphic_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Zoom(perspectiveCameraPyramideLinie, pyramidLineCameraAngle, e);
+            Zoom(pyramidLinePerspectiveCamera, pyramidLineCameraAngle, e);
         }
 
         /// <summary>
         /// Rotates the 3D model when the mouse is moved and the left mouse button is hold.
         /// </summary>
         /// <param name="sender">The grid with the viewport3D.</param>
-        /// <param name="e"></param>
-        private void GridPyramidLineGraphic_MouseMove(object sender, MouseEventArgs e)
+        /// <param name="e">The MouseEventArgs.</param>
+        private void PyramidLineGraphic_MouseMove(object sender, MouseEventArgs e)
         {
             Rotate3DModel(
                 pyramidLineRotation, 
                 ref pyramidLineCameraAngle, 
-                perspectiveCameraPyramideLinie, 
+                pyramidLinePerspectiveCamera, 
                 sender, 
                 e);
         }
@@ -736,10 +693,10 @@ namespace Schifterschnitt
         /// Converts the angle if the input is valid and shows the result.
         /// </summary>
         /// <param name="sender">The textbox for angle conversion.</param>
-        /// <param name="e"></param>
-        private void TextBoxPyramideLinieWinkelumrechnung_TextChanged(object sender, TextChangedEventArgs e)
+        /// <param name="e">The TextChangedEventArgs.</param>
+        private void PyramidLineAngleConversion_TextChanged(object sender, TextChangedEventArgs e)
         {
-            AngleConversion(textBoxPyramideLinieWinkelumrechnung, textBlockPyramideLinieWinkelumrechnung);
+            AngleConversion(PyramidLineAngleConversion, pyramidLineAngleConversionResult);
         }
 
         /// <summary>
@@ -749,22 +706,22 @@ namespace Schifterschnitt
         {
             var resultTextblocks = new TextBlock[]
             {
-                textBlockPyramideLinieWinkelQueranschlag,
-                textBlockPyramideLinieWinkelSaegeblatt,
-                textBlockPyramideLinieBreite,
-                textBlockPyramideLinieBreiteMitSchraege,
-                textBlockPyramideLinieFlächenwinkel,
-                textBlockPyramideLinieBreitenversatz,
-                textBlockPyramideLinieSchraegeS,
-                textBlockPyramideLinieNeigungswinkel,
-                textBlockPyramideLinieInkreisradiusOA,
-                textBlockPyramideLinieInkreisradiusOI,
-                textBlockPyramideLinieInkreisradiusUA,
-                textBlockPyramideLinieInkreisradiusUI,
-                textBlockPyramideLinieUmkreisradiusOA,
-                textBlockPyramideLinieUmkreisradiusOI,
-                textBlockPyramideLinieUmkreisradiusUA,
-                textBlockPyramideLinieUmkreisradiusUI,
+                PyramidLineAngleCrossCut,
+                PyramidLineTiltAngleSawBlade,
+                PyramidLineWidth,
+                PyramidLineWidthWithSlant,
+                PyramidLineAngleDihedral,
+                PyramidLineOffset,
+                PyramidLineSlantS,
+                PyramidLineTiltAngle,
+                PyramidLineInscribedTopOuter,
+                PyramidLineInscribedTopInner,
+                PyramidLineInscribedBottomOuter,
+                PyramidLineInscribedBottomInner,
+                PyramidLineCircumscribedTopOuter,
+                PyramidLineCircumscribedTopInner,
+                PyramidLineCircumscribedBottomOuter,
+                PyramidLineCircumscribedBottomInner,
             };
 
             foreach (var textBlock in resultTextblocks)
@@ -777,17 +734,17 @@ namespace Schifterschnitt
         /// Resets everything.
         /// </summary>
         /// <param name="sender">The button to reset everything.</param>
-        /// <param name="e"></param>
-        private void ButtonPyramideLinieReset_Click(object sender, RoutedEventArgs e)
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void PyramidLineReset_Click(object sender, RoutedEventArgs e)
         {
             PyramidLineResultReset();
 
             var inputTextboxes = new TextBox[] { 
-                textBoxPyramideLinieHoehe, 
-                textBoxPyramideLinieStaerke, 
-                textBoxPyramideLinieAnzahlSeiten,
-                textBoxPyramideLinieGrundlinie, 
-                textBoxPyramideLinieOberlinie 
+                PyramidLineHeight, 
+                PyramidLineThickness, 
+                PyramidLineNumberOfSides,
+                PyramidLineBottomLineLength, 
+                PyramidLineTopLineLength 
             };
 
             foreach (var textbox in inputTextboxes)
@@ -796,7 +753,7 @@ namespace Schifterschnitt
                 textbox.Background = Brushes.White;
             }
 
-            modelVisual3dPyramideLinie.Content = new Model3DGroup();
+            pyramidLineModelVisual3D.Content = new Model3DGroup();
             
             pyramidLineFeedback.Deactivate(
                 pyramidLineFeedback.InvalidValues, 
@@ -807,55 +764,64 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Startet die Berechnung und weist den Ergebnisfeldern die Ergebnisse zu.
+        /// Calculates everything and shows the results.
         /// </summary>
-        /// <param name="sender">Der Button Berechnen.</param>
-        /// <param name="e"></param>
-        private void ButtonPyramideLinieBerechnung_Click(object sender, RoutedEventArgs e)
+        /// <param name="sender">The button to calculate the compound miter.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void PyramidLineCalculation_Click(object sender, RoutedEventArgs e)
         {
             pyramidLineFeedback.Deactivate(pyramidLineFeedback.InputChanged);
 
-            double höhe = 0;
-            double materialstärke = 0;
-            short anzahlSeiten = 0;
-            double grundlinie = 0;
-            double oberlinie = 0;
+            double height = 0;
+            double thickness = 0;
+            short numberOfSides = 0;
+            double bottomLine = 0;
+            double topLine = 0;
 
-            if (ATextBoxIsEmpty(pyramideLinieEingaben, 0, 4))
+            var inputTextBoxes = new TextBox[]
+            {
+                PyramidLineHeight,
+                PyramidLineThickness,
+                PyramidLineNumberOfSides,
+                PyramidLineBottomLineLength,
+                PyramidLineTopLineLength
+            };
+
+            if (ATextBoxIsEmpty(inputTextBoxes))
             {
                 PyramidLineResultReset();
-                modelVisual3dPyramideLinie.Content = new Model3DGroup();
+                pyramidLineModelVisual3D.Content = new Model3DGroup();
                 pyramidLineFeedback.Deactivate(pyramidLineFeedback.Calculated);
                 pyramidLineFeedback.Activate(pyramidLineFeedback.EnterValues);
 
                 return;
             }
 
-            if (!InputValid(textBoxPyramideLinieHoehe, ref höhe) 
-                || höhe <= 0)
-                textBoxPyramideLinieHoehe.Background = Brushes.Red;
+            if (!InputValid(PyramidLineHeight, ref height) 
+                || height <= 0)
+                PyramidLineHeight.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieStaerke, ref materialstärke) 
-                || materialstärke <= 0)
-                textBoxPyramideLinieStaerke.Background = Brushes.Red;
+            if (!InputValid(PyramidLineThickness, ref thickness) 
+                || thickness <= 0)
+                PyramidLineThickness.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieAnzahlSeiten, ref anzahlSeiten) 
-                || anzahlSeiten < 3 
-                || anzahlSeiten > 100)
-                textBoxPyramideLinieAnzahlSeiten.Background = Brushes.Red;
+            if (!InputValid(PyramidLineNumberOfSides, ref numberOfSides) 
+                || numberOfSides < 3 
+                || numberOfSides > 100)
+                PyramidLineNumberOfSides.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieGrundlinie, ref grundlinie) 
-                || grundlinie < 0)
-                textBoxPyramideLinieGrundlinie.Background = Brushes.Red;
+            if (!InputValid(PyramidLineBottomLineLength, ref bottomLine) 
+                || bottomLine < 0)
+                PyramidLineBottomLineLength.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideLinieOberlinie, ref oberlinie) 
-                || oberlinie < 0)
-                textBoxPyramideLinieOberlinie.Background = Brushes.Red;
+            if (!InputValid(PyramidLineTopLineLength, ref topLine) 
+                || topLine < 0)
+                PyramidLineTopLineLength.Background = Brushes.Red;
 
-            if (ATextBoxIsRed(pyramideLinieEingaben, 0, 4))
+            if (ATextBoxIsRed(inputTextBoxes))
             {
                 PyramidLineResultReset();
-                modelVisual3dPyramideLinie.Content = new Model3DGroup();
+                pyramidLineModelVisual3D.Content = new Model3DGroup();
                 pyramidLineFeedback.Deactivate(pyramidLineFeedback.Calculated);
                 pyramidLineFeedback.Activate(pyramidLineFeedback.InvalidValues);
                 pyramidLineFeedback.Activate(pyramidLineFeedback.EnterValues);
@@ -863,77 +829,89 @@ namespace Schifterschnitt
                 return;
             }
 
-            pyramidLine.Height = höhe;
-            pyramidLine.ThicknessFirstBoard = materialstärke;
-            pyramidLine.ThicknessSecondBoard = materialstärke;
-            pyramidLine.NumberOfSides = anzahlSeiten;
-            pyramidLine.BottomSideLength = grundlinie;
-            pyramidLine.TopSideLength = oberlinie;
+            pyramidLine.Height = height;
+            pyramidLine.ThicknessFirstBoard = thickness;
+            pyramidLine.ThicknessSecondBoard = thickness;
+            pyramidLine.NumberOfSides = numberOfSides;
+            pyramidLine.BottomSideLength = bottomLine;
+            pyramidLine.TopSideLength = topLine;
 
-            pyramidLine.AngleBeta = Math.Round(Convert.ToDouble((pyramidLine.NumberOfSides - 2.0) * 180.0 / pyramidLine.NumberOfSides), 4);
+            double doubleNumberOfSides = Convert.ToDouble(pyramidLine.NumberOfSides);
 
-            double alpha = Calc.Atan(((pyramidLine.BottomSideLength / (2 * Calc.Tan(180.0 / pyramidLine.NumberOfSides))) -
-                (pyramidLine.TopSideLength / (2 * Calc.Tan(180.0 / pyramidLine.NumberOfSides)))) / pyramidLine.Height);
+            pyramidLine.AngleBeta = (doubleNumberOfSides - 2.0) * 180.0 / doubleNumberOfSides;
 
-            pyramidLine.AngleAlphaFirstBoard = alpha;
-            pyramidLine.AngleAlphaSecondBoard = alpha;
+            double inscribedTopOuter = Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides);
+            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides);
+
+            double angleAlpha = Calc.Atan((inscribedBottomOuter - inscribedTopOuter) / pyramidLine.Height);
+
+            pyramidLine.AngleAlphaFirstBoard = angleAlpha;
+            pyramidLine.AngleAlphaSecondBoard = angleAlpha;
 
             pyramidLine.MiterJoint = true;
 
             pyramidLine.Calculation();
 
-            textBlockPyramideLinieWinkelQueranschlag.Text = Math.Round(pyramidLine.AngleCrossCutFirstBoard, 2) + "°";
-            textBlockPyramideLinieWinkelSaegeblatt.Text = Math.Round(pyramidLine.AngleSawBladeTiltFirstBoard, 2) + "°";
-            textBlockPyramideLinieBreite.Text = ErrorIfTooLarge(pyramidLine.WidthFirstBoard);
-            textBlockPyramideLinieBreiteMitSchraege.Text = ErrorIfTooLarge(pyramidLine.WidthWithSlantFirstBoard);
+            PyramidLineAngleCrossCut.Text = Math.Round(pyramidLine.AngleCrossCutFirstBoard, 2) + "°";
+            PyramidLineTiltAngleSawBlade.Text = Math.Round(pyramidLine.AngleSawBladeTiltFirstBoard, 2) + "°";
+            PyramidLineWidth.Text = ErrorIfTooLarge(pyramidLine.WidthFirstBoard);
+            PyramidLineWidthWithSlant.Text = ErrorIfTooLarge(pyramidLine.WidthWithSlantFirstBoard);
 
-            textBlockPyramideLinieFlächenwinkel.Text = Math.Round(pyramidLine.AngleDihedral, 2) + "°";
+            PyramidLineAngleDihedral.Text = Math.Round(pyramidLine.AngleDihedral, 2) + "°";
 
             double offset = Calc.Sin(pyramidLine.AngleAlphaFirstBoard) * pyramidLine.WidthFirstBoard;
             double slantS = pyramidLine.ThicknessFirstBoard / Calc.Cos(pyramidLine.AngleAlphaFirstBoard);
 
-            textBlockPyramideLinieBreitenversatz.Text = ErrorIfTooLarge(offset);
-            textBlockPyramideLinieSchraegeS.Text = ErrorIfTooLarge(slantS);
+            PyramidLineOffset.Text = ErrorIfTooLarge(offset);
+            PyramidLineSlantS.Text = ErrorIfTooLarge(slantS);
 
-            textBlockPyramideLinieNeigungswinkel.Text = Math.Round(pyramidLine.AngleAlphaFirstBoard, 2) + " °";
+            PyramidLineTiltAngle.Text = Math.Round(pyramidLine.AngleAlphaFirstBoard, 2) + " °";
 
-            double inscribedTopOuter = Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides);
             double circumscribedTopOuter = Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides);
-            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides);
             double circumscribedBottomOuter = Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides);
 
-            double inscribedTopInner = Calc.InscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - slantS;
-            double circumscribedTopInner = Calc.CircumscribedCircleRadius(pyramidLine.TopSideLength, pyramidLine.NumberOfSides) - slantS / Calc.Sin(pyramidLine.AngleBeta / 2.0);
-            double inscribedBottomInner = Calc.InscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - slantS;
-            double circumscribedBottomInner = Calc.CircumscribedCircleRadius(pyramidLine.BottomSideLength, pyramidLine.NumberOfSides) - slantS / Calc.Sin(pyramidLine.AngleBeta / 2.0);
+            double miterLine = slantS / Calc.Sin(pyramidLine.AngleBeta / 2.0);
 
+            double inscribedTopInner = inscribedTopOuter - slantS;
+            double circumscribedTopInner = circumscribedTopOuter - miterLine;
+            double inscribedBottomInner = inscribedBottomOuter - slantS;
+            double circumscribedBottomInner = circumscribedBottomOuter - miterLine;
 
-            textBlockPyramideLinieInkreisradiusOA.Text = ErrorIfTooLarge(inscribedTopOuter);
-            textBlockPyramideLinieUmkreisradiusOA.Text = ErrorIfTooLarge(circumscribedTopOuter);
-            textBlockPyramideLinieInkreisradiusUA.Text = ErrorIfTooLarge(inscribedBottomOuter);
-            textBlockPyramideLinieUmkreisradiusUA.Text = ErrorIfTooLarge(circumscribedBottomOuter);
+            PyramidLineInscribedTopOuter.Text = ErrorIfTooLarge(inscribedTopOuter);
+            PyramidLineCircumscribedTopOuter.Text = ErrorIfTooLarge(circumscribedTopOuter);
+            PyramidLineInscribedBottomOuter.Text = ErrorIfTooLarge(inscribedBottomOuter);
+            PyramidLineCircumscribedBottomOuter.Text = ErrorIfTooLarge(circumscribedBottomOuter);
 
-            textBlockPyramideLinieInkreisradiusOI.Text = ErrorIfTooLarge(inscribedTopInner);
-            textBlockPyramideLinieUmkreisradiusOI.Text = ErrorIfTooLarge(circumscribedTopInner);
-            textBlockPyramideLinieInkreisradiusUI.Text = ErrorIfTooLarge(inscribedBottomInner);
-            textBlockPyramideLinieUmkreisradiusUI.Text = ErrorIfTooLarge(circumscribedBottomInner);
+            PyramidLineInscribedTopInner.Text = ErrorIfTooLarge(inscribedTopInner);
+            PyramidLineCircumscribedTopInner.Text = ErrorIfTooLarge(circumscribedTopInner);
+            PyramidLineInscribedBottomInner.Text = ErrorIfTooLarge(inscribedBottomInner);
+            PyramidLineCircumscribedBottomInner.Text = ErrorIfTooLarge(circumscribedBottomInner);
 
-            pyramidLine.CreateModel(modelVisual3dPyramideLinie);
+            pyramidLine.CreateModel(pyramidLineModelVisual3D);
 
             pyramidLineFeedback.Deactivate(pyramidLineFeedback.EnterValues);
             pyramidLineFeedback.Activate(pyramidLineFeedback.Calculated);
         }
 
         /// <summary>
-        /// Stellt den Hintergrund eines veränderten Eingabefeldes weiß und aktualisiert die Feedbackleiste.
+        /// Sets the background of the textbox to white and updates the feedback area.
         /// </summary>
-        /// <param name="sender">Das Eingabefeld das die Methode ausgelöst hat.</param>
-        /// <param name="e"></param>
-        private void PyramideLinieInput_TextChanged(object sender, TextChangedEventArgs e)
+        /// <param name="sender">The textbox that called the method.</param>
+        /// <param name="e">The TextChangedEventArgs.</param>
+        private void PyramidLineInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             ((TextBox)sender).Background = Brushes.White;
 
-            if (!ATextBoxIsRed(pyramideLinieEingaben, 0, 4))
+            var inputTextBoxes = new TextBox[]
+            {
+                PyramidLineHeight,
+                PyramidLineThickness,
+                PyramidLineNumberOfSides,
+                PyramidLineBottomLineLength,
+                PyramidLineTopLineLength
+            };
+
+            if (!ATextBoxIsRed(inputTextBoxes))
                 pyramidLineFeedback.Deactivate(pyramidLineFeedback.InvalidValues);
 
             if (pyramidLineFeedback.Calculated.Active)
@@ -947,7 +925,7 @@ namespace Schifterschnitt
         /// Resizes the columns of the grid so only the most right one gets bigger if the window gets bigger.
         /// </summary>
         /// <param name="sender">The grid to resize the columns in.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The SizeChangedEventArgs.</param>
         private void PyramidLineGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             pyramidLineColumnResize.ExpandMostRightIfBigger(sender, e);
@@ -957,7 +935,7 @@ namespace Schifterschnitt
         /// Resizes the columns of the grid so only the one below the mouse is fully shown if the window gets smaller.
         /// </summary>
         /// <param name="sender">The grid to resize the columns in.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The MouseEventArgs.</param>
         private void PyramidLineGrid_MouseMove(object sender, MouseEventArgs e)
         {
             pyramidLineColumnResize.ShowFullyIfSmaller(sender, e);
@@ -965,29 +943,29 @@ namespace Schifterschnitt
 
         #endregion
 
-        #region Methoden Pyramide mit Neigungswinkel
+        #region Methods pyramid with tilt angle
 
         /// <summary>
         /// Controls the zoom by changing the camera position and lookdirection.
         /// </summary>
         /// <param name="sender">The grid with the viewport3D</param>
-        /// <param name="e"></param>
-        private void GridPyramidAngle_MouseWheel(object sender, MouseWheelEventArgs e)
+        /// <param name="e">The MouseWheelEventArgs.</param>
+        private void PyramidAngleGraphic_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Zoom(perspectiveCameraPyramideWinkel, pyramidAngleCameraAngle, e);
+            Zoom(pyramidAnglePerspectiveCamera, pyramidAngleCameraAngle, e);
         }
 
         /// <summary>
         /// Rotates the 3D model on mouse movement if the left button is hold.
         /// </summary>
         /// <param name="sender">The grid with the viewport3D.</param>
-        /// <param name="e"></param>
-        private void GridPyramidAngle_MouseMove(object sender, MouseEventArgs e)
+        /// <param name="e">The MouseEventArgs.</param>
+        private void PyramidAngleGraphic_MouseMove(object sender, MouseEventArgs e)
         {
             Rotate3DModel(
                 pyramidAngleRotation, 
                 ref pyramidAngleCameraAngle, 
-                perspectiveCameraPyramideWinkel, 
+                pyramidAnglePerspectiveCamera, 
                 sender, 
                 e);
         }
@@ -996,10 +974,10 @@ namespace Schifterschnitt
         /// Converts the angle if the input is valid and shows the result.
         /// </summary>
         /// <param name="sender">The textbox for angle conversion.</param>
-        /// <param name="e"></param>
-        private void TextBoxPyramidAngleAngleConversion_TextChanged(object sender, TextChangedEventArgs e)
+        /// <param name="e">The TextChangedEventArgs.</param>
+        private void PyramidAngleAngleConversion_TextChanged(object sender, TextChangedEventArgs e)
         {
-            AngleConversion(textBoxPyramideWinkelWinkelumrechnung, textBlockPyramideWinkelWinkelumrechnung);
+            AngleConversion(PyramidAngleAngleConversion, PyramidAngleAngleConversionResult);
         }
 
         /// <summary>
@@ -1009,22 +987,22 @@ namespace Schifterschnitt
         {
             var resultTextblocks = new TextBlock[]
             {
-                textBlockPyramideWinkelWinkelQueranschlag,
-                textBlockPyramideWinkelWinkelSaegeblatt,
-                textBlockPyramideWinkelBreite,
-                textBlockPyramideWinkelBreiteMitSchraege,
-                textBlockPyramideWinkelFlächenwinkel,
-                textBlockPyramideWinkelBreitenversatzErgebnis,
-                textBlockPyramideWinkelSchraegeS,
-                textBlockPyramideWinkelOberlinie,
-                textBlockPyramideWinkelInkreisradiusOA,
-                textBlockPyramideWinkelInkreisradiusOI,
-                textBlockPyramideWinkelInkreisradiusUA,
-                textBlockPyramideWinkelInkreisradiusUI,
-                textBlockPyramideWinkelUmkreisradiusOA,
-                textBlockPyramideWinkelUmkreisradiusOI,
-                textBlockPyramideWinkelUmkreisradiusUA,
-                textBlockPyramideWinkelUmkreisradiusUI,
+                PyramidAngleAngleCrossCut,
+                PyramidAngleTiltAngleSawBlade,
+                PyramidAngleWidth,
+                PyramidAngleWidthWithSlant,
+                PyramidAngleAngleDihedral,
+                PyramidAngleOffsetResult,
+                PyramidAngleSlantS,
+                PyramidAngleTopLine,
+                PyramidAngleInscribedTopOuter,
+                PyramidAngleInscribedTopInner,
+                PyramidAngleInscribedBottomOuter,
+                PyramidAngleInscribedBottomInner,
+                PyramidAngleCircumscribedTopOuter,
+                PyramidAngleCircumscribedTopInner,
+                PyramidAngleCircumscribedBottomOuter,
+                PyramidAngleCircumscribedBottomInner,
             };
 
             foreach (var textBlock in resultTextblocks)
@@ -1035,19 +1013,19 @@ namespace Schifterschnitt
         /// Resets everything.
         /// </summary>
         /// <param name="sender">The button to reset everything.</param>
-        /// <param name="e"></param>
-        private void ButtonPyramidAngleReset_Click(object sender, RoutedEventArgs e)
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void PyramidAngleReset_Click(object sender, RoutedEventArgs e)
         {
             PyramidAngleResultReset();
 
             var inputTextboxes = new TextBox[] 
             {
-                textBoxPyramideWinkelHoehe, 
-                textBoxPyramideWinkelStaerke, 
-                textBoxPyramideWinkelAnzahlSeiten,
-                textBoxPyramideWinkelGrundlinie, 
-                textBoxPyramideWinkelNeigungswinkel, 
-                textBoxPyramideWinkelBreitenversatz 
+                PyramidAngleHeight, 
+                PyramidAngleThickness, 
+                PyramidAngleNumberOfSides,
+                PyramidAngleBottomLine, 
+                PyramidAngleTiltAngle, 
+                PyramidAngleOffset 
             };
 
             foreach (var textbox in inputTextboxes)
@@ -1056,7 +1034,7 @@ namespace Schifterschnitt
                 textbox.Background = Brushes.White;
             }
 
-            modelVisual3dPyramideWinkel.Content = new Model3DGroup();
+            pyramidAngleModelVisual3D.Content = new Model3DGroup();
 
             pyramidAngleFeedback.Deactivate(
                 pyramidAngleFeedback.InvalidValues, 
@@ -1072,55 +1050,72 @@ namespace Schifterschnitt
         }
 
         /// <summary>
-        /// Startet die Berechnung und weist den Ergebnisfeldern die Ergebnisse zu.
+        /// Calculates everything and shows the results.
         /// </summary>
-        /// <param name="sender">Der Button Berechnen.</param>
-        /// <param name="e"></param>
-        private void ButtonPyramideWinkelBerechnung_Click(object sender, RoutedEventArgs e)
+        /// <param name="sender">The button to calculate everything.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void PyramidAngleCalculation_Click(object sender, RoutedEventArgs e)
         {
             pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.InputChanged);
 
-            short anzahlSeiten = 0;
-            double materialstärke = 0;
-            double grundlinie = 0;
-            double neigungswinkel = 0;
-            double höhe = 0;
-            double höheErgebend = 0;
+            short numberOfSides = 0;
+            double thickness = 0;
+            double bottomLine = 0;
+            double tiltAngle = 0;
+            double height = 0;
+            double resultingHeight = 0;
 
-            if (ATextBoxIsEmpty(pyramideWinkelEingaben, 1, 4))
+            var inputTextBoxes = new TextBox[]
+            {
+                PyramidAngleThickness,
+                PyramidAngleNumberOfSides,
+                PyramidAngleBottomLine,
+                PyramidAngleTiltAngle
+            };
+
+            if (ATextBoxIsEmpty(inputTextBoxes))
             {
                 PyramidAngleResultReset();
-                modelVisual3dPyramideWinkel.Content = new Model3DGroup();
+                pyramidAngleModelVisual3D.Content = new Model3DGroup();
                 pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.Calculated);
                 pyramidAngleFeedback.Activate(pyramidAngleFeedback.EnterValues);
 
                 return;
             }
 
-            if (!InputValid(textBoxPyramideWinkelAnzahlSeiten, ref anzahlSeiten) 
-                || anzahlSeiten < 3 || anzahlSeiten > 100)
-                textBoxPyramideWinkelAnzahlSeiten.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleNumberOfSides, ref numberOfSides) 
+                || numberOfSides < 3 || numberOfSides > 100)
+                PyramidAngleNumberOfSides.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelStaerke, ref materialstärke) 
-                || materialstärke <= 0)
-                textBoxPyramideWinkelStaerke.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleThickness, ref thickness) 
+                || thickness <= 0)
+                PyramidAngleThickness.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelGrundlinie, ref grundlinie) 
-                || grundlinie < 0)
-                textBoxPyramideWinkelGrundlinie.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleBottomLine, ref bottomLine) 
+                || bottomLine < 0)
+                PyramidAngleBottomLine.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelNeigungswinkel, ref neigungswinkel) 
-                || neigungswinkel < -90 || neigungswinkel > 90)
-                textBoxPyramideWinkelNeigungswinkel.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleTiltAngle, ref tiltAngle) 
+                || tiltAngle < -90 || tiltAngle > 90)
+                PyramidAngleTiltAngle.Background = Brushes.Red;
 
-            if ((textBoxPyramideWinkelHoehe.Text != "") && (!InputValid(textBoxPyramideWinkelHoehe, ref höhe) 
-                || höhe <= 0))
-                textBoxPyramideWinkelHoehe.Background = Brushes.Red;
+            if ((PyramidAngleHeight.Text != "") && (!InputValid(PyramidAngleHeight, ref height) 
+                || height <= 0))
+                PyramidAngleHeight.Background = Brushes.Red;
 
-            if (ATextBoxIsRed(pyramideWinkelEingaben, 0, 4))
+            inputTextBoxes = new TextBox[]
+            {
+                PyramidAngleHeight,
+                PyramidAngleThickness,
+                PyramidAngleNumberOfSides,
+                PyramidAngleBottomLine,
+                PyramidAngleTiltAngle
+            };
+
+            if (ATextBoxIsRed(inputTextBoxes))
             {
                 PyramidAngleResultReset();
-                modelVisual3dPyramideWinkel.Content = new Model3DGroup();
+                pyramidAngleModelVisual3D.Content = new Model3DGroup();
                 pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.Calculated);
                 pyramidAngleFeedback.Activate(pyramidAngleFeedback.InvalidValues);
                 pyramidAngleFeedback.Activate(pyramidAngleFeedback.EnterValues);
@@ -1128,21 +1123,22 @@ namespace Schifterschnitt
                 return;
             }
 
-            pyramidAngle.NumberOfSides = anzahlSeiten;
-            pyramidAngle.ThicknessFirstBoard = materialstärke;
-            pyramidAngle.ThicknessSecondBoard = materialstärke;
-            pyramidAngle.BottomSideLength = grundlinie;
-            pyramidAngle.AngleAlphaFirstBoard = neigungswinkel;
-            pyramidAngle.AngleAlphaSecondBoard = neigungswinkel;
+            pyramidAngle.NumberOfSides = numberOfSides;
+            pyramidAngle.ThicknessFirstBoard = thickness;
+            pyramidAngle.ThicknessSecondBoard = thickness;
+            pyramidAngle.BottomSideLength = bottomLine;
+            pyramidAngle.AngleAlphaFirstBoard = tiltAngle;
+            pyramidAngle.AngleAlphaSecondBoard = tiltAngle;
 
-            höheErgebend = Calc.Tan(90.0 - pyramidAngle.AngleAlphaFirstBoard) * (pyramidAngle.BottomSideLength / (2 * Calc.Tan(180.0 /
-                pyramidAngle.NumberOfSides)));
+            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
+
+            resultingHeight = Calc.Tan(90.0 - pyramidAngle.AngleAlphaFirstBoard) * inscribedBottomOuter;
 
             if (pyramidAngle.AngleAlphaFirstBoard > 0)
             {
-                if ((textBoxPyramideWinkelHoehe.Text != "") && höhe > höheErgebend)
+                if ((PyramidAngleHeight.Text != "") && height > resultingHeight)
                 {
-                    textBoxPyramideWinkelHoehe.Background = Brushes.Red;
+                    PyramidAngleHeight.Background = Brushes.Red;
 
                     pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.Calculated);
                     pyramidAngleFeedback.Activate(pyramidAngleFeedback.HeightLargerThanResulting);
@@ -1150,20 +1146,20 @@ namespace Schifterschnitt
                 }
                 else
                 {
-                    pyramidAngle.Height = höhe;
+                    pyramidAngle.Height = height;
                 }
 
-                if (textBoxPyramideWinkelHoehe.Text == "")
+                if (PyramidAngleHeight.Text == "")
                 {
-                    textBoxPyramideWinkelHoehe.Text = Convert.ToString(Math.Round(höheErgebend - 0.01, 2));
-                    pyramidAngle.Height = double.Parse(textBoxPyramideWinkelHoehe.Text);
+                    PyramidAngleHeight.Text = Convert.ToString(Math.Round(resultingHeight - 0.01, 2));
+                    pyramidAngle.Height = double.Parse(PyramidAngleHeight.Text);
                 }
             }
             else
             {
-                if (textBoxPyramideWinkelHoehe.Text == "")
+                if (PyramidAngleHeight.Text == "")
                 {
-                    textBoxPyramideWinkelHoehe.Background = Brushes.Red;
+                    PyramidAngleHeight.Background = Brushes.Red;
 
                     pyramidAngleFeedback.Activate(pyramidAngleFeedback.HeightNeeded);
                     pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.Calculated);
@@ -1171,63 +1167,65 @@ namespace Schifterschnitt
                 }
                 else
                 {
-                    pyramidAngle.Height = höhe;
+                    pyramidAngle.Height = height;
                 }
             }
 
-            if (textBoxPyramideWinkelHoehe.Background == Brushes.Red)
+            if (PyramidAngleHeight.Background == Brushes.Red)
             {
                 PyramidAngleResultReset();
-                modelVisual3dPyramideWinkel.Content = new Model3DGroup();
+                pyramidAngleModelVisual3D.Content = new Model3DGroup();
 
                 return;
             }
 
-            pyramidAngle.AngleBeta = Convert.ToDouble((Convert.ToDouble(pyramidAngle.NumberOfSides) - 2) * 180.0 / Convert.ToDouble(pyramidAngle.NumberOfSides));
+            pyramidAngle.AngleBeta = Convert.ToDouble((pyramidAngle.NumberOfSides - 2) * 180.0 / pyramidAngle.NumberOfSides);
 
             pyramidAngle.MiterJoint = true;
 
             pyramidAngle.Calculation();
 
-            textBlockPyramideWinkelWinkelQueranschlag.Text = Math.Round(pyramidAngle.AngleCrossCutFirstBoard, 2) + "°";
-            textBlockPyramideWinkelWinkelSaegeblatt.Text = Math.Round(pyramidAngle.AngleSawBladeTiltFirstBoard, 2) + "°";
-            textBlockPyramideWinkelBreite.Text = ErrorIfTooLarge(pyramidAngle.WidthFirstBoard);
-            textBlockPyramideWinkelBreiteMitSchraege.Text = ErrorIfTooLarge(pyramidAngle.WidthWithSlantFirstBoard);
+            PyramidAngleAngleCrossCut.Text = Math.Round(pyramidAngle.AngleCrossCutFirstBoard, 2) + "°";
+            PyramidAngleTiltAngleSawBlade.Text = Math.Round(pyramidAngle.AngleSawBladeTiltFirstBoard, 2) + "°";
+            PyramidAngleWidth.Text = ErrorIfTooLarge(pyramidAngle.WidthFirstBoard);
+            PyramidAngleWidthWithSlant.Text = ErrorIfTooLarge(pyramidAngle.WidthWithSlantFirstBoard);
 
-            pyramidAngle.TopSideLength = ((pyramidAngle.BottomSideLength / (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides))) -
-                Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard) * (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides));
-
-            textBlockPyramideWinkelFlächenwinkel.Text = Math.Round(pyramidAngle.AngleDihedral, 2) + "°";
+            PyramidAngleAngleDihedral.Text = Math.Round(pyramidAngle.AngleDihedral, 2) + "°";
 
             double slantS = pyramidAngle.ThicknessFirstBoard / Calc.Cos(pyramidAngle.AngleAlphaFirstBoard);
             double offset = Calc.Sin(pyramidAngle.AngleAlphaFirstBoard) * pyramidAngle.WidthFirstBoard;
 
-            textBlockPyramideWinkelSchraegeS.Text = ErrorIfTooLarge(slantS);
-            textBlockPyramideWinkelBreitenversatzErgebnis.Text = ErrorIfTooLarge(offset);
-            textBlockPyramideWinkelOberlinie.Text = ErrorIfTooLarge(pyramidAngle.TopSideLength);
+            PyramidAngleSlantS.Text = ErrorIfTooLarge(slantS);
+            PyramidAngleOffsetResult.Text = ErrorIfTooLarge(offset);
+
+            double circumscribedBottomOuter = Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
+
+            pyramidAngle.TopSideLength = (inscribedBottomOuter - offset) * (2 * Calc.Tan(180.0 / pyramidAngle.NumberOfSides));
 
             double inscribedTopOuter = Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides);
             double circumscribedTopOuter = Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides);
-            double inscribedBottomOuter = Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
-            double circumscribedBottomOuter = Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides);
             
-            double inscribedTopInner = Calc.InscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - slantS;
-            double circumscribedTopInner = Calc.CircumscribedCircleRadius(pyramidAngle.TopSideLength, pyramidAngle.NumberOfSides) - slantS / Calc.Sin(pyramidAngle.AngleBeta / 2.0);
-            double inscribedBottomInner = Calc.InscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - slantS;
-            double circumscribedBottomInner = Calc.CircumscribedCircleRadius(pyramidAngle.BottomSideLength, pyramidAngle.NumberOfSides) - slantS / Calc.Sin(pyramidAngle.AngleBeta / 2.0);
+            double miterLine = slantS / Calc.Sin(pyramidAngle.AngleBeta / 2.0);
 
-            textBlockPyramideWinkelInkreisradiusOA.Text = ErrorIfTooLarge(inscribedTopOuter);
-            textBlockPyramideWinkelUmkreisradiusOA.Text = ErrorIfTooLarge(circumscribedTopOuter);
-            textBlockPyramideWinkelInkreisradiusUA.Text = ErrorIfTooLarge(inscribedBottomOuter);
-            textBlockPyramideWinkelUmkreisradiusUA.Text = ErrorIfTooLarge(circumscribedBottomOuter);
+            double inscribedTopInner = inscribedTopOuter - slantS;
+            double circumscribedTopInner = circumscribedTopOuter - miterLine;
+            double inscribedBottomInner = inscribedBottomOuter - slantS;
+            double circumscribedBottomInner = circumscribedBottomOuter - miterLine;
 
-            textBlockPyramideWinkelInkreisradiusOI.Text = ErrorIfTooLarge(inscribedTopInner);
-            textBlockPyramideWinkelUmkreisradiusOI.Text = ErrorIfTooLarge(circumscribedTopInner);
-            textBlockPyramideWinkelInkreisradiusUI.Text = ErrorIfTooLarge(inscribedBottomInner);
-            textBlockPyramideWinkelUmkreisradiusUI.Text = ErrorIfTooLarge(circumscribedBottomInner);
+            PyramidAngleTopLine.Text = ErrorIfTooLarge(pyramidAngle.TopSideLength);
+
+            PyramidAngleInscribedTopOuter.Text = ErrorIfTooLarge(inscribedTopOuter);
+            PyramidAngleCircumscribedTopOuter.Text = ErrorIfTooLarge(circumscribedTopOuter);
+            PyramidAngleInscribedBottomOuter.Text = ErrorIfTooLarge(inscribedBottomOuter);
+            PyramidAngleCircumscribedBottomOuter.Text = ErrorIfTooLarge(circumscribedBottomOuter);
+
+            PyramidAngleInscribedTopInner.Text = ErrorIfTooLarge(inscribedTopInner);
+            PyramidAngleCircumscribedTopInner.Text = ErrorIfTooLarge(circumscribedTopInner);
+            PyramidAngleInscribedBottomInner.Text = ErrorIfTooLarge(inscribedBottomInner);
+            PyramidAngleCircumscribedBottomInner.Text = ErrorIfTooLarge(circumscribedBottomInner);
 
 
-            pyramidAngle.CreateModel(modelVisual3dPyramideWinkel);
+            pyramidAngle.CreateModel(pyramidAngleModelVisual3D);
 
             pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.EnterValues);
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.Calculated);
@@ -1237,32 +1235,32 @@ namespace Schifterschnitt
         /// Calculates the tilt angle if input is valid.
         /// </summary>
         /// <param name="sender">The button to calculate the tilt angle.</param>
-        /// <param name="e"></param>
-        private void ButtonPyramidAngleTiltAngle_Click(object sender, RoutedEventArgs e)
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void PyramidAngleTiltAngle_Click(object sender, RoutedEventArgs e)
         {
             pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.TiltAngleChanged);
 
             double height = 0;
             double offset = 0;
 
-            if (textBoxPyramideWinkelHoehe.Text == "" || textBoxPyramideWinkelBreitenversatz.Text == "")
+            if (PyramidAngleHeight.Text == "" || PyramidAngleOffset.Text == "")
                 return;
 
-            if (!InputValid(textBoxPyramideWinkelHoehe, ref height) || height <= 0)
-                textBoxPyramideWinkelHoehe.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleHeight, ref height) || height <= 0)
+                PyramidAngleHeight.Background = Brushes.Red;
 
-            if (!InputValid(textBoxPyramideWinkelBreitenversatz, ref offset))
-                textBoxPyramideWinkelBreitenversatz.Background = Brushes.Red;
+            if (!InputValid(PyramidAngleOffset, ref offset))
+                PyramidAngleOffset.Background = Brushes.Red;
 
-            if (textBoxPyramideWinkelHoehe.Background == Brushes.Red 
-                || textBoxPyramideWinkelBreitenversatz.Background == Brushes.Red)
+            if (PyramidAngleHeight.Background == Brushes.Red 
+                || PyramidAngleOffset.Background == Brushes.Red)
             {
                 pyramidAngleFeedback.Activate(pyramidAngleFeedback.InvalidValues);
                 return;
             }
 
             double tiltAngle = Math.Round(Calc.Atan(offset / height), 4);
-            textBoxPyramideWinkelNeigungswinkel.Text = Convert.ToString(tiltAngle);
+            PyramidAngleTiltAngle.Text = Convert.ToString(tiltAngle);
 
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.TiltAngleCalculated);
         }
@@ -1271,7 +1269,7 @@ namespace Schifterschnitt
         /// Changes the textbox background to white and updates the feedback area.
         /// </summary>
         /// <param name="sender">The textbox that called the method.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The TextChangedEventArgs.</param>
         private void PyramidAngleInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             var senderTextBox = (TextBox)sender;
@@ -1280,15 +1278,16 @@ namespace Schifterschnitt
 
             senderTextBox.Background = Brushes.White;
 
-            if (!ATextBoxIsRed(pyramideWinkelEingaben, 0, 5))
-                feedback.Deactivate(feedback.InvalidValues);
-
             helper = new TextBox[] {
-                textBoxPyramideWinkelHoehe,
-                textBoxPyramideWinkelStaerke,
-                textBoxPyramideWinkelAnzahlSeiten,
-                textBoxPyramideWinkelGrundlinie
+                PyramidAngleHeight,
+                PyramidAngleThickness,
+                PyramidAngleNumberOfSides,
+                PyramidAngleBottomLine,
+                PyramidAngleTiltAngle
             };
+
+            if (!ATextBoxIsRed(helper))
+                feedback.Deactivate(feedback.InvalidValues);
 
             if (feedback.Calculated.Active && (helper.Contains(senderTextBox)))
             {
@@ -1297,9 +1296,9 @@ namespace Schifterschnitt
             }
 
             helper = new TextBox[] {
-                textBoxPyramideWinkelHoehe,
-                textBoxPyramideWinkelBreitenversatz,
-                textBoxPyramideWinkelNeigungswinkel
+                PyramidAngleHeight,
+                PyramidAngleOffset,
+                PyramidAngleTiltAngle
             };
 
             if (feedback.TiltAngleCalculated.Active && (helper.Contains(senderTextBox)))
@@ -1309,13 +1308,13 @@ namespace Schifterschnitt
             }
 
             helper = new TextBox[] {
-                textBoxPyramideWinkelHoehe,
-                textBoxPyramideWinkelNeigungswinkel
+                PyramidAngleHeight,
+                PyramidAngleTiltAngle
             };
 
             if (helper.Contains(senderTextBox))
             {
-                textBoxPyramideWinkelHoehe.Background = Brushes.White;
+                PyramidAngleHeight.Background = Brushes.White;
 
                 feedback.Deactivate(feedback.HeightNeeded);
                 feedback.Deactivate(feedback.HeightLargerThanResulting);
@@ -1326,7 +1325,7 @@ namespace Schifterschnitt
         /// Resizes the columns of the grid so only the most right one gets bigger if the window gets bigger.
         /// </summary>
         /// <param name="sender">The grid to resize the columns in.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The SizeChangedEventArgs.</param>
         private void PyramidAngleGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             pyramidAngleColumnResize.ExpandMostRightIfBigger(sender, e);
@@ -1336,7 +1335,7 @@ namespace Schifterschnitt
         /// Resizes the columns of the grid so only the one below the mouse is fully shown if the window gets smaller.
         /// </summary>
         /// <param name="sender">The grid to resize the columns in.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The MouseEventArgs.</param>
         private void PyramidAngleGrid_MouseMove(object sender, MouseEventArgs e)
         {
             pyramidAngleColumnResize.ShowFullyIfSmaller(sender, e);
@@ -1350,7 +1349,7 @@ namespace Schifterschnitt
         /// Shows the license.
         /// </summary>
         /// <param name="sender">The button.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(@"Schifterschnitt V4
@@ -1409,7 +1408,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// Loads all tabs after the window is loaded.
         /// </summary>
         /// <param name="sender">The window.</param>
-        /// <param name="e"></param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             int selected = tabControl.SelectedIndex;
@@ -1453,46 +1452,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// Checks if a textbox in an array has a red background.
         /// </summary>
         /// <param name="textBoxes">The textboxes to check.</param>
-        /// <param name="start">The start index in the array.</param>
-        /// <param name="end">The end index in the array (included).</param>
-        /// <returns>True if the background of at least one textbox is red.</returns>
-        private bool ATextBoxIsRed(TextBox[] textBoxes, int start, int end)
-        {
-            for (int i = start; i <= end; i++)
-            {
-                if (textBoxes[i].Background == Brushes.Red)
-                    return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Checks if a textbox in an array has a red background.
-        /// </summary>
-        /// <param name="textBoxes">The textboxes to check.</param>
         /// <returns>True if the background of at least one textbox is red.</returns>
         private bool ATextBoxIsRed(TextBox[] textBoxes)
         {
             foreach (var textBox in textBoxes)
             {
                 if (textBox.Background == Brushes.Red)
-                    return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Checks if a textbox in an array is empty.
-        /// </summary>
-        /// <param name="textBoxes">The textboxes to check.</param>
-        /// <param name="start">The start index in the array.</param>
-        /// <param name="end">The end index in the array (included).</param>
-        /// <returns>True if at least one textbox is empty.</returns>
-        private bool ATextBoxIsEmpty(TextBox[] textBoxes, int start, int end)
-        {
-            for (int i = start; i <= end; i++)
-            {
-                if (textBoxes[i].Text == "")
                     return true;
             }
             return false;
@@ -1521,7 +1486,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>A string saying "Error" if the value is too large to display.</returns>
         public static string ErrorIfTooLarge(double number)
         {
-            if (number < 10000 && number > -10000)
+            if (number < 99000 && number > -99000)
                 return Math.Round(number, 2) + " mm";
             else
                 return "Error";
