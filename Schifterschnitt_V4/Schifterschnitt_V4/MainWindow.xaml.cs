@@ -433,14 +433,13 @@ namespace Schifterschnitt
         /// <param name="e">The RoutedEventArgs.</param>
         private void CornerAngleAlpha_Click(object sender, RoutedEventArgs e)
         {
-            cornerFeedback.Deactivate(cornerFeedback.AlphaChanged);
-
             double height = 0;
             double offsetFirst = 0;
             double offsetSecond = 0;
 
             var inputTextBoxes = new TextBox[]
             {
+                CornerHeight,
                 CornerOffsetFirst,
                 CornerOffsetSecond
             };
@@ -454,29 +453,31 @@ namespace Schifterschnitt
             if (CornerOffsetSecond.Text != "" && (!InputValid(CornerOffsetSecond, ref offsetSecond)))
                 CornerOffsetSecond.Background = Brushes.Red;
 
-            if (CornerHeight.Background == Brushes.Red || ATextBoxIsRed(inputTextBoxes))
+            if (ATextBoxIsRed(inputTextBoxes))
+            {
                 cornerFeedback.Activate(cornerFeedback.InvalidValues);
-
+                return;
+            }
+            
             var calculated = false;
 
-            if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
-                && CornerOffsetFirst.Background == Brushes.White && CornerOffsetFirst.Text != "")
+            if (CornerHeight.Text != "" && CornerOffsetFirst.Text != "")
             {
                 CornerAngleAlphaFirst.Text = Convert.ToString(Math.Round(Calc.Atan(offsetFirst / height), 4));
-
                 calculated = true;
             }
 
-            if (CornerHeight.Background == Brushes.White && CornerHeight.Text != "" 
-                && CornerOffsetSecond.Background == Brushes.White && CornerOffsetSecond.Text != "")
+            if (CornerHeight.Text != "" && CornerOffsetSecond.Text != "")
             {
                 CornerAngleAlphaSecond.Text = Convert.ToString(Math.Round(Calc.Atan(offsetSecond / height), 4));
-
                 calculated = true;
             }
 
             if (calculated)
+            {
+                cornerFeedback.Deactivate(cornerFeedback.AlphaChanged);
                 cornerFeedback.Activate(cornerFeedback.AlphaCalculated);
+            }
         }
 
         /// <summary>
@@ -486,8 +487,6 @@ namespace Schifterschnitt
         /// <param name="e">The RoutedEventArgs.</param>
         private void CornerAngleBeta_Click(object sender, RoutedEventArgs e)
         {
-            cornerFeedback.Deactivate(cornerFeedback.BetaChanged);
-
             short numberOfSides = 0;
 
             if (CornerNumberOfSides.Text == "")
@@ -505,6 +504,7 @@ namespace Schifterschnitt
 
             CornerAngleBeta.Text = Convert.ToString(Math.Round(angleBeta, 4));
 
+            cornerFeedback.Deactivate(cornerFeedback.BetaChanged);
             cornerFeedback.Activate(cornerFeedback.BetaCalculated);
         }
 
@@ -527,10 +527,23 @@ namespace Schifterschnitt
                 CornerAngleAlphaFirst,
                 CornerAngleAlphaSecond,
                 CornerAngleBeta,
+                CornerOffsetFirst,
+                CornerOffsetSecond,
+                CornerNumberOfSides
             };
 
             if (!ATextBoxIsRed(helper))
                 cornerFeedback.Deactivate(cornerFeedback.InvalidValues);
+
+            helper = new TextBox[]
+            {
+                CornerHeight,
+                CornerThicknessFirst,
+                CornerThicknessSecond,
+                CornerAngleAlphaFirst,
+                CornerAngleAlphaSecond,
+                CornerAngleBeta,
+            };
 
             if (cornerFeedback.Calculated.Active && helper.Contains(senderTextBox))
             {
@@ -553,6 +566,9 @@ namespace Schifterschnitt
                 cornerFeedback.Deactivate(cornerFeedback.AlphaCalculated);
             }
 
+            if (CornerOffsetFirst.Text == "" && CornerOffsetSecond.Text == "")
+                cornerFeedback.Deactivate(cornerFeedback.AlphaChanged);
+
             helper = new TextBox[]
             {
                 CornerNumberOfSides,
@@ -564,6 +580,9 @@ namespace Schifterschnitt
                 cornerFeedback.Activate(cornerFeedback.BetaChanged);
                 cornerFeedback.Deactivate(cornerFeedback.BetaCalculated);
             }
+
+            if (CornerNumberOfSides.Text == "")
+                cornerFeedback.Deactivate(cornerFeedback.BetaChanged);
         }
 
         /// <summary>
@@ -1238,8 +1257,6 @@ namespace Schifterschnitt
         /// <param name="e">The RoutedEventArgs.</param>
         private void PyramidAngleTiltAngle_Click(object sender, RoutedEventArgs e)
         {
-            pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.TiltAngleChanged);
-
             double height = 0;
             double offset = 0;
 
@@ -1262,6 +1279,7 @@ namespace Schifterschnitt
             double tiltAngle = Math.Round(Calc.Atan(offset / height), 4);
             PyramidAngleTiltAngle.Text = Convert.ToString(tiltAngle);
 
+            pyramidAngleFeedback.Deactivate(pyramidAngleFeedback.TiltAngleChanged);
             pyramidAngleFeedback.Activate(pyramidAngleFeedback.TiltAngleCalculated);
         }
 
@@ -1274,9 +1292,20 @@ namespace Schifterschnitt
         {
             var senderTextBox = (TextBox)sender;
             var feedback = pyramidAngleFeedback;
-            TextBox[] helper;
 
             senderTextBox.Background = Brushes.White;
+
+            var helper = new TextBox[] {
+                PyramidAngleHeight,
+                PyramidAngleThickness,
+                PyramidAngleNumberOfSides,
+                PyramidAngleBottomLine,
+                PyramidAngleTiltAngle,
+                PyramidAngleOffset
+            };
+
+            if (!ATextBoxIsRed(helper))
+                feedback.Deactivate(feedback.InvalidValues);
 
             helper = new TextBox[] {
                 PyramidAngleHeight,
@@ -1285,9 +1314,6 @@ namespace Schifterschnitt
                 PyramidAngleBottomLine,
                 PyramidAngleTiltAngle
             };
-
-            if (!ATextBoxIsRed(helper))
-                feedback.Deactivate(feedback.InvalidValues);
 
             if (feedback.Calculated.Active && (helper.Contains(senderTextBox)))
             {
@@ -1306,6 +1332,9 @@ namespace Schifterschnitt
                 feedback.Activate(feedback.TiltAngleChanged);
                 feedback.Deactivate(feedback.TiltAngleCalculated);
             }
+
+            if (PyramidAngleOffset.Text == "")
+                feedback.Deactivate(feedback.TiltAngleChanged);
 
             helper = new TextBox[] {
                 PyramidAngleHeight,
@@ -1378,6 +1407,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True if the input is valid.</returns>
         private bool InputValid(TextBox textBox, ref double number)
         {
+            if (textBox.Text.Length > 8)
+                return false;
+
             if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
                 return false;
 
@@ -1395,6 +1427,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.", "Lizenz
         /// <returns>True if the input is valid.</returns>
         private bool InputValid(TextBox textBox, ref short number)
         {
+            if (textBox.Text.Length > 8)
+                return false;
+
             if (textBox.Text.Contains(".") || textBox.Text.Contains("NaN"))
                 return false;
 
