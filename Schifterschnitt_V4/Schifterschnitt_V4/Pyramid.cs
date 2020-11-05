@@ -57,150 +57,148 @@ namespace Schifterschnitt
         {
             double slantS = ThicknessFirstBoard / Calc.Cos(AngleAlphaFirstBoard);
 
-            // Berechnet die Radien der Umkreise und fügt sie einem Array hinzu.
-            double umkreisradiusUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
-            double umkreisradiusOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
-            double umkreisradiusInnenUnten = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
-            double umkreisradiusInnenOben = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
-            double[] umkreise = { umkreisradiusUnten, umkreisradiusOben, umkreisradiusInnenUnten, umkreisradiusInnenOben };
+            double radiusBottomOuter = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides);
+            double radiusTopOuter = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides);
+            double radiusBottomInner = Calc.CircumscribedCircleRadius(BottomSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
+            double radiusTopInner = Calc.CircumscribedCircleRadius(TopSideLength, NumberOfSides) - (slantS / Calc.Sin((NumberOfSides - 2.0) / NumberOfSides * 180.0 / 2));
+            double[] umkreise = { radiusBottomOuter, radiusTopOuter, radiusBottomInner, radiusTopInner };
 
             // We need a reference length to make all pyramids the same size.
             // This makes sure they will be the same size in the view area.
-            double referenz;
+            double reference;
 
-            if (Height > umkreisradiusUnten && Height > umkreisradiusOben)
-                referenz = Height;
-            else if (umkreisradiusUnten > Height && umkreisradiusUnten > umkreisradiusOben)
-                referenz = umkreisradiusUnten;
-            else if (umkreisradiusOben > Height && umkreisradiusOben > umkreisradiusUnten)
-                referenz = umkreisradiusOben;
+            if (Height > radiusBottomOuter && Height > radiusTopOuter)
+                reference = Height;
+            else if (radiusBottomOuter > Height && radiusBottomOuter >= radiusTopOuter)
+                reference = radiusBottomOuter;
+            else if (radiusTopOuter > Height && radiusTopOuter > radiusBottomOuter)
+                reference = radiusTopOuter;
             else
-                referenz = Height;
+                reference = Height;
 
-            var punkteUnten = new List<Point3D>();
-            var punkteOben = new List<Point3D>();
-            var punkteInnenUnten = new List<Point3D>();
-            var punkteInnenOben = new List<Point3D>();
-            List<Point3D>[] punkteListen = { punkteUnten, punkteOben, punkteInnenUnten, punkteInnenOben };
+            reference /= 2;
 
-            double[] schleifenWerte = { Height / referenz * -1, Height / referenz, Height / referenz * -1, Height / referenz };
+            var pointsBottomOuter = new List<Point3D>();
+            var pointsTopOuter = new List<Point3D>();
+            var pointsBottomInner = new List<Point3D>();
+            var pointsTopInner = new List<Point3D>();
+            List<Point3D>[] pointLists = { pointsBottomOuter, pointsTopOuter, pointsBottomInner, pointsTopInner };
 
-            double w = 360.0 / NumberOfSides / 2.0;
+            double halfmodelHeight = Height / reference / 2;
+
+            double[] loopZValues = { halfmodelHeight * -1, halfmodelHeight, halfmodelHeight * -1, halfmodelHeight };
+
+            double pointAngle = 360.0 / NumberOfSides / 2.0;
             double x;
             double y;
 
             for (int i = 0; i < 4; i++)
             {
-                double item = umkreise[i];
-                for (int j = 0; j < NumberOfSides; j++)
+                double radius = umkreise[i];
+
+                for (int count = 0; count < NumberOfSides; count++)
                 {
-                    if (w < 90)
+                    if (pointAngle < 90)
                     {
-                        x = -1 * Calc.Sin(w) * (item / referenz) * 2;
-                        y = -1 * Calc.Cos(w) * (item / referenz) * 2;
+                        x = -1 * Calc.Sin(pointAngle) * (radius / reference);
+                        y = -1 * Calc.Cos(pointAngle) * (radius / reference);
                     }
-                    else if (w >= 90 && w < 180)
+                    else if (pointAngle >= 90 && pointAngle < 180)
                     {
-                        x = -1 * Calc.Cos(w - 90) * (item / referenz) * 2;
-                        y = Calc.Sin(w - 90) * (item / referenz) * 2;
+                        x = -1 * Calc.Cos(pointAngle - 90) * (radius / reference);
+                        y = Calc.Sin(pointAngle - 90) * (radius / reference);
                     }
-                    else if (w >= 180 && w < 270)
+                    else if (pointAngle >= 180 && pointAngle < 270)
                     {
-                        x = Calc.Sin(w - 180) * (item / referenz) * 2;
-                        y = Calc.Cos(w - 180) * (item / referenz) * 2;
+                        x = Calc.Sin(pointAngle - 180) * (radius / reference);
+                        y = Calc.Cos(pointAngle - 180) * (radius / reference);
                     }
                     else
                     {
-                        x = Calc.Cos(w - 270) * (item / referenz) * 2;
-                        y = -1 * Calc.Sin(w - 270) * (item / referenz) * 2;
+                        x = Calc.Cos(pointAngle - 270) * (radius / reference);
+                        y = -1 * Calc.Sin(pointAngle - 270) * (radius / reference);
                     }
 
-                    punkteListen[i].Add(new Point3D(x, y, schleifenWerte[i]));
+                    pointLists[i].Add(new Point3D(x, y, loopZValues[i]));
 
-                    w += (360.0 / NumberOfSides);
+                    pointAngle += (360.0 / NumberOfSides);
                 }
-                w = 360.0 / NumberOfSides / 2.0;
+                pointAngle = 360.0 / NumberOfSides / 2.0;
             }
 
-            // When the top or bottem side lengths are to small we need a point for the inner planes.
-            Point3D innenMitteUnten = new Point3D(0, 0, Height / referenz * -1 + (Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(umkreisradiusInnenUnten) / referenz * 2));
-            Point3D innenMitteOben = new Point3D(0, 0, Height / referenz - (Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(umkreisradiusInnenOben) / referenz * 2));
+            // When the top or bottem side lengths are to small we need a point for the inner areas.
+            double distanceBottomCenter = Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(radiusBottomInner) / reference;
+            double distanceTopCenter = Calc.Tan(90 - Math.Abs(AngleAlphaFirstBoard)) * Math.Abs(radiusTopInner) / reference;
+
+            Point3D innerCenterBottom = new Point3D(0, 0, halfmodelHeight * -1 + distanceBottomCenter);
+            Point3D innerCenterTop = new Point3D(0, 0, halfmodelHeight - distanceTopCenter);
 
             var group = new Model3DGroup();
 
-            // Verbindet die Punkte und füllt die Flächen.
-
-            // Füllt die äußeren Flächen.
-            group.Children.Add(Square(punkteUnten[0], punkteUnten[NumberOfSides - 1], punkteOben[NumberOfSides - 1], punkteOben[0]));
+            group.Children.Add(Square(pointsBottomOuter[0], pointsBottomOuter[NumberOfSides - 1], pointsTopOuter[NumberOfSides - 1], pointsTopOuter[0]));
 
             for (int i = 0; i < NumberOfSides - 1; i++)
-                group.Children.Add(Square(punkteUnten[i + 1], punkteUnten[i], punkteOben[i], punkteOben[i + 1]));
+                group.Children.Add(Square(pointsBottomOuter[i + 1], pointsBottomOuter[i], pointsTopOuter[i], pointsTopOuter[i + 1]));
 
-            // Füllt die inneren Flächen wenn oben und unten ein Loch entsteht.
-            if (umkreisradiusInnenOben > 0 && umkreisradiusInnenUnten > 0)
+            // If there is a hole at the top and bottom we can fill the inner surfaces with squares.
+            if (radiusTopInner > 0 && radiusBottomInner > 0)
             {
-                group.Children.Add(Square(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1]));
+                group.Children.Add(Square(pointsBottomInner[NumberOfSides - 1], pointsBottomInner[0], pointsTopInner[0], pointsTopInner[NumberOfSides - 1]));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Square(punkteInnenUnten[i], punkteInnenUnten[i + 1], punkteInnenOben[i + 1], punkteInnenOben[i]));
+                    group.Children.Add(Square(pointsBottomInner[i], pointsBottomInner[i + 1], pointsTopInner[i + 1], pointsTopInner[i]));
             }
 
-            // Füllt die inneren Flächen wenn nur oben ein Loch entsteht.
-            if (umkreisradiusInnenOben > 0 && umkreisradiusInnenUnten <= 0)
+            // Otherwise we use triangles and the centerpoint.
+            if (radiusTopInner > 0 && radiusBottomInner <= 0)
             {
-                group.Children.Add(Triangle(punkteInnenOben[0], punkteInnenOben[NumberOfSides - 1], innenMitteUnten));
+                group.Children.Add(Triangle(pointsTopInner[0], pointsTopInner[NumberOfSides - 1], innerCenterBottom));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Triangle(punkteInnenOben[i + 1], punkteInnenOben[i], innenMitteUnten));
+                    group.Children.Add(Triangle(pointsTopInner[i + 1], pointsTopInner[i], innerCenterBottom));
             }
 
-            // Füllt die inneren Flächen wenn nur unten ein Loch entsteht.
-            if (umkreisradiusInnenUnten > 0 && umkreisradiusInnenOben <= 0)
+            if (radiusBottomInner > 0 && radiusTopInner <= 0)
             {
-                group.Children.Add(Triangle(punkteInnenUnten[NumberOfSides - 1], punkteInnenUnten[0], innenMitteOben));
+                group.Children.Add(Triangle(pointsBottomInner[NumberOfSides - 1], pointsBottomInner[0], innerCenterTop));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Triangle(punkteInnenUnten[i], punkteInnenUnten[i + 1], innenMitteOben));
+                    group.Children.Add(Triangle(pointsBottomInner[i], pointsBottomInner[i + 1], innerCenterTop));
             }
 
-            // Wenn oben kein Loch entsteht.
-            if (umkreisradiusInnenOben <= 0)
+            // If there is no hole at the top or bottom we need triangles to fill the top and bottom surfaces solid.
+            if (radiusTopInner <= 0)
             {
-                // Füllt die obere Fläche mit Dreiecken.
-                Point3D middle = new Point3D(0, 0, Height / referenz);
+                Point3D middle = new Point3D(0, 0, halfmodelHeight);
 
-                group.Children.Add(Triangle(punkteOben[0], punkteOben[NumberOfSides - 1], middle));
+                group.Children.Add(Triangle(pointsTopOuter[0], pointsTopOuter[NumberOfSides - 1], middle));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Triangle(punkteOben[i + 1], punkteOben[i], middle));
+                    group.Children.Add(Triangle(pointsTopOuter[i + 1], pointsTopOuter[i], middle));
             }
             else
             {
-                // Füllt die oberen Flächen.
-                group.Children.Add(Square(punkteOben[0], punkteOben[NumberOfSides - 1], punkteInnenOben[NumberOfSides - 1], punkteInnenOben[0]));
+                group.Children.Add(Square(pointsTopOuter[0], pointsTopOuter[NumberOfSides - 1], pointsTopInner[NumberOfSides - 1], pointsTopInner[0]));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Square(punkteOben[i + 1], punkteOben[i], punkteInnenOben[i], punkteInnenOben[i + 1]));
+                    group.Children.Add(Square(pointsTopOuter[i + 1], pointsTopOuter[i], pointsTopInner[i], pointsTopInner[i + 1]));
             }
 
-            // Wenn unten kein Loch entsteht.
-            if (umkreisradiusInnenUnten <= 0)
+            if (radiusBottomInner <= 0)
             {
-                // Füllt die untere Fläche mit Dreiecken.
-                Point3D middle = new Point3D(0, 0, Height / referenz * -1);
+                Point3D middle = new Point3D(0, 0, halfmodelHeight * -1);
 
-                group.Children.Add(Triangle(punkteUnten[NumberOfSides - 1], punkteUnten[0], middle));
+                group.Children.Add(Triangle(pointsBottomOuter[NumberOfSides - 1], pointsBottomOuter[0], middle));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Triangle(punkteUnten[i], punkteUnten[i + 1], middle));
+                    group.Children.Add(Triangle(pointsBottomOuter[i], pointsBottomOuter[i + 1], middle));
             }
             else
             {
-                // Füllt die unteren Flächen.
-                group.Children.Add(Square(punkteUnten[NumberOfSides - 1], punkteUnten[0], punkteInnenUnten[0], punkteInnenUnten[NumberOfSides - 1]));
+                group.Children.Add(Square(pointsBottomOuter[NumberOfSides - 1], pointsBottomOuter[0], pointsBottomInner[0], pointsBottomInner[NumberOfSides - 1]));
 
                 for (int i = 0; i < NumberOfSides - 1; i++)
-                    group.Children.Add(Square(punkteUnten[i], punkteUnten[i + 1], punkteInnenUnten[i + 1], punkteInnenUnten[i]));
+                    group.Children.Add(Square(pointsBottomOuter[i], pointsBottomOuter[i + 1], pointsBottomInner[i + 1], pointsBottomInner[i]));
             }
 
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(2, 1, -1)));

@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Schifterschnitt"
         mc:Ignorable="d"
-        Title="Schifterschnitt Test" Height="770" Width="1135" Icon="Images/Schifterschnitt_Icon.ico" Background="Black" MinWidth="700" MinHeight="400"
+        Title="Schifterschnitt V4" Height="770" Width="1135" Icon="Images/Schifterschnitt_Icon.ico" Background="Black" MinWidth="700" MinHeight="400"
         Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="TextBlock">
