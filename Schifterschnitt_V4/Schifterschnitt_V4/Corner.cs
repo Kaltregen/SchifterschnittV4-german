@@ -39,90 +39,92 @@ namespace Schifterschnitt
             // This makes sure a model of any size fits in the view area.
             double reference = WidthFirstBoard < WidthSecondBoard ? WidthSecondBoard : WidthFirstBoard;
 
-            double movx = Calc.Tan(AngleAlphaSecondBoard) * (Height / reference);
-            double movy = Calc.Cos(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference) -
-                (Calc.Tan(AngleBeta - 90) * (Calc.Tan(AngleAlphaSecondBoard) * (Height / reference) -
-                Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference)));
-            double mohxAdd = (ThicknessSecondBoard / reference) / Calc.Cos(AngleAlphaSecondBoard);
+            // The board length needs to be adjusted for really long miter cuts.
+            double normalBoardLength = 2.5 * reference;
+            double boardLength = 2.5;
+            double minBoardLengthFirst = Calc.Tan(AngleCrossCutFirstBoard) * WidthFirstBoard;
+            double minBoardLengthSecond = Calc.Tan(AngleCrossCutSecondBoard) * WidthSecondBoard;
 
-            // Berechnung des Y-Versatzes von Mitte-Oben-Hinten zu Mitte-Oben-Vorne.
-            double schraegeEins = (ThicknessFirstBoard / reference) / Calc.Cos(AngleAlphaFirstBoard);
-            double schraegeZwei = (ThicknessSecondBoard / reference) / Calc.Cos(AngleAlphaSecondBoard);
+            if (normalBoardLength < minBoardLengthSecond)
+                boardLength = minBoardLengthSecond / reference;
+            if (normalBoardLength < minBoardLengthFirst)
+                boardLength = minBoardLengthFirst / reference;
 
-            double linie = Math.Sqrt(Math.Pow(schraegeEins, 2) + Math.Pow(schraegeZwei, 2) - 2 * schraegeEins * schraegeZwei * Calc.Cos(360 - AngleBeta - 180));
+            double modelHeight = Height / reference;
+            double halfModelHeight = Height / reference / 2;
 
-            double winkelgruenEins = Calc.Acos((Math.Pow(linie, 2) + Math.Pow(schraegeEins, 2) - Math.Pow(schraegeZwei, 2)) / (2 * linie * schraegeEins));
-            double winkelgruenZwei = Calc.Acos((Math.Pow(linie, 2) + Math.Pow(schraegeZwei, 2) - Math.Pow(schraegeEins, 2)) / (2 * linie * schraegeZwei));
+            double offsetFirst = Calc.Tan(AngleAlphaFirstBoard) * modelHeight;
+            double offsetSecond = Calc.Tan(AngleAlphaSecondBoard) * modelHeight;
 
-            double winkelgelbEins = 0;
-            double winkelgelbZwei = 0;
+            double centerTopFrontX = Calc.Tan(AngleAlphaSecondBoard) * modelHeight;
+            double centerTopFrontY = Calc.Cos(AngleBeta - 90) * offsetFirst - (Calc.Tan(AngleBeta - 90) * (centerTopFrontX - Calc.Sin(AngleBeta - 90) * offsetFirst));
+            double centerBottomBackX = (ThicknessSecondBoard / reference) / Calc.Cos(AngleAlphaSecondBoard);
 
-            if (winkelgruenZwei > 90)
-                winkelgelbEins = 90 + winkelgruenEins;
+            double slantFirst = ThicknessFirstBoard / reference / Calc.Cos(AngleAlphaFirstBoard);
+            double slantSecond = ThicknessSecondBoard / reference / Calc.Cos(AngleAlphaSecondBoard);
+
+            double line = Math.Sqrt(Math.Pow(slantFirst, 2) + Math.Pow(slantSecond, 2) - 2 * slantFirst * slantSecond * Calc.Cos(360 - AngleBeta - 180));
+
+            double angleGreenOne = Calc.Acos((Math.Pow(line, 2) + Math.Pow(slantFirst, 2) - Math.Pow(slantSecond, 2)) / (2 * line * slantFirst));
+            double angleGreenTwo = Calc.Acos((Math.Pow(line, 2) + Math.Pow(slantSecond, 2) - Math.Pow(slantFirst, 2)) / (2 * line * slantSecond));
+
+            double angleYellowOne;
+            double angleYellowTwo;
+
+            if (angleGreenTwo > 90)
+                angleYellowOne = 90 + angleGreenOne;
             else
-                winkelgelbEins = 90 - winkelgruenEins;
+                angleYellowOne = 90 - angleGreenOne;
 
-            if (winkelgruenEins > 90)
-                winkelgelbZwei = 90 + winkelgruenZwei;
+            if (angleGreenOne > 90)
+                angleYellowTwo = 90 + angleGreenTwo;
             else
-                winkelgelbZwei = 90 - winkelgruenZwei;
+                angleYellowTwo = 90 - angleGreenTwo;
 
-            winkelgelbEins = Math.Abs(winkelgelbEins);
-            winkelgelbZwei = Math.Abs(winkelgelbZwei);
+            angleYellowOne = Math.Abs(angleYellowOne);
+            angleYellowTwo = Math.Abs(angleYellowTwo);
 
-            double yVersatz = linie / Calc.Sin(180 - winkelgelbEins - winkelgelbZwei) * Calc.Sin(winkelgelbEins);
+            double centerBottomBackY = line / Calc.Sin(180 - angleYellowOne - angleYellowTwo) * Calc.Sin(angleYellowOne);
 
-            if (winkelgruenEins > 90)
-                yVersatz *= -1;
+            if (angleGreenOne > 90)
+                centerBottomBackY *= -1;
 
-            double laenge = 2.5;
-            double zusatzEins = Calc.Tan(AngleCrossCutFirstBoard) * WidthFirstBoard;
-            double zusatzZwei = Calc.Tan(AngleCrossCutSecondBoard) * WidthSecondBoard;
+            if (System.Double.IsNaN(centerBottomBackY))
+                centerBottomBackY = 0;
 
-            if (2.5 * reference < zusatzZwei)
-                laenge = zusatzZwei / reference;
-            if (2.5 * reference < zusatzEins)
-                laenge = zusatzEins / reference;
+            double leftBottomFrontX = -1 * Calc.Cos(Math.Abs(AngleBeta - 90)) * boardLength;
+            double leftBottomFrontY = Calc.Sin(AngleBeta - 90) * boardLength;
+            double leftTopFrontX = leftBottomFrontX + Calc.Sin(AngleBeta - 90) * offsetFirst;
+            double leftTopFrontY = leftBottomFrontY + Calc.Cos(Math.Abs(AngleBeta - 90)) * offsetFirst;
 
-            double mohyAdd = yVersatz;
+            double leftBackXAddition = Calc.Sin(AngleBeta - 90) * slantFirst;
+            double leftBackYAddition = Calc.Cos(Math.Abs(AngleBeta - 90)) * slantFirst;
 
-            if (System.Double.IsNaN(mohyAdd))
-                mohyAdd = 0;
-
-            double luvx = -1 * Calc.Cos(Math.Abs(AngleBeta - 90)) * laenge;
-            double luvy = Calc.Sin(AngleBeta - 90) * laenge;
-            double lovx = luvx + Calc.Sin(AngleBeta - 90) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference);
-            double lovy = luvy + Calc.Cos(Math.Abs(AngleBeta - 90)) * Calc.Tan(AngleAlphaFirstBoard) * (Height / reference);
-
-            double halbeHöheModell = Height / reference / 2;
-
-            Point3D ruv = new Point3D(0, -laenge, halbeHöheModell * -1);
-            Point3D ruh = new Point3D(schraegeZwei, -laenge, halbeHöheModell * -1);
-            Point3D rov = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / reference), -laenge, halbeHöheModell);
-            Point3D roh = new Point3D(Calc.Tan(AngleAlphaSecondBoard) * (Height / reference) + schraegeZwei, -laenge, halbeHöheModell);
-            Point3D muv = new Point3D(0, 0, halbeHöheModell * -1);
-            Point3D muh = new Point3D(mohxAdd, mohyAdd, halbeHöheModell * -1);
-            Point3D mov = new Point3D(movx, movy, halbeHöheModell);
-            Point3D moh = new Point3D(movx + mohxAdd, movy + mohyAdd, halbeHöheModell);
-            Point3D luv = new Point3D(luvx, luvy, halbeHöheModell * -1);
-            Point3D luh = new Point3D(luvx + Calc.Sin(AngleBeta - 90) * schraegeEins, luvy + Calc.Cos(Math.Abs(AngleBeta - 90)) * schraegeEins,
-                halbeHöheModell * -1);
-            Point3D lov = new Point3D(lovx, lovy, halbeHöheModell);
-            Point3D loh = new Point3D(lovx + Calc.Sin(AngleBeta - 90) * schraegeEins, lovy + Calc.Cos(Math.Abs(AngleBeta - 90)) * schraegeEins,
-                halbeHöheModell);
+            Point3D rightBottomFront = new Point3D(0, -boardLength, halfModelHeight * -1);
+            Point3D rightBottomBack = new Point3D(slantSecond, -boardLength, halfModelHeight * -1);
+            Point3D rightTopFront = new Point3D(offsetSecond, -boardLength, halfModelHeight);
+            Point3D rightTopBack = new Point3D(offsetSecond + slantSecond, -boardLength, halfModelHeight);
+            Point3D centerBottomFront = new Point3D(0, 0, halfModelHeight * -1);
+            Point3D centerBottomBack = new Point3D(centerBottomBackX, centerBottomBackY, halfModelHeight * -1);
+            Point3D centerTopFront = new Point3D(centerTopFrontX, centerTopFrontY, halfModelHeight);
+            Point3D centerTopBack = new Point3D(centerTopFrontX + centerBottomBackX, centerTopFrontY + centerBottomBackY, halfModelHeight);
+            Point3D leftBottomFront = new Point3D(leftBottomFrontX, leftBottomFrontY, halfModelHeight * -1);
+            Point3D leftBottomBack = new Point3D(leftBottomFrontX + leftBackXAddition, leftBottomFrontY + leftBackYAddition, halfModelHeight * -1);
+            Point3D leftTopFront = new Point3D(leftTopFrontX, leftTopFrontY, halfModelHeight);
+            Point3D leftTopBack = new Point3D(leftTopFrontX + leftBackXAddition, leftTopFrontY + leftBackYAddition, halfModelHeight);
 
             var group = new Model3DGroup();
 
-            group.Children.Add(Square(ruv, ruh, roh, rov));
-            group.Children.Add(Square(muv, ruv, rov, mov));
-            group.Children.Add(Square(mov, rov, roh, moh));
-            group.Children.Add(Square(lov, mov, moh, loh));
-            group.Children.Add(Square(luv, muv, mov, lov));
-            group.Children.Add(Square(luh, luv, lov, loh));
-            group.Children.Add(Square(muh, luh, loh, moh));
-            group.Children.Add(Square(ruh, muh, moh, roh));
-            group.Children.Add(Square(ruv, muv, muh, ruh));
-            group.Children.Add(Square(muv, luv, luh, muh));
+            group.Children.Add(Square(rightBottomFront, rightBottomBack, rightTopBack, rightTopFront));
+            group.Children.Add(Square(centerBottomFront, rightBottomFront, rightTopFront, centerTopFront));
+            group.Children.Add(Square(centerTopFront, rightTopFront, rightTopBack, centerTopBack));
+            group.Children.Add(Square(leftTopFront, centerTopFront, centerTopBack, leftTopBack));
+            group.Children.Add(Square(leftBottomFront, centerBottomFront, centerTopFront, leftTopFront));
+            group.Children.Add(Square(leftBottomBack, leftBottomFront, leftTopFront, leftTopBack));
+            group.Children.Add(Square(centerBottomBack, leftBottomBack, leftTopBack, centerTopBack));
+            group.Children.Add(Square(rightBottomBack, centerBottomBack, centerTopBack, rightTopBack));
+            group.Children.Add(Square(rightBottomFront, centerBottomFront, centerBottomBack, rightBottomBack));
+            group.Children.Add(Square(centerBottomFront, leftBottomFront, leftBottomBack, centerBottomBack));
 
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(2, 1, -1)));
             group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-2, -1, -1)));
