@@ -18,43 +18,42 @@
 
 using System.Windows.Media;
 
-namespace Schifterschnitt.Feedback
+namespace Schifterschnitt
 {
     /// <summary>
-    /// Eine Meldung die in der Feedbackleiste angezeigt werden kann.
+    /// A report that can be shown in the feedback area.
     /// </summary>
-    public class Meldung
+    public class Report
     {
-        #region Eigenschaften
+        #region Properties
 
         /// <summary>
-        /// Die Hintergrundfarbe des Grid-Felds der Meldung.
+        /// The background color of the report.
         /// </summary>
-        public SolidColorBrush Hintergrundfarbe { get; set; }
+        public SolidColorBrush BackgroundColor { get; set; }
 
         /// <summary>
-        /// Der Text der Meldung.
+        /// The text the report is showing.
         /// </summary>
         public string Text { get; set; }
 
         /// <summary>
-        /// Bestimmt ob die Meldung aktiv ist.
+        /// Sets a report as active or inactive.
         /// </summary>
-        public bool Aktiv { get; set; } = false;
+        public bool Active { get; set; }
 
         #endregion
 
         #region ctor
 
         /// <summary>
-        ///  Legt die Defaultwerte für die Eigenschaften fest.
+        /// Creates a new report.
         /// </summary>
-        public Meldung()
+        public Report()
         {
-            // Defaultwerte für die Eigenschaften festlegen.
-            Hintergrundfarbe = Brushes.White;
+            BackgroundColor = Brushes.White;
             Text = "";
-            Aktiv = false;
+            Active = false;
         }
 
         #endregion

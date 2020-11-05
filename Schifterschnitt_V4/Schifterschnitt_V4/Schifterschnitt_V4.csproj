@@ -83,10 +83,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Objekt\Ecke.cs" />
-    <Compile Include="Rechne.cs" />
-    <Compile Include="Objekt\SchifterObjekt.cs" />
-    <Compile Include="Objekt\Pyramide.cs" />
+    <Compile Include="GridColumnResize.cs" />
+    <Compile Include="Corner.cs" />
+    <Compile Include="Calc.cs" />
+    <Compile Include="CompoundMiterObject.cs" />
+    <Compile Include="Pyramid.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,14 +96,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Feedback\Feedbackleiste.cs" />
+    <Compile Include="FeedbackArea.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Feedback\Meldung.cs" />
+    <Compile Include="Report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
